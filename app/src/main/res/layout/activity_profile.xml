@@ -59,30 +59,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_profile_name" />
 
-    <ImageView
-        android:id="@+id/img_settings_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/top_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/more" />
+<!--    <ImageView-->
+<!--        android:id="@+id/img_settings_icon"-->
+<!--        android:layout_width="24dp"-->
+<!--        android:layout_height="24dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/top_toolbar"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/more" />-->
 
-    <TextView
-        android:id="@+id/txt_profile_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="My Profile"
-        android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/img_settings_icon"
-        app:layout_constraintHorizontal_bias="0.563"
-        app:layout_constraintStart_toStartOf="@+id/top_toolbar"
-        app:layout_constraintTop_toTopOf="@+id/top_toolbar" />
+<!--    <TextView-->
+<!--        android:id="@+id/txt_profile_title"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:text="My Profile"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@color/colorAccent"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/top_toolbar"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/top_toolbar" />-->
 
     <TextView
         android:id="@+id/textView5"
@@ -159,6 +158,19 @@
         app:layout_constraintTop_toTopOf="@+id/view_jobs_completed" />
 
     <TextView
+        android:id="@+id/txt_num_totalearned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$3.5k"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view_jobs_posted"
+        app:layout_constraintEnd_toEndOf="@+id/view_jobs_posted"
+        app:layout_constraintStart_toStartOf="@+id/view_jobs_posted"
+        app:layout_constraintTop_toTopOf="@+id/view_jobs_posted" />
+
+    <TextView
         android:id="@+id/lbl_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -184,5 +196,18 @@
         app:layout_constraintEnd_toEndOf="@+id/view_jobs_completed"
         app:layout_constraintStart_toStartOf="@+id/view_jobs_completed"
         app:layout_constraintTop_toBottomOf="@+id/txt_num_jobs_completed" />
+
+    <TextView
+        android:id="@+id/lbl_totalearned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Earnings"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_jobs_posted"
+        app:layout_constraintEnd_toEndOf="@+id/view_jobs_posted"
+        app:layout_constraintStart_toStartOf="@+id/view_jobs_posted"
+        app:layout_constraintTop_toBottomOf="@+id/txt_num_totalearned" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
