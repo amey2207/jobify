@@ -20,8 +20,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-       toolbar = (Toolbar)findViewById(R.id.top_toolbar);
-       toolbar.setTitle("My Profile");
+       toolbar = (Toolbar)findViewById(R.id.top_toolbar_myprofile);
+       toolbar.setTitle("");
        setSupportActionBar(toolbar);
 
 

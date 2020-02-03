@@ -9,7 +9,7 @@
     tools:context=".ProfileActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/top_toolbar"
+        android:id="@+id/top_toolbar_myprofile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorTopBar"
@@ -28,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_toolbar"></de.hdodenhof.circleimageview.CircleImageView>
+        app:layout_constraintTop_toBottomOf="@+id/top_toolbar_myprofile"></de.hdodenhof.circleimageview.CircleImageView>
 
     <TextView
         android:id="@+id/txt_profile_name"
@@ -69,19 +69,22 @@
 <!--        app:layout_constraintTop_toTopOf="parent"-->
 <!--        app:srcCompat="@drawable/more" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/txt_profile_title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:text="My Profile"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/colorAccent"-->
-<!--        android:textSize="24sp"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/top_toolbar"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/top_toolbar" />-->
+    <TextView
+        android:id="@+id/txt_profile_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="My Profile"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintStart_toStartOf="@+id/top_toolbar_myprofile"
+        app:layout_constraintTop_toTopOf="@+id/top_toolbar_myprofile" />
 
     <TextView
         android:id="@+id/textView5"
