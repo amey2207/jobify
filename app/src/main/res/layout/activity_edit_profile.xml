@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="Edit Profile"
         android:textColor="@color/colorAccent"
-        android:textSize="24"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/top_toolbar_editprofile"
         app:layout_constraintEnd_toStartOf="@+id/img_save_editprofile"
