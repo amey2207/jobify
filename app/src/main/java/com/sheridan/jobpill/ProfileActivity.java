@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +45,8 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.logout:
                 break;
             case R.id.edit_profile:
-                break;
+                Intent intent = new Intent(ProfileActivity.this,EditProfileActivity.class);
+                startActivity(intent);
             default:
                 // Otherwise, do nothing.
                 break;
