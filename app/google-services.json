@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "439100331519-oabhpk53fihp1010g2qd803tlu6gnaep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sheridan.jobpill",
+            "certificate_hash": "32d72af9120b785cfeb664f2b985786a9922eb27"
+          }
+        },
+        {
           "client_id": "439100331519-bjpnkq82b4eleqm6mucci66kcskr9f0q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
