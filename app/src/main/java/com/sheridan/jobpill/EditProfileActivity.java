@@ -123,11 +123,11 @@ public class EditProfileActivity extends AppCompatActivity {
                         txtProfileCity.setText(city);
 
 
-                        // ------ Used when need to show default image while actual image is loaded from firebase storage. ------- //
-                        // RequestOptions placeholderRequest = new RequestOptions();
-                        // placeholderRequest.placeholder(R.drawable.default_image);
 
-                        Glide.with(EditProfileActivity.this).load(image).into(imgChangeProfile);
+                         RequestOptions placeholderRequest = new RequestOptions();
+                         placeholderRequest.placeholder(R.drawable.profile_default);
+
+                        Glide.with(EditProfileActivity.this).setDefaultRequestOptions(placeholderRequest).load(image).into(imgChangeProfile);
 
 
                     }
