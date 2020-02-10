@@ -63,6 +63,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Uri profileImageURI = null;
 
+    private Uri downloadUri;
+
     private StorageReference image_path = null;
 
     private StorageReference storageReference;
@@ -97,7 +99,7 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
-
+        progressBar.setVisibility(View.VISIBLE);
 
         firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -142,96 +144,152 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
-
         imgSaveIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final String name = txtProfileName.getText().toString();
                 final String intro = txtProfileIntro.getText().toString();
                 final String phone = txtProfilePhone.getText().toString();
                 final String city = txtProfileCity.getText().toString();
 
-                if(!TextUtils.isEmpty(name) && profileImageURI != null){
-
-                    image_path = storageReference.child("profile_images").child(user_id + ".jpg");
-
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    image_path.putFile(profileImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
-                            if(task.isSuccessful()){
-
-                               image_path.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                   @Override
-                                   public void onSuccess(Uri uri) {
-                                       Uri downloadUrl = uri;
-
-                                       Map<String, String> userMap = new HashMap<>();
-                                       userMap.put("name",name);
-                                       userMap.put("intro",intro);
-                                       userMap.put("phone", phone);
-                                       userMap.put("city",city);
-                                       userMap.put("photoURL", downloadUrl.toString());
+                progressBar.setVisibility(View.VISIBLE);
 
 
+                if (isChanged) {
+
+                    if (!TextUtils.isEmpty(name) && profileImageURI != null) {
+
+                        image_path = storageReference.child("profile_images").child(user_id + ".jpg");
 
 
-                                       firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<Void> task) {
+                        image_path.putFile(profileImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                                               if(task.isSuccessful()){
-
-
-
-                                                   Toast.makeText(EditProfileActivity.this,"User Profile Updated",Toast.LENGTH_LONG).show();
-
-                                                   Intent intent = new Intent(EditProfileActivity.this,ProfileActivity.class);
-                                                   startActivity(intent);
-                                                   finish();
-
-                                               }else{
-
-                                                   String error = task.getException().getMessage();
-
-                                                   Toast.makeText(EditProfileActivity.this,"Firestore error: " + error,Toast.LENGTH_LONG).show();
+                                if (task.isSuccessful()) {
 
 
-                                               }
+                                    storeFirestore(task, name, intro, phone, city);
 
-                                               progressBar.setVisibility(View.INVISIBLE);
+                                } else {
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(EditProfileActivity.this, "Image error: " + error, Toast.LENGTH_LONG).show();
 
+                                    progressBar.setVisibility(View.INVISIBLE);
 
-                                           }
-                                       });
+                                }
 
-//                                       Toast.makeText(EditProfileActivity.this,"Image Uploaded",Toast.LENGTH_LONG).show();
-                                   }
-                               });
-
-
-                            }else{
-                                String error = task.getException().getMessage();
-                                Toast.makeText(EditProfileActivity.this,"Image error: " + error,Toast.LENGTH_LONG).show();
-
-                                progressBar.setVisibility(View.INVISIBLE);
 
                             }
+                        });
+
+                    }
+
+                } else {
+                    storeFirestore(null, name, intro, phone, city);
+                }
+
+            }
+        });
+
+
+    }
+
+    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city) {
+
+
+
+        if (task != null) {
+
+            image_path.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    downloadUri = uri;
+
+                    final Map<String, String> userMap = new HashMap<>();
+                    userMap.put("name", name);
+                    userMap.put("intro", intro);
+                    userMap.put("phone", phone);
+                    userMap.put("city", city);
+                    userMap.put("photoURL", downloadUri.toString());
+
+
+
+
+                    firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if (task.isSuccessful()) {
+
+
+                                Toast.makeText(EditProfileActivity.this, "User Profile Updated", Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+
+                                String error = task.getException().getMessage();
+
+                                Toast.makeText(EditProfileActivity.this, "Firestore error: " + error, Toast.LENGTH_LONG).show();
+
+
+                            }
+
+                            progressBar.setVisibility(View.INVISIBLE);
 
 
                         }
                     });
+                }
+            });
+        } else {
+            downloadUri = profileImageURI;
 
-                }else{
+            final Map<String, String> userMap = new HashMap<>();
+            userMap.put("name", name);
+            userMap.put("intro", intro);
+            userMap.put("phone", phone);
+            userMap.put("city", city);
+            userMap.put("photoURL", downloadUri.toString());
+
+
+
+
+            firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                    if (task.isSuccessful()) {
+
+
+                        Toast.makeText(EditProfileActivity.this, "User Profile Updated", Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    } else {
+
+                        String error = task.getException().getMessage();
+
+                        Toast.makeText(EditProfileActivity.this, "Firestore error: " + error, Toast.LENGTH_LONG).show();
+
+
+                    }
+
+                    progressBar.setVisibility(View.INVISIBLE);
+
 
                 }
+            });
+
+        }
 
 
-
-            }
-        });
 
 
     }
@@ -247,6 +305,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 profileImageURI = result.getUri();
                 imgChangeProfile.setImageURI(profileImageURI);
+
+                isChanged = true;
 
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
