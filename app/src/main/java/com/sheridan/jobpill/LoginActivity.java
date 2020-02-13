@@ -50,42 +50,17 @@ public class LoginActivity extends AppCompatActivity {
                 fb.signInWithEmailAndPassword(userEmail.getText().toString(), userPass.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            final FirebaseUser currentUser = fb.getCurrentUser();
-
-                            if (currentUser != null) {
-
-                                current_user_id = currentUser.getUid();
-
-                                firebaseFirestore.collection("Users").document(current_user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            if (!task.getResult().exists()) {
-                                                Intent intent = new Intent(LoginActivity.this, EditProfileActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else {
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        } else {
-                                            String errorMessage = task.getException().getMessage();
-                                            Toast.makeText(LoginActivity.this, "Error " + errorMessage, Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-
-                            }
-                        } else {
+                        if(task.isSuccessful()) {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        }
+                        else {
                             Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
             }
         });
+
     }
 
 
