@@ -73,6 +73,16 @@ public class SignUpActivity extends AppCompatActivity {
                        Toast.makeText(SignUpActivity.this, "Confirm Password and Password don't match.", Toast.LENGTH_LONG).show();
 
                    }
+               }else{
+                   if(TextUtils.isEmpty(emailID)){
+                       Toast.makeText(SignUpActivity.this, "Please provide a valid email address", Toast.LENGTH_LONG).show();
+                   }else if(TextUtils.isEmpty(pass)){
+                       Toast.makeText(SignUpActivity.this, "Please provide a valid password", Toast.LENGTH_LONG).show();
+                   }else if(TextUtils.isEmpty(confPass)){
+                       Toast.makeText(SignUpActivity.this, "Please confirm your password", Toast.LENGTH_LONG).show();
+                   }else if(!pass.equals(confPass)){
+                       Toast.makeText(SignUpActivity.this, "Confirm Password and Password don't match.", Toast.LENGTH_LONG).show();
+                   }
                }
             }
         });

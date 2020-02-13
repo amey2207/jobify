@@ -37,6 +37,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageActivity;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,9 +125,8 @@ public class EditProfileActivity extends AppCompatActivity {
                         txtProfileCity.setText(city);
 
 
-
-                         RequestOptions placeholderRequest = new RequestOptions();
-                         placeholderRequest.placeholder(R.drawable.profile_default);
+                        RequestOptions placeholderRequest = new RequestOptions();
+                        placeholderRequest.placeholder(R.drawable.profile_default);
 
                         Glide.with(EditProfileActivity.this).setDefaultRequestOptions(placeholderRequest).load(image).into(imgChangeProfile);
 
@@ -180,14 +181,41 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 }
 
-
                             }
                         });
+
+                    } else {
+
+                        if (TextUtils.isEmpty(name)) {
+                            Toast.makeText(EditProfileActivity.this, "Please provide a name", Toast.LENGTH_LONG).show();
+
+                        } else if (profileImageURI == null) {
+                            Toast.makeText(EditProfileActivity.this, "Please select a profile image", Toast.LENGTH_LONG).show();
+
+                        }
+
+
+                        progressBar.setVisibility(View.INVISIBLE);
 
                     }
 
                 } else {
-                    storeFirestore(null, name, intro, phone, city);
+
+                    if (profileImageURI == null) {
+                        Toast.makeText(EditProfileActivity.this, "Please select a profile image", Toast.LENGTH_LONG).show();
+
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                    } else if(TextUtils.isEmpty(name)) {
+
+                        Toast.makeText(EditProfileActivity.this, "Please provide a name", Toast.LENGTH_LONG).show();
+
+                        progressBar.setVisibility(View.INVISIBLE);
+
+
+                    }else{
+                        storeFirestore(null, name, intro, phone, city);
+                    }
                 }
 
             }
@@ -197,7 +225,6 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city) {
-
 
 
         if (task != null) {
@@ -213,8 +240,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     userMap.put("phone", phone);
                     userMap.put("city", city);
                     userMap.put("photoURL", downloadUri.toString());
-
-
 
 
                     firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -257,8 +282,6 @@ public class EditProfileActivity extends AppCompatActivity {
             userMap.put("photoURL", downloadUri.toString());
 
 
-
-
             firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -288,8 +311,6 @@ public class EditProfileActivity extends AppCompatActivity {
             });
 
         }
-
-
 
 
     }
