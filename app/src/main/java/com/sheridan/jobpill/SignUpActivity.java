@@ -117,6 +117,5 @@ public class SignUpActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-
     }
 }

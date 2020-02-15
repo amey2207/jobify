@@ -6,18 +6,62 @@
     android:layout_height="match_parent"
     tools:context=".SignUpActivity">
 
+
     <EditText
         android:id="@+id/name_txt"
         android:layout_width="250dp"
         android:layout_height="43dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="80dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/sign_up_full_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_txtview"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/signUp_txtview" />
+
+    <EditText
+        android:id="@+id/confPass_txt"
+        android:layout_width="250dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="40dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/sign_up_conf_pass"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pass_txt" />
+
+    <EditText
+        android:id="@+id/email_txt"
+        android:layout_width="250dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="40dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/sign_up_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_txt" />
+
+    <EditText
+        android:id="@+id/pass_txt"
+        android:layout_width="250dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/sign_up_pass"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
     <Button
         android:id="@+id/signUp_btn"
@@ -35,53 +79,15 @@
         android:id="@+id/signUp_txtview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="88dp"
         android:fontFamily="serif"
         android:text="@string/sign_up_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/email_txt"
-        android:layout_width="250dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="@string/sign_up_email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_txt"
-        android:autofillHints="" />
-
-    <EditText
-        android:id="@+id/pass_txt"
-        android:layout_width="250dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="@string/sign_up_pass"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_txt"
-        android:autofillHints="" />
-
-    <EditText
-        android:id="@+id/confPass_txt"
-        android:layout_width="250dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="@string/sign_up_conf_pass"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_txt"
-        android:autofillHints="" />
 
     <ProgressBar
         android:id="@+id/signup_progress"
