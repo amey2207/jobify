@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_action_home"
+        android:icon="@drawable/round_home_black_24"
+        android:title="Home" />
+    <item
+        android:id="@+id/bottom_action_jobs"
+        android:icon="@drawable/baseline_work_black_24"
+        android:title="Jobs" />
+    <item
+        android:id="@+id/bottom_action_schedule"
+        android:icon="@drawable/baseline_event_black_24"
+        android:title="Schedule" />
+    <item
+        android:id="@+id/bottom_action_account"
+        android:icon="@drawable/baseline_account_box_black_24"
+        android:title="Account" />
+</menu>

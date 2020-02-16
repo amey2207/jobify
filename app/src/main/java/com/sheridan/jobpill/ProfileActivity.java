@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -43,7 +44,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     CircleImageView imgProfile;
 
+    BottomNavigationView bottomNavigationView;
+
     private Uri profileImageURI = null;
+
 
 
 
@@ -60,6 +64,30 @@ public class ProfileActivity extends AppCompatActivity {
        setupWidgets();
 
 
+       bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.bottom_action_jobs:
+//                        sentToJobs();
+                        return true;
+                    case R.id.bottom_action_schedule:
+//                        sendToSchedule();
+                        return true;
+                    case R.id.bottom_action_home:
+                        sendToMain();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+
+
     }
 
     public void setupWidgets(){
@@ -73,6 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         imgProfile = findViewById(R.id.img_profile);
 
+        bottomNavigationView = findViewById(R.id.profileBottomNav);
     }
 
     @Override
@@ -164,6 +193,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void sendToLogin() {
         Intent intent = new Intent(ProfileActivity.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendToMain() {
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
