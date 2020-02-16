@@ -156,6 +156,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
+                // If a new profile picture is selected by the user
 
                 if (isChanged) {
 
@@ -183,6 +184,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
                             }
                         });
+
+                        // If no new picture is selected by the user
+                        // check if the name field is empty or if the profileimage is not selected
 
                     } else {
 
