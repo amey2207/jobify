@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-
         userLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

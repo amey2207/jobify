@@ -40,11 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
     //declare firebase authentication
     private FirebaseAuth firebaseAuth;
 
-    //declare system variables
-    String emailID = email.getText().toString().trim();
-    String pass = password.getText().toString();
-    String confPass = confirmPassword.getText().toString();
-    String emailFormat = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +57,11 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //declare system variables
+                String emailID = email.getText().toString().trim();
+                String pass = password.getText().toString();
+                String confPass = confirmPassword.getText().toString();
+                String emailFormat = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 //check if fields are empty
                if(!TextUtils.isEmpty(emailID) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(confPass)){
 
@@ -88,6 +88,9 @@ public class SignUpActivity extends AppCompatActivity {
                                signUpProgress.setVisibility(View.INVISIBLE);
                            }
                        });
+                   }
+                   else if(!emailID.matches(emailFormat)){
+                       Toast.makeText(SignUpActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
                    }
                    else {
                        Toast.makeText(SignUpActivity.this, "Passwords don't match.", Toast.LENGTH_LONG).show();
