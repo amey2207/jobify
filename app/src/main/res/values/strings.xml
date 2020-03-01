@@ -6,4 +6,16 @@
     <string name="sign_up_pass">Password</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="sign_up_conf_pass">Confirm Password</string>
+    <string name="dialog_title">Choose Job Interests</string>
+    <string name="lbl_dialog_ok">OK</string>
+    <string name="lbl_dialog_dismiss">Dismiss</string>
+    <string name="lbl_dialog_clearall">Clear all</string>
+
+    <string-array name="interest_categories">
+        <item>Plumbing</item>
+        <item>Moving</item>
+        <item>Painting</item>
+        <item>Repair Work</item>
+        <item>Mechanic</item>
+    </string-array>
 </resources>

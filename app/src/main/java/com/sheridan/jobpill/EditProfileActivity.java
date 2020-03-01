@@ -2,11 +2,13 @@ package com.sheridan.jobpill;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -27,18 +30,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firestore.v1beta1.FirestoreGrpc;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageActivity;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +53,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private TextView txtChangeProfileImg;
     private CircleImageView imgChangeProfile;
+
+    private TextView txtInterests;
+    private Button btnInterests;
+    String[] listInterests;
+    boolean[] checkedInterests;
+    ArrayList<Integer> selectedInterests = new ArrayList<>();
 
     private String user_id;
 
@@ -71,6 +79,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser currentUser;
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -81,6 +90,73 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         setUpWidgets();
+
+        listInterests = getResources().getStringArray(R.array.interest_categories);
+        checkedInterests = new boolean[listInterests.length];
+
+        btnInterests.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(EditProfileActivity.this);
+                mBuilder.setTitle(R.string.dialog_title);
+                mBuilder.setMultiChoiceItems(listInterests, checkedInterests, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
+                        if(isChecked){
+                            // if current item is not in the selectedItems arraylist add it in the arraylist
+                            if(!selectedInterests.contains(position)){
+                                selectedInterests.add(position);
+                                //else remove item from the list
+                            }
+                        } else {
+                            if(selectedInterests.contains(position)){
+                                selectedInterests.remove(selectedInterests.indexOf(position));
+                            }
+                        }
+                    }
+                });
+
+                mBuilder.setCancelable(false);
+                mBuilder.setPositiveButton(R.string.lbl_dialog_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        String items = "";
+                        for(int i = 0; i < selectedInterests.size(); i++){
+                            items = items + listInterests[selectedInterests.get(i)];
+                            if(i != selectedInterests.size()-1){
+                                items = items + ",";
+                            }
+
+                            Log.d("interests: ", "value:" + selectedInterests.get(i).toString());
+                        }
+
+                        txtInterests.setText(items);
+                    }
+                });
+
+                mBuilder.setNegativeButton(R.string.lbl_dialog_dismiss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                mBuilder.setNeutralButton(R.string.lbl_dialog_clearall, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        for(int i = 0; i < checkedInterests.length; i++){
+                            checkedInterests[i] = false;
+                        }
+                        selectedInterests.clear();
+                        txtInterests.setText("");
+                    }
+                });
+
+                AlertDialog mDialog = mBuilder.create();
+                mDialog.show();
+
+            }
+        });
 
         imgChangeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +192,32 @@ public class EditProfileActivity extends AppCompatActivity {
                         String phone = task.getResult().getString("phone");
                         String city = task.getResult().getString("city");
                         String image = task.getResult().getString("photoURL");
+                        ArrayList<Integer> interests = (ArrayList<Integer>)task.getResult().get("interests");
+
+                        if(!interests.isEmpty()){
+                            for(int i = 0; i < interests.size();i++){
+                                Log.d("interests", "value " + Integer.parseInt(String.valueOf(interests.get(i))));
+                                int temp =  Integer.parseInt(String.valueOf(interests.get(i)));
+                                checkedInterests[temp] = true;
+                                selectedInterests.add(temp);
+                                Log.d("selected interests: ", "value: " + selectedInterests.toString());
+                            }
+
+                            String items = "";
+                            for(int i = 0; i < selectedInterests.size(); i++){
+                                items = items + listInterests[selectedInterests.get(i)];
+                                if(i != selectedInterests.size()-1){
+                                    items = items + ",";
+                                }
+
+                                Log.d("interests: ", "value:" + selectedInterests.get(i).toString());
+                            }
+
+                            //set default selected interests
+                            txtInterests.setText(items);
+
+
+                        }
 
                         profileImageURI = Uri.parse(image);
 
@@ -123,6 +225,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         txtProfileIntro.setText(intro);
                         txtProfilePhone.setText(phone);
                         txtProfileCity.setText(city);
+
 
 
                         RequestOptions placeholderRequest = new RequestOptions();
@@ -172,7 +275,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
 
 
-                                    storeFirestore(task, name, intro, phone, city);
+                                    storeFirestore(task, name, intro, phone, city, selectedInterests);
 
                                 } else {
                                     String error = task.getException().getMessage();
@@ -218,7 +321,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
                     }else{
-                        storeFirestore(null, name, intro, phone, city);
+                        storeFirestore(null, name, intro, phone, city, selectedInterests);
                     }
                 }
 
@@ -226,9 +329,11 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
+
+
     }
 
-    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city) {
+    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city, final ArrayList interests) {
 
 
         if (task != null) {
@@ -238,12 +343,14 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onSuccess(Uri uri) {
                     downloadUri = uri;
 
-                    final Map<String, String> userMap = new HashMap<>();
+                    final Map<String, Object> userMap = new HashMap<>();
                     userMap.put("name", name);
                     userMap.put("intro", intro);
                     userMap.put("phone", phone);
                     userMap.put("city", city);
                     userMap.put("photoURL", downloadUri.toString());
+                    userMap.put("email",currentUser.getEmail());
+                    userMap.put("interests", selectedInterests);
 
 
                     firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -278,12 +385,15 @@ public class EditProfileActivity extends AppCompatActivity {
         } else {
             downloadUri = profileImageURI;
 
-            final Map<String, String> userMap = new HashMap<>();
+            final Map<String, Object> userMap = new HashMap<>();
             userMap.put("name", name);
             userMap.put("intro", intro);
             userMap.put("phone", phone);
             userMap.put("city", city);
             userMap.put("photoURL", downloadUri.toString());
+            userMap.put("email",currentUser.getEmail());
+            userMap.put("interests", selectedInterests);
+
 
 
             firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -359,11 +469,15 @@ public class EditProfileActivity extends AppCompatActivity {
         txtProfilePhone = findViewById(R.id.txt_profile_phone);
         txtProfileCity = findViewById(R.id.txt_profile_city);
 
+        txtInterests = findViewById(R.id.txt_interests);
+        btnInterests = findViewById(R.id.btn_interestsdialog);
+
         progressBar = findViewById(R.id.edit_profile_progress);
         progressBar.setVisibility(View.VISIBLE);
 
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
+        currentUser = firebaseAuth.getCurrentUser();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
