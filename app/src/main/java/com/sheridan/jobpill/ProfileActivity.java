@@ -45,6 +45,8 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtProfilePhone;
     TextView txtProfileCity;
 
+    TextView txtInterests;
+
     CircleImageView imgProfile;
 
     BottomNavigationView bottomNavigationView;
@@ -104,6 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
         txtProfileIntro = findViewById(R.id.txt_profile_intro);
 //        txtProfilePhone = findViewById(R.id.txt_profile_phone);
         txtProfileCity = findViewById(R.id.txt_profile_location);
+        txtInterests = findViewById(R.id.txtInterests);
 
         imgProfile = findViewById(R.id.img_profile);
 
@@ -137,6 +140,22 @@ public class ProfileActivity extends AppCompatActivity {
                             String city = task.getResult().getString("city");
                             String image = task.getResult().getString("photoURL");
                             ArrayList<Integer> interests = (ArrayList<Integer>)task.getResult().get("interests");
+
+                            String interestList = "";
+                            if(!interests.isEmpty()){
+                                for(int i = 0; i < interests.size();i++){
+                                    interestList = interestList + listInterests[Integer.parseInt(String.valueOf(interests.get(i)))];
+                                    if(i != interests.size()-1){
+                                        interestList = interestList + ", ";
+                                    }
+                                }
+                            }else{
+                                interestList = "No Interests Selected!";
+                            }
+
+                            txtInterests.setText(interestList);
+
+
 
 
                             profileImageURI = Uri.parse(image);
