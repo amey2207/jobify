@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     private RecyclerView jobsListView;
 
     private JobsListFirestoreAdapter adapter;
+    private ImageButton btn_plus;
 
     private TextView txtGreeting;
 
@@ -63,6 +66,14 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         setSupportActionBar(toolbar);
 
         setupWidgets();
+        btn_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent jobIntent = new Intent(MainActivity.this, JobPostingActivity.class);
+                startActivity(jobIntent);
+                finish();
+            }
+        });
 
 
         bottomNavigationView.setSelectedItemId(R.id.bottom_action_home);
@@ -121,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     public void setupWidgets() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        btn_plus = findViewById(R.id.plus_btn);
         txtGreeting = findViewById(R.id.txt_greeting);
         bottomNavigationView = findViewById(R.id.mainBottomNav);
         jobsListView = findViewById(R.id.jobs_list);
