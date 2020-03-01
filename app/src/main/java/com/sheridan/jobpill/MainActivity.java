@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private String current_user_id;
 
     private Button btn_viewProfile;
+    private ImageButton btn_plus;
 
     private TextView txtGreeting;
 
@@ -39,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupWidgets();
+        btn_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent jobIntent = new Intent(MainActivity.this, JobPostingActivity.class);
+                startActivity(jobIntent);
+                finish();
+            }
+        });
 
         btn_viewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         btn_viewProfile = findViewById(R.id.btn_profile);
+        btn_plus = findViewById(R.id.plus_btn);
         txtGreeting = findViewById(R.id.txt_greeting);
         bottomNavigationView = findViewById(R.id.mainBottomNav);
     }
