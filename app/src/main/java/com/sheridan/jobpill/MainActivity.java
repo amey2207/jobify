@@ -2,15 +2,29 @@ package com.sheridan.jobpill;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.SnapshotParser;
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -18,15 +32,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.sheridan.jobpill.Models.Job;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
     private String current_user_id;
 
-    private Button btn_viewProfile;
+    private Toolbar toolbar;
+
+    private RecyclerView jobsListView;
+
+    private JobsListFirestoreAdapter adapter;
 
     private TextView txtGreeting;
 
@@ -38,16 +58,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = (Toolbar) findViewById(R.id.top_toolbar_main);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
         setupWidgets();
 
-        btn_viewProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(profileIntent);
-                finish();
-            }
-        });
 
         bottomNavigationView.setSelectedItemId(R.id.bottom_action_home);
 
@@ -72,16 +88,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Query
+        Query query = firebaseFirestore.collection("jobs");
+        //RecyclerOptions
+
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(3)
+                .build();
+
+        FirestorePagingOptions<Job> options = new FirestorePagingOptions.Builder<Job>()
+                .setLifecycleOwner(this)
+                .setQuery(query, config, Job.class)
+                .build();
+
+        adapter = new JobsListFirestoreAdapter(options,this );
+
+
+
+        jobsListView.setHasFixedSize(true);
+        jobsListView.setLayoutManager(new LinearLayoutManager(this));
+        jobsListView.setAdapter(adapter);
+
+        //View Holder
+
 
     }
+
+
 
 
     public void setupWidgets() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        btn_viewProfile = findViewById(R.id.btn_profile);
         txtGreeting = findViewById(R.id.txt_greeting);
         bottomNavigationView = findViewById(R.id.mainBottomNav);
+        jobsListView = findViewById(R.id.jobs_list);
     }
 
     @Override
@@ -103,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            txtGreeting.setText("Hello " + currentUser.getEmail());
                         }
                     } else {
                         String errorMessage = task.getException().getMessage();
@@ -112,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
     }
 
 
@@ -126,5 +168,22 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
+        Log.d("ITEM_CLICK", "Clicked the item: " + position + "and ID: " + snapshot.getId());
+
+        Job job = snapshot.toObject(Job.class);
+        job.setItemId(snapshot.getId());
+
+        Intent intent = new Intent(this,JobDetailsActivity.class);
+        intent.putExtra("JobSnapshot",job);
+        startActivity(intent);
     }
 }

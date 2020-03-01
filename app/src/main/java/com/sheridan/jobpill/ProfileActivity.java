@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Uri profileImageURI = null;
 
 
+    String[] listInterests;
+
 
 
     @Override
@@ -63,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
 
        setupWidgets();
 
+       listInterests = getResources().getStringArray(R.array.interest_categories);
 
        bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
 
@@ -130,12 +136,23 @@ public class ProfileActivity extends AppCompatActivity {
                             String phone = task.getResult().getString("phone");
                             String city = task.getResult().getString("city");
                             String image = task.getResult().getString("photoURL");
+                            ArrayList<Integer> interests = (ArrayList<Integer>)task.getResult().get("interests");
+
 
                             profileImageURI = Uri.parse(image);
 
                             txtProfileName.setText(name);
                             txtProfileCity.setText(city);
                             txtProfileIntro.setText(intro);
+
+                            if(!interests.isEmpty()) {
+                                for (int i = 0; i < interests.size(); i++) {
+                                    Log.d("interests", "value " + Integer.parseInt(String.valueOf(interests.get(i))));
+                                    int temp = Integer.parseInt(String.valueOf(interests.get(i)));
+
+                                    Log.d("interest list: " , "value: " + listInterests[temp]);
+                                }
+                            }
 
 
                             RequestOptions placeholderRequest = new RequestOptions();
