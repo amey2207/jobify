@@ -10,6 +10,25 @@
     <string name="lbl_dialog_ok">OK</string>
     <string name="lbl_dialog_dismiss">Dismiss</string>
     <string name="lbl_dialog_clearall">Clear all</string>
+    <string name="job_instructions">Job Instructions</string>
+    <string name="post">Post</string>
+    <string name="cancel">Cancel</string>
+    <string name="instructions">Instructions</string>
+    <string name="location">Location</string>
+    <string name="next">Next</string>
+    <string name="cancel2">Cancel</string>
+    <string name="job_title">Job Title</string>
+    <string name="payment">Payment</string>
+    <string name="description">Description</string>
+    <string name="job_images">Job Images</string>
+    <string name="category">Category</string>
+    <string name="job_image_2">Job Image 2</string>
+    <string name="log_in">Log in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="can_t_sign_in_click_here">Can\'t sign in? click here</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="logo">Logo</string>
 
     <string-array name="interest_categories">
         <item>Plumbing</item>

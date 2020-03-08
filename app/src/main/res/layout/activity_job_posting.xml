@@ -11,20 +11,21 @@
         android:layout_width="152dp"
         android:layout_height="52dp"
         android:ems="10"
-        android:hint="Location"
+        android:hint="@string/location"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.899"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35" />
+        app:layout_constraintVertical_bias="0.35"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/Next_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.82"
@@ -36,7 +37,7 @@
         android:id="@+id/cancel_post_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.198"
@@ -49,35 +50,38 @@
         android:layout_width="354dp"
         android:layout_height="49dp"
         android:ems="10"
-        android:hint="Job Title"
+        android:hint="@string/job_title"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintVertical_bias="0.242"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/price_editText"
         android:layout_width="152dp"
         android:layout_height="52dp"
         android:ems="10"
-        android:hint="Payment"
+        android:hint="@string/payment"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35" />
+        app:layout_constraintVertical_bias="0.35"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/description_editText"
         android:layout_width="359dp"
         android:layout_height="118dp"
-        android:gravity="top|left"
-        android:hint="Description"
+        android:autofillHints=""
+        android:gravity="start|end"
+        android:hint="@string/description"
         android:inputType="textMultiLine"
         android:lines="8"
         android:maxLines="10"
@@ -87,12 +91,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.484" />
+        app:layout_constraintVertical_bias="0.482" />
 
     <ImageButton
         android:id="@+id/job_imagebtn"
         android:layout_width="180dp"
         android:layout_height="125dp"
+        android:contentDescription="@string/job_images"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.074"
@@ -105,6 +110,7 @@
         android:id="@+id/job_imagebtn2"
         android:layout_width="180dp"
         android:layout_height="125dp"
+        android:contentDescription="@string/job_image_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.93"
@@ -128,7 +134,7 @@
         android:id="@+id/Category_txtView"
         android:layout_width="112dp"
         android:layout_height="30dp"
-        android:text="Category"
+        android:text="@string/category"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
