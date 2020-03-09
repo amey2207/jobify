@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
     private TextView txtGreeting;
 
+
     private BottomNavigationView bottomNavigationView;
 
 
