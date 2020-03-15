@@ -10,16 +10,16 @@
         android:id="@+id/Location_editText"
         android:layout_width="152dp"
         android:layout_height="52dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/location"
-        android:inputType="number"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.899"
+        app:layout_constraintHorizontal_bias="0.88"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/Job_title_editText"
+        app:layout_constraintVertical_bias="0.039" />
 
     <Button
         android:id="@+id/Next_btn"
@@ -30,8 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.82"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.835" />
+        app:layout_constraintTop_toBottomOf="@+id/cat_spinner" />
 
     <Button
         android:id="@+id/cancel_post_btn"
@@ -42,28 +41,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.198"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.834" />
+        app:layout_constraintTop_toBottomOf="@+id/cat_spinner" />
 
     <EditText
         android:id="@+id/Job_title_editText"
         android:layout_width="354dp"
         android:layout_height="49dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/job_title"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.242"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/job_imagebtn"
+        app:layout_constraintVertical_bias="0.029" />
 
     <EditText
-        android:id="@+id/price_editText"
+        android:id="@+id/payment_editText"
         android:layout_width="152dp"
         android:layout_height="52dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/payment"
         android:inputType="number"
@@ -71,9 +70,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/Job_title_editText"
+        app:layout_constraintVertical_bias="0.038" />
 
     <EditText
         android:id="@+id/description_editText"
@@ -89,34 +87,20 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.482" />
+        app:layout_constraintTop_toBottomOf="@+id/payment_editText"
+        app:layout_constraintVertical_bias="0.03" />
 
     <ImageButton
         android:id="@+id/job_imagebtn"
-        android:layout_width="180dp"
-        android:layout_height="125dp"
+        android:layout_width="355dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/job_images"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.074"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.027"
-        app:srcCompat="@mipmap/ic_launcher" />
-
-    <ImageButton
-        android:id="@+id/job_imagebtn2"
-        android:layout_width="180dp"
-        android:layout_height="125dp"
-        android:contentDescription="@string/job_image_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.026"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <Spinner
@@ -127,8 +111,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.682" />
+        app:layout_constraintTop_toBottomOf="@+id/Category_txtView"
+        app:layout_constraintVertical_bias="0.032" />
 
     <TextView
         android:id="@+id/Category_txtView"
@@ -138,9 +122,9 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintTop_toBottomOf="@+id/description_editText"
+        app:layout_constraintVertical_bias="0.08" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
