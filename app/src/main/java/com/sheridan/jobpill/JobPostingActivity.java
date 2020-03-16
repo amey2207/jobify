@@ -78,20 +78,25 @@ public class JobPostingActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String jobTitle = titleEdt.getText().toString();
                 String jobPayment = paymentEdt.getText().toString();
                 String jobLocation = locationEdt.getText().toString();
                 String jobDescription = descriptionEdt.getText().toString();
                 String jobCategory = categorySpn.getSelectedItem().toString();
-
-                Intent jobIntent = new Intent(JobPostingActivity.this, InstructionsActivity.class);
-                jobIntent.putExtra("Job_Title", jobTitle);
-                jobIntent.putExtra("Job_Payment", jobPayment);
-                jobIntent.putExtra("Job_Location", jobLocation);
-                jobIntent.putExtra("Job_Description", jobDescription);
-                jobIntent.putExtra("Job_Category", jobCategory);
-                startActivity(jobIntent);
-                finish();
+                if (jobTitle.isEmpty() || jobPayment.isEmpty() || jobLocation.isEmpty() || jobCategory.isEmpty() || jobDescription.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent jobIntent = new Intent(JobPostingActivity.this, InstructionsActivity.class);
+                    jobIntent.putExtra("Job_Title", jobTitle);
+                    jobIntent.putExtra("Job_Payment", jobPayment);
+                    jobIntent.putExtra("Job_Location", jobLocation);
+                    jobIntent.putExtra("Job_Description", jobDescription);
+                    jobIntent.putExtra("Job_Category", jobCategory);
+                    startActivity(jobIntent);
+                    finish();
+                }
             }
         });
         addItemsOnSpinner();
