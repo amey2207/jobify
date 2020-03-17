@@ -1,32 +1,32 @@
 package com.sheridan.jobpill;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.firebase.ui.firestore.SnapshotParser;
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,30 +37,27 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.sheridan.jobpill.Models.Job;
 
-public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick {
+public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick,FilterAlertDialog.FilterDialogListener{
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
-
     private String current_user_id;
-
     private Toolbar toolbar;
-
     private RecyclerView jobsListView;
-
     private JobsListFirestoreAdapter adapter;
     private ImageButton btn_plus;
-
     private TextView txtGreeting;
-
-
     private BottomNavigationView bottomNavigationView;
 
+    private Boolean filtersApplied = false;
+    String locFilter = "";
+    String catFilter = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         toolbar = (Toolbar) findViewById(R.id.top_toolbar_main);
         toolbar.setTitle("");
@@ -114,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                 .setQuery(query, config, Job.class)
                 .build();
 
-        adapter = new JobsListFirestoreAdapter(options,this );
-
+        adapter = new JobsListFirestoreAdapter(options, this);
 
 
         jobsListView.setHasFixedSize(true);
@@ -127,7 +123,28 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.mainactivity_menu,menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Get the menu item and determine what action to take.
+        switch (item.getItemId()) {
+            case R.id.filter:
+                filterAlertDialog();
+                break;
+            default:
+                // Otherwise, do nothing.
+                break;
+        }
+
+        // Call the super version of this method.
+        return super.onOptionsItemSelected(item);
+    }
 
 
     public void setupWidgets() {
@@ -195,8 +212,84 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Job job = snapshot.toObject(Job.class);
         job.setItemId(snapshot.getId());
 
-        Intent intent = new Intent(this,JobDetailsActivity.class);
-        intent.putExtra("JobSnapshot",job);
+        Intent intent = new Intent(this, JobDetailsActivity.class);
+        intent.putExtra("JobSnapshot", job);
         startActivity(intent);
+    }
+
+
+    public void filterAlertDialog(){
+        FilterAlertDialog filterAlertDialog = new FilterAlertDialog();
+        Bundle bundle = new Bundle();
+
+        if(!TextUtils.isEmpty(locFilter)){
+            bundle.putString("location",locFilter);
+        }
+        filterAlertDialog.setArguments(bundle);
+        filterAlertDialog.show(getSupportFragmentManager(),"filter_dialog");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        EditText location = dialog.getDialog().findViewById(R.id.txt_location_filter);
+        Spinner category_spinner = dialog.getDialog().findViewById(R.id.spinner_category_filter);
+        Spinner pay_spinner = dialog.getDialog().findViewById(R.id.spinner_pay_filter);
+
+        Log.d("POSITIVE_CLICK","location: " + location.getText().toString());
+        Log.d("POSITIVE_CLICK","category: " + category_spinner.getSelectedItem().toString());
+        Log.d("POSITIVE_CLICK","pay: " + pay_spinner.getSelectedItemPosition());
+
+
+
+        if(!TextUtils.isEmpty(location.getText())){
+            locFilter = location.getText().toString();
+        }
+
+
+        Query query = firebaseFirestore.collection("jobs")
+                .whereEqualTo("location", locFilter);
+        //RecyclerOptions
+
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(3)
+                .build();
+
+        FirestorePagingOptions<Job> options = new FirestorePagingOptions.Builder<Job>()
+                .setLifecycleOwner(this)
+                .setQuery(query, config, Job.class)
+                .build();
+
+        adapter.updateOptions(options);
+
+        this.filtersApplied = true;
+
+    }
+
+    @Override
+    public void onDialogNeutralClick(DialogFragment dialog) {
+        Query query = firebaseFirestore.collection("jobs");
+
+        //RecyclerOptions
+
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(3)
+                .build();
+
+        FirestorePagingOptions<Job> options = new FirestorePagingOptions.Builder<Job>()
+                .setLifecycleOwner(this)
+                .setQuery(query, config, Job.class)
+                .build();
+
+        adapter.updateOptions(options);
+
+        locFilter = "";
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 }

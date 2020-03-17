@@ -30,11 +30,28 @@
     <string name="password">Password</string>
     <string name="logo">Logo</string>
 
+
     <string-array name="interest_categories">
         <item>Plumbing</item>
         <item>Moving</item>
         <item>Painting</item>
         <item>Repair Work</item>
         <item>Mechanic</item>
+    </string-array>
+
+    <string-array name="filter_categories">
+        <item>Select Category</item>
+        <item>Plumbing</item>
+        <item>Moving</item>
+        <item>Painting</item>
+        <item>Repair Work</item>
+        <item>Mechanic</item>
+    </string-array>
+
+    <string-array name="pay_filters">
+        <item>Select Pay Filter</item>
+        <item>$0-$100</item>
+        <item>$100-$500</item>
+        <item>$500+</item>
     </string-array>
 </resources>

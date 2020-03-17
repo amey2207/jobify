@@ -19,9 +19,10 @@ public class Job implements Parcelable {
     private String jobTitle;
     private String location;
     private String photoURL;
-    private ArrayList<String> interestedUsers;
+    private String jobStatus;
+    private ArrayList<String> usersApplied;
 
-    public Job(String itemId, String createdBy, String createdDate, long estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL, ArrayList<String> interestedUsers) {
+    public Job(String itemId, String createdBy, String createdDate, long estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL,String jobStatus, ArrayList<String> usersApplied) {
         this.itemId = itemId;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
@@ -32,7 +33,9 @@ public class Job implements Parcelable {
         this.jobTitle = jobTitle;
         this.location = location;
         this.photoURL = photoURL;
-        this.interestedUsers = interestedUsers;
+        this.jobStatus = jobStatus;
+        this.usersApplied = usersApplied;
+
     }
 
     public Job() {
@@ -49,7 +52,8 @@ public class Job implements Parcelable {
         jobTitle = in.readString();
         location = in.readString();
         photoURL = in.readString();
-        interestedUsers = in.createStringArrayList();
+        jobStatus = in.readString();
+        usersApplied = in.createStringArrayList();
     }
 
     public static final Creator<Job> CREATOR = new Creator<Job>() {
@@ -144,12 +148,20 @@ public class Job implements Parcelable {
         this.photoURL = photoURL;
     }
 
-    public ArrayList<String> getInterestedUsers() {
-        return interestedUsers;
+    public ArrayList<String> getUsersApplied() {
+        return usersApplied;
     }
 
-    public void setInterestedUsers(ArrayList<String> interestedUsers) {
-        this.interestedUsers = interestedUsers;
+    public void setUsersApplied(ArrayList<String> usersApplied) {
+        this.usersApplied = usersApplied;
+    }
+
+    public String getJobStatus() {
+        return jobStatus;
+    }
+
+    public void setJobStatus(String jobStatus) {
+        this.jobStatus = jobStatus;
     }
 
     @Override
@@ -165,7 +177,8 @@ public class Job implements Parcelable {
                 ", jobTitle='" + jobTitle + '\'' +
                 ", location='" + location + '\'' +
                 ", photoUrl='" + photoURL + '\'' +
-                ", interestedUsers=" + interestedUsers +
+                ", jobStatus='" + jobStatus + '\'' +
+                ", usersApplied=" + usersApplied +
                 '}';
     }
 
@@ -186,6 +199,7 @@ public class Job implements Parcelable {
         parcel.writeString(jobTitle);
         parcel.writeString(location);
         parcel.writeString(photoURL);
-        parcel.writeStringList(interestedUsers);
+        parcel.writeString(jobStatus);
+        parcel.writeStringList(usersApplied);
     }
 }
