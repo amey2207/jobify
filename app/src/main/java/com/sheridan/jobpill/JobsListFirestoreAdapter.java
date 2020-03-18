@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
@@ -31,6 +33,11 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         holder.jobTitle.setText(model.getJobTitle());
         holder.jobDescription.setText(model.getJobDescription());
         holder.jobEstimatedPay.setText(model.getEstimatedPay() + "");
+
+        RequestOptions placeholderRequest = new RequestOptions();
+        placeholderRequest.placeholder(R.drawable.profile_default);
+
+        Glide.with(holder.itemView.getContext()).setDefaultRequestOptions(placeholderRequest).load(model.getPhotoURL()).into(holder.jobImage);
     }
 
     @NonNull
