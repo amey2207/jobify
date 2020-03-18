@@ -52,12 +52,16 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
                 break;
             case FINISHED:
                 Log.d("PAGING_LOG","All Data Loaded");
+                if(getItemCount() == 0){
+                    Log.d("PAGING_LOG","No Items: " + 0);
+                }
                 break;
             case ERROR:
                 Log.d("PAGING_LOG","Error Loading Data: ");
                 break;
             case LOADED:
                 Log.d("PAGING_LOG","Total Items Loaded : " + getItemCount());
+
                 break;
         }
     }
@@ -85,6 +89,8 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
             onListItemClick.onItemClick(getItem(getAdapterPosition()),getAdapterPosition());
         }
     }
+
+
 
     public interface OnListItemClick{
         void onItemClick(DocumentSnapshot snapshot, int position);

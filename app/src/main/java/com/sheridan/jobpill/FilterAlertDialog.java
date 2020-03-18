@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,11 +26,17 @@ public class FilterAlertDialog extends DialogFragment {
         View v = inflater.inflate(R.layout.filter_alert_dialog,null);
 
         EditText location = v.findViewById(R.id.txt_location_filter);
+        Spinner catSpinner = v.findViewById(R.id.spinner_category_filter);
 
+
+        //prepopulate data on the filter options if they exist
         Bundle bundle = getArguments();
        if(!bundle.isEmpty()){
            String loc = bundle.getString("location","");
+           int cat = bundle.getInt("category",0);
            location.setText(loc);
+           catSpinner.setSelection(cat);
+
        }
 
 

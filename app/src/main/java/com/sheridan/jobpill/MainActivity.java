@@ -37,6 +37,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.sheridan.jobpill.Models.Job;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick,FilterAlertDialog.FilterDialogListener{
 
     private FirebaseAuth firebaseAuth;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     private Boolean filtersApplied = false;
     String locFilter = "";
     String catFilter = "";
+    int catFilterPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,9 +228,18 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         if(!TextUtils.isEmpty(locFilter)){
             bundle.putString("location",locFilter);
         }
+
+        if(!TextUtils.isEmpty(catFilter)){
+            bundle.putInt("category",catFilterPosition);
+        }
         filterAlertDialog.setArguments(bundle);
         filterAlertDialog.show(getSupportFragmentManager(),"filter_dialog");
     }
+
+
+    //On Filter alert dialog "filter" click
+    //apply the options on the query, update the paging adapter with the new query
+    //save the selected options in bundle and pass to activity
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
@@ -239,16 +251,34 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Log.d("POSITIVE_CLICK","category: " + category_spinner.getSelectedItem().toString());
         Log.d("POSITIVE_CLICK","pay: " + pay_spinner.getSelectedItemPosition());
 
+        Query query = firebaseFirestore.collection("jobs");
 
 
-        if(!TextUtils.isEmpty(location.getText())){
+        if(!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0){
             locFilter = location.getText().toString();
+            catFilter = category_spinner.getSelectedItem().toString();
+            catFilterPosition = category_spinner.getSelectedItemPosition();
+
+            query = firebaseFirestore.collection("jobs")
+                    .whereEqualTo("location", locFilter)
+                    .whereEqualTo("jobCategory",catFilter);
+
+        }else if(!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0){
+
+            locFilter = location.getText().toString();
+            query = firebaseFirestore.collection("jobs")
+                    .whereEqualTo("location", locFilter);
+
+        }else if(TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0){
+            catFilter = category_spinner.getSelectedItem().toString();
+            catFilterPosition = category_spinner.getSelectedItemPosition();
+
+
+            query = firebaseFirestore.collection("jobs")
+                    .whereEqualTo("jobCategory",catFilter);
         }
 
 
-        Query query = firebaseFirestore.collection("jobs")
-                .whereEqualTo("location", locFilter);
-        //RecyclerOptions
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
@@ -266,6 +296,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
     }
 
+    //Clear filters on query and update adapter
+    // and reinitialize the filters to empty
     @Override
     public void onDialogNeutralClick(DialogFragment dialog) {
         Query query = firebaseFirestore.collection("jobs");
@@ -285,6 +317,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         adapter.updateOptions(options);
 
         locFilter = "";
+        catFilter = "";
+        catFilterPosition = 0;
+
 
     }
 
