@@ -17,12 +17,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txt_greeting"
+        android:id="@+id/txt_main_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Jobs"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/top_toolbar_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/top_toolbar_main"

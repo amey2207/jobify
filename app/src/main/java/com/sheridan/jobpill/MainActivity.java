@@ -1,18 +1,14 @@
 package com.sheridan.jobpill;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,8 +32,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.sheridan.jobpill.Models.Job;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick,FilterAlertDialog.FilterDialogListener{
 
@@ -154,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         btn_plus = findViewById(R.id.plus_btn);
-        txtGreeting = findViewById(R.id.txt_greeting);
+        txtGreeting = findViewById(R.id.txt_main_title);
         bottomNavigationView = findViewById(R.id.mainBottomNav);
         jobsListView = findViewById(R.id.jobs_list);
     }
