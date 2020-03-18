@@ -85,7 +85,7 @@
         android:hint="@string/description"
         android:inputType="textMultiLine"
         android:lines="8"
-        android:maxLength="1000"
+        android:maxLength="250"
         android:maxLines="10"
         android:minLines="6"
         android:scrollbars="vertical"
