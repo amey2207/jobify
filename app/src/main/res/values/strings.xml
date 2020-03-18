@@ -29,6 +29,8 @@
     <string name="e_mail">E-mail</string>
     <string name="password">Password</string>
     <string name="logo">Logo</string>
+    <string name="todo">TODO</string>
+    <string name="jobs">Jobs</string>
 
 
     <string-array name="interest_categories">

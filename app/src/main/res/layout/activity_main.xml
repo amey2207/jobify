@@ -20,7 +20,7 @@
         android:id="@+id/txt_main_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jobs"
+        android:text="@string/jobs"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -53,13 +53,14 @@
         android:id="@+id/plus_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@mipmap/plus_resized"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toTopOf="@+id/mainBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.974"
-        app:srcCompat="@mipmap/plus_resized"
-        android:contentDescription="TODO" />
+        app:srcCompat="@mipmap/plus_resized" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
