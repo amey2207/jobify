@@ -18,6 +18,8 @@ import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.sheridan.jobpill.Models.Job;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsListFirestoreAdapter.JobsViewHolder> {
 
     private OnListItemClick onListItemClick;
@@ -34,10 +36,12 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         holder.jobDescription.setText(model.getJobDescription());
         holder.jobEstimatedPay.setText(model.getEstimatedPay() + "");
 
-        RequestOptions placeholderRequest = new RequestOptions();
-        placeholderRequest.placeholder(R.drawable.profile_default);
 
-        Glide.with(holder.itemView.getContext()).setDefaultRequestOptions(placeholderRequest).load(model.getPhotoURL()).into(holder.jobImage);
+        Glide.with(holder.itemView.getContext())
+                .load(model.getPhotoURL())
+                .placeholder(R.drawable.profile_default)
+                .transition(withCrossFade())
+                .into(holder.jobImage);
     }
 
     @NonNull
