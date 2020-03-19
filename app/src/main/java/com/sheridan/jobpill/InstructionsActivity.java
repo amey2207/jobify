@@ -66,7 +66,6 @@ public class InstructionsActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         jobMap = new HashMap<>();
-        jobMap.put("Title", jobTitle);
         jobMap.put("createdBy", currentUser.getEmail());
         jobMap.put("createdDate", date);
         jobMap.put("estimatedPay", jobPayment);
