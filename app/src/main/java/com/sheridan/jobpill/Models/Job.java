@@ -3,8 +3,6 @@ package com.sheridan.jobpill.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 public class Job implements Parcelable {
 
 
@@ -20,9 +18,8 @@ public class Job implements Parcelable {
     private String location;
     private String photoURL;
     private String jobStatus;
-    private ArrayList<String> usersApplied;
 
-    public Job(String itemId, String createdBy, String createdDate, long estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL,String jobStatus, ArrayList<String> usersApplied) {
+    public Job(String itemId, String createdBy, String createdDate, long estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL, String jobStatus) {
         this.itemId = itemId;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
@@ -34,7 +31,6 @@ public class Job implements Parcelable {
         this.location = location;
         this.photoURL = photoURL;
         this.jobStatus = jobStatus;
-        this.usersApplied = usersApplied;
 
     }
 
@@ -53,7 +49,6 @@ public class Job implements Parcelable {
         location = in.readString();
         photoURL = in.readString();
         jobStatus = in.readString();
-        usersApplied = in.createStringArrayList();
     }
 
     public static final Creator<Job> CREATOR = new Creator<Job>() {
@@ -148,14 +143,6 @@ public class Job implements Parcelable {
         this.photoURL = photoURL;
     }
 
-    public ArrayList<String> getUsersApplied() {
-        return usersApplied;
-    }
-
-    public void setUsersApplied(ArrayList<String> usersApplied) {
-        this.usersApplied = usersApplied;
-    }
-
     public String getJobStatus() {
         return jobStatus;
     }
@@ -178,7 +165,6 @@ public class Job implements Parcelable {
                 ", location='" + location + '\'' +
                 ", photoUrl='" + photoURL + '\'' +
                 ", jobStatus='" + jobStatus + '\'' +
-                ", usersApplied=" + usersApplied +
                 '}';
     }
 
@@ -200,6 +186,6 @@ public class Job implements Parcelable {
         parcel.writeString(location);
         parcel.writeString(photoURL);
         parcel.writeString(jobStatus);
-        parcel.writeStringList(usersApplied);
+
     }
 }
