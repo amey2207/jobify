@@ -2,23 +2,16 @@ package com.sheridan.jobpill.Models;
 
 public class JobApplication {
 
-    private String jobId, applicantId, applicationDate, status;
+    private String applicantId;
+    private String applicationDate;
+    private String status;
 
     public JobApplication(){}
 
-    public JobApplication(String jobId, String applicantId, String applicationDate, String status) {
-        this.jobId = jobId;
+    public JobApplication(String applicantId, String applicationDate, String status) {
         this.applicantId = applicantId;
         this.applicationDate = applicationDate;
         this.status = status;
-    }
-
-    public String getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
     }
 
     public String getApplicantId() {
