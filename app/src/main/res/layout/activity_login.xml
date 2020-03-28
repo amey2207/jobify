@@ -24,9 +24,13 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="92dp"
+        android:layout_width="wrap_content"
         android:layout_height="51dp"
+        android:backgroundTint="@color/colorAccent"
         android:text="@string/log_in"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.282"
@@ -36,10 +40,14 @@
 
     <Button
         android:id="@+id/btn_signup"
-        android:layout_width="92dp"
-        android:layout_height="54dp"
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:backgroundTint="@color/colorAccent"
         android:onClick="Signup_page"
         android:text="@string/sign_up"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.711"

@@ -126,7 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
         };
 
         //set part of the string to be clickable
-        spannableString.setSpan(clickableSpan, 16, 25, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(clickableSpan, 16, 26, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //set UI text to the spannable string and make the link in the textView element clickable
         clickHere.setText(spannableString);

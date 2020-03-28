@@ -69,14 +69,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_profile_progress"></de.hdodenhof.circleimageview.CircleImageView>
 
-        <TextView
-            android:id="@+id/txt_change_imgprofile"
+        <Button
+            android:id="@+id/btn_change_imgprofile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/skill_border"
+            android:backgroundTint="@color/colorAccent"
             android:text="Edit profile picture"
-            android:textColor="@color/colorAccent"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_change_profile" />
@@ -106,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.08"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_change_imgprofile" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_change_imgprofile" />
 
 
         <EditText

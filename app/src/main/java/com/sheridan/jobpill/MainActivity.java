@@ -33,7 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.sheridan.jobpill.Models.Job;
 
-public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick,FilterAlertDialog.FilterDialogListener{
+public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     String locFilter = "";
     String catFilter = "";
     int catFilterPosition = 0;
+
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +96,11 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
             }
         });
 
+        currentUser = firebaseAuth.getCurrentUser();
+
         //Query
-        Query query = firebaseFirestore.collection("jobs");
+        Query query = firebaseFirestore
+                .collection("jobs");
         //RecyclerOptions
 
         PagedList.Config config = new PagedList.Config.Builder()
@@ -111,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         adapter = new JobsListFirestoreAdapter(options, this);
 
 
+
         jobsListView.setHasFixedSize(true);
         jobsListView.setLayoutManager(new LinearLayoutManager(this));
         jobsListView.setAdapter(adapter);
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.mainactivity_menu,menu);
+        menuInflater.inflate(R.menu.mainactivity_menu, menu);
         return true;
     }
 
@@ -157,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     protected void onStart() {
         super.onStart();
 
-        final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        currentUser = firebaseAuth.getCurrentUser();
         if (currentUser == null) {
             sendToLogin();
         } else {
@@ -212,22 +218,23 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Intent intent = new Intent(this, JobDetailsActivity.class);
         intent.putExtra("JobSnapshot", job);
         startActivity(intent);
+
     }
 
 
-    public void filterAlertDialog(){
+    public void filterAlertDialog() {
         FilterAlertDialog filterAlertDialog = new FilterAlertDialog();
         Bundle bundle = new Bundle();
 
-        if(!TextUtils.isEmpty(locFilter)){
-            bundle.putString("location",locFilter);
+        if (!TextUtils.isEmpty(locFilter)) {
+            bundle.putString("location", locFilter);
         }
 
-        if(!TextUtils.isEmpty(catFilter)){
-            bundle.putInt("category",catFilterPosition);
+        if (!TextUtils.isEmpty(catFilter)) {
+            bundle.putInt("category", catFilterPosition);
         }
         filterAlertDialog.setArguments(bundle);
-        filterAlertDialog.show(getSupportFragmentManager(),"filter_dialog");
+        filterAlertDialog.show(getSupportFragmentManager(), "filter_dialog");
     }
 
 
@@ -241,37 +248,36 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Spinner category_spinner = dialog.getDialog().findViewById(R.id.spinner_category_filter);
         Spinner pay_spinner = dialog.getDialog().findViewById(R.id.spinner_pay_filter);
 
-        Log.d("POSITIVE_CLICK","location: " + location.getText().toString());
-        Log.d("POSITIVE_CLICK","category: " + category_spinner.getSelectedItem().toString());
-        Log.d("POSITIVE_CLICK","pay: " + pay_spinner.getSelectedItemPosition());
+        Log.d("POSITIVE_CLICK", "location: " + location.getText().toString());
+        Log.d("POSITIVE_CLICK", "category: " + category_spinner.getSelectedItem().toString());
+        Log.d("POSITIVE_CLICK", "pay: " + pay_spinner.getSelectedItemPosition());
 
         Query query = firebaseFirestore.collection("jobs");
 
 
-        if(!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0){
+        if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0) {
             locFilter = location.getText().toString();
             catFilter = category_spinner.getSelectedItem().toString();
             catFilterPosition = category_spinner.getSelectedItemPosition();
 
             query = firebaseFirestore.collection("jobs")
                     .whereEqualTo("location", locFilter)
-                    .whereEqualTo("jobCategory",catFilter);
+                    .whereEqualTo("jobCategory", catFilter);
 
-        }else if(!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0){
+        } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0) {
 
             locFilter = location.getText().toString();
             query = firebaseFirestore.collection("jobs")
                     .whereEqualTo("location", locFilter);
 
-        }else if(TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0){
+        } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0) {
             catFilter = category_spinner.getSelectedItem().toString();
             catFilterPosition = category_spinner.getSelectedItemPosition();
 
 
             query = firebaseFirestore.collection("jobs")
-                    .whereEqualTo("jobCategory",catFilter);
+                    .whereEqualTo("jobCategory", catFilter);
         }
-
 
 
         PagedList.Config config = new PagedList.Config.Builder()
@@ -294,7 +300,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     // and reinitialize the filters to empty
     @Override
     public void onDialogNeutralClick(DialogFragment dialog) {
-        Query query = firebaseFirestore.collection("jobs");
+        Query query = firebaseFirestore
+                .collection("jobs");
 
         //RecyclerOptions
 

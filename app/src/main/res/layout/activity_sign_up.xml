@@ -57,6 +57,7 @@
         android:width="180dp"
         android:height="40dp"
         android:background="@drawable/custom_blue_btn"
+        android:backgroundTint="@color/colorAccent"
         android:text="@string/sign_up_btn"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

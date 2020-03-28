@@ -37,6 +37,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         holder.jobEstimatedPay.setText(model.getEstimatedPay() + "");
 
 
+
         Glide.with(holder.itemView.getContext())
                 .load(model.getPhotoURL())
                 .placeholder(R.drawable.profile_default)

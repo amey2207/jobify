@@ -51,8 +51,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView imgCancelIcon;
     private ImageView imgSaveIcon;
 
-    private TextView txtChangeProfileImg;
     private CircleImageView imgChangeProfile;
+
+    private Button btnChangeProfileImg;
 
     private TextView txtInterests;
     private Button btnInterests;
@@ -158,7 +159,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        imgChangeProfile.setOnClickListener(new View.OnClickListener() {
+        btnChangeProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -461,7 +462,7 @@ public class EditProfileActivity extends AppCompatActivity {
         imgCancelIcon = findViewById(R.id.img_cancel_editprofile);
         imgSaveIcon = findViewById(R.id.img_save_editprofile);
 
-        txtChangeProfileImg = findViewById(R.id.txt_change_imgprofile);
+        btnChangeProfileImg = findViewById(R.id.btn_change_imgprofile);
         imgChangeProfile = findViewById(R.id.img_change_profile);
 
         txtProfileName = findViewById(R.id.txt_profile_name);
