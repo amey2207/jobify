@@ -1,4 +1,4 @@
-package com.sheridan.jobpill;
+package com.sheridan.jobpill.JobApplication;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,47 +11,46 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.sheridan.jobpill.Models.Job;
+import com.sheridan.jobpill.Job.JobsListFirestoreAdapter;
+import com.sheridan.jobpill.Models.JobApplication;
+import com.sheridan.jobpill.R;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsListFirestoreAdapter.JobsViewHolder> {
+public class JobApplicationListFirestoreAdapter extends FirestorePagingAdapter<JobApplication,JobApplicationListFirestoreAdapter.JobApplicantsViewHolder> {
 
     private OnListItemClick onListItemClick;
 
-    public JobsListFirestoreAdapter(@NonNull FirestorePagingOptions<Job> options, OnListItemClick onListItemClick) {
+
+    public JobApplicationListFirestoreAdapter(@NonNull FirestorePagingOptions<JobApplication> options, OnListItemClick onListItemClick) {
         super(options);
         this.onListItemClick = onListItemClick;
     }
 
+
     @Override
-    protected void onBindViewHolder(@NonNull JobsViewHolder holder, int position, @NonNull Job model) {
+    protected void onBindViewHolder(@NonNull JobApplicationListFirestoreAdapter.JobApplicantsViewHolder holder, int position, @NonNull JobApplication model) {
 
-        holder.jobTitle.setText(model.getJobTitle());
-        holder.jobDescription.setText(model.getJobDescription());
-        holder.jobEstimatedPay.setText(model.getEstimatedPay() + "");
-
-
+        holder.applicantName.setText(model.getApplicantName() + " from " + model.getApplicantCity());
 
         Glide.with(holder.itemView.getContext())
-                .load(model.getPhotoURL())
+                .load(model.getApplicantPhoto())
                 .placeholder(R.drawable.profile_default)
                 .transition(withCrossFade())
-                .into(holder.jobImage);
+                .into(holder.applicantImg);
+
     }
 
     @NonNull
     @Override
-    public JobsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.jobslist_item_single, parent, false);
-        return new JobsViewHolder(view);
+    public JobApplicationListFirestoreAdapter.JobApplicantsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.jobapplicants_item_single, parent, false);
+        return new JobApplicantsViewHolder(view);
     }
-
 
     @Override
     protected void onLoadingStateChanged(@NonNull LoadingState state) {
@@ -77,21 +76,16 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         }
     }
 
-    public class JobsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class JobApplicantsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView jobTitle;
-        private TextView jobDescription;
-        private ImageView jobImage;
-        private TextView jobEstimatedPay;
+        private TextView applicantName;
+        private ImageView applicantImg;
 
-        public JobsViewHolder(@NonNull View itemView) {
+        public JobApplicantsViewHolder(@NonNull View itemView) {
             super(itemView);
 
-
-            jobTitle = itemView.findViewById(R.id.txt_jobTitle);
-            jobDescription = itemView.findViewById(R.id.txt_jobDescription);
-            jobImage = itemView.findViewById(R.id.img_jobPhoto);
-            jobEstimatedPay = itemView.findViewById(R.id.txt_jobEstimatedPay);
+            applicantName = itemView.findViewById(R.id.name_applicant);
+            applicantImg = itemView.findViewById(R.id.img_applicant);
 
             itemView.setOnClickListener(this);
         }
@@ -108,3 +102,4 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         void onItemClick(DocumentSnapshot snapshot, int position);
     }
 }
+

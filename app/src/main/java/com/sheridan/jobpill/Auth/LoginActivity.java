@@ -1,4 +1,4 @@
-package com.sheridan.jobpill;
+package com.sheridan.jobpill.Auth;
 
 import android.os.Bundle;
 
@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.R;
 
 public class LoginActivity extends AppCompatActivity {
 

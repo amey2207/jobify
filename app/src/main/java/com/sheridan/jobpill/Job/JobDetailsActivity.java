@@ -1,10 +1,12 @@
-package com.sheridan.jobpill;
+package com.sheridan.jobpill.Job;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +25,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
+import com.sheridan.jobpill.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,12 +84,28 @@ public class JobDetailsActivity extends AppCompatActivity {
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 JobApplication jobApplication = new JobApplication();
                 jobApplication.setApplicantId(current_user_id);
                 String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                 jobApplication.setApplicationDate(date);
                 jobApplication.setStatus("pending approval");
 
+                SharedPreferences settings = getSharedPreferences("myprofile",
+                        Context.MODE_PRIVATE);
+
+                String name = settings.getString("name","");
+                String intro = settings.getString("intro","");
+                String phone = settings.getString("phone","");
+                String city = settings.getString("city","");
+                String image = settings.getString("image","");
+
+                //set user details in job_application
+                jobApplication.setApplicantName(name);
+                jobApplication.setApplicantIntro(intro);
+                jobApplication.setApplicantPhone(phone);
+                jobApplication.setApplicantCity(city);
+                jobApplication.setApplicantPhoto(image);
 
                 jobsRef.document(currentJob.getItemId()).collection("jobApplications").add(jobApplication).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
@@ -153,7 +173,7 @@ public class JobDetailsActivity extends AppCompatActivity {
     }
 
     private void sendToLogin() {
-        Intent intent = new Intent(JobDetailsActivity.this,LoginActivity.class);
+        Intent intent = new Intent(JobDetailsActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

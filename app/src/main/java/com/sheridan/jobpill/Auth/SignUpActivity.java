@@ -1,4 +1,4 @@
-package com.sheridan.jobpill;
+package com.sheridan.jobpill.Auth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +24,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
+import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.Profile.EditProfileActivity;
+import com.sheridan.jobpill.R;
 
 public class SignUpActivity extends AppCompatActivity {
 

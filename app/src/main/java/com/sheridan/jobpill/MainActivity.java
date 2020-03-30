@@ -1,6 +1,8 @@
 package com.sheridan.jobpill;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +33,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.sheridan.jobpill.Auth.LoginActivity;
+import com.sheridan.jobpill.Job.JobDetailsActivity;
+import com.sheridan.jobpill.Job.JobDetailsPoster;
+import com.sheridan.jobpill.Job.JobPostingActivity;
+import com.sheridan.jobpill.Job.JobsActivity;
+import com.sheridan.jobpill.Job.JobsListFirestoreAdapter;
 import com.sheridan.jobpill.Models.Job;
+import com.sheridan.jobpill.Profile.EditProfileActivity;
+import com.sheridan.jobpill.Profile.ProfileActivity;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
@@ -100,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
         //Query
         Query query = firebaseFirestore
-                .collection("jobs");
+                .collection("jobs")
+                .orderBy("createdDate", Query.Direction.DESCENDING);
 
         //RecyclerOptions
 
@@ -181,6 +194,27 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                             startActivity(intent);
                             finish();
                         } else {
+                            String name = task.getResult().getString("name");
+                            String intro = task.getResult().getString("intro");
+                            String phone = task.getResult().getString("phone");
+                            String city = task.getResult().getString("city");
+                            String image = task.getResult().getString("photoURL");
+
+                            SharedPreferences settings = getSharedPreferences("myprofile",
+                                    Context.MODE_PRIVATE);
+
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString("name", name);
+                            editor.putString("intro", intro);
+                            editor.putString("phone", phone);
+                            editor.putString("city", city);
+                            editor.putString("image", image);
+
+                            editor.commit();
+
+                            Log.d("SHARED_PREFERENCES" , "PROFILE SAVED AS: " + name + ", " + intro +
+                                    ", " + phone + ", " + city + ", " + image);
+
                         }
                     } else {
                         String errorMessage = task.getException().getMessage();
@@ -191,6 +225,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         }
 
     }
+
+
 
 
     private void sendToLogin() {
@@ -223,9 +259,18 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Job job = snapshot.toObject(Job.class);
         job.setItemId(snapshot.getId());
 
-        Intent intent = new Intent(this, JobDetailsActivity.class);
-        intent.putExtra("JobSnapshot", job);
-        startActivity(intent);
+
+        if(currentUser.getEmail().equals(job.getCreatedBy())){
+            Intent intent = new Intent(this, JobDetailsPoster.class);
+            intent.putExtra("JobSnapshot", job);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(this, JobDetailsActivity.class);
+            intent.putExtra("JobSnapshot", job);
+            startActivity(intent);
+        }
+
+
 
     }
 
@@ -270,13 +315,15 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
             query = firebaseFirestore.collection("jobs")
                     .whereEqualTo("location", locFilter)
-                    .whereEqualTo("jobCategory", catFilter);
+                    .whereEqualTo("jobCategory", catFilter)
+                    .orderBy("createdDate",Query.Direction.DESCENDING);
 
         } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0) {
 
             locFilter = location.getText().toString();
             query = firebaseFirestore.collection("jobs")
-                    .whereEqualTo("location", locFilter);
+                    .whereEqualTo("location", locFilter)
+                    .orderBy("createdDate",Query.Direction.DESCENDING);
 
         } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0) {
             catFilter = category_spinner.getSelectedItem().toString();
@@ -284,7 +331,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
 
             query = firebaseFirestore.collection("jobs")
-                    .whereEqualTo("jobCategory", catFilter);
+                    .whereEqualTo("jobCategory", catFilter)
+                    .orderBy("createdDate",Query.Direction.DESCENDING);
         }
 
 
@@ -309,7 +357,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     @Override
     public void onDialogNeutralClick(DialogFragment dialog) {
         Query query = firebaseFirestore
-                .collection("jobs");
+                .collection("jobs")
+                .orderBy("createdDate",Query.Direction.DESCENDING);
 
         //RecyclerOptions
 

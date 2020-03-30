@@ -1,4 +1,4 @@
-package com.sheridan.jobpill;
+package com.sheridan.jobpill.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +23,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sheridan.jobpill.Auth.LoginActivity;
+import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.R;
 
 import java.util.ArrayList;
 
@@ -228,7 +230,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void sendToLogin() {
-        Intent intent = new Intent(ProfileActivity.this,LoginActivity.class);
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

@@ -1,4 +1,4 @@
-package com.sheridan.jobpill;
+package com.sheridan.jobpill.Job;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -18,8 +18,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
