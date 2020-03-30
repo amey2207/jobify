@@ -34,7 +34,8 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
 
         holder.jobTitle.setText(model.getJobTitle());
         holder.jobDescription.setText(model.getJobDescription());
-        holder.jobEstimatedPay.setText(model.getEstimatedPay() + "");
+        holder.jobEstimatedPay.setText("$" + model.getEstimatedPay());
+
 
 
 
