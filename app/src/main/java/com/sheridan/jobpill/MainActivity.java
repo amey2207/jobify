@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_action_jobs:
-//                        sentToJobs();
+//                        sendToJobs();
                         return true;
                     case R.id.bottom_action_schedule:
 //                        sendToSchedule();
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         //Query
         Query query = firebaseFirestore
                 .collection("jobs");
+
         //RecyclerOptions
 
         PagedList.Config config = new PagedList.Config.Builder()
@@ -125,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -203,6 +206,11 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         finish();
     }
 
+    private void sendToJobs() {
+        Intent intent = new Intent(MainActivity.this, JobsActivity.class);
+        startActivity(intent);
+        finish();
+    }
     @Override
     protected void onStop() {
         super.onStop();

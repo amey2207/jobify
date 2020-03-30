@@ -73,7 +73,6 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
                 break;
             case LOADED:
                 Log.d("PAGING_LOG","Total Items Loaded : " + getItemCount());
-
                 break;
         }
     }
@@ -87,6 +86,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
 
         public JobsViewHolder(@NonNull View itemView) {
             super(itemView);
+
 
             jobTitle = itemView.findViewById(R.id.txt_jobTitle);
             jobDescription = itemView.findViewById(R.id.txt_jobDescription);
