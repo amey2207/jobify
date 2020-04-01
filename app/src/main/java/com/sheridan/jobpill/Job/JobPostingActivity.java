@@ -2,9 +2,11 @@ package com.sheridan.jobpill.Job;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -36,7 +38,7 @@ public class JobPostingActivity extends AppCompatActivity {
     EditText locationEdt;
     EditText descriptionEdt;
     Spinner categorySpn;
-
+    private Uri jobImageURI = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class JobPostingActivity extends AppCompatActivity {
                 String jobLocation = locationEdt.getText().toString();
                 String jobDescription = descriptionEdt.getText().toString();
                 String jobCategory = categorySpn.getSelectedItem().toString();
+                String jobImage = jobImageURI.toString();
                 if (jobTitle.isEmpty() || jobPayment.isEmpty() || jobLocation.isEmpty() || jobCategory.isEmpty() || jobDescription.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
                 }
@@ -94,6 +97,7 @@ public class JobPostingActivity extends AppCompatActivity {
                     jobIntent.putExtra("Job_Location", jobLocation);
                     jobIntent.putExtra("Job_Description", jobDescription);
                     jobIntent.putExtra("Job_Category", jobCategory);
+                    jobIntent.putExtra("Job_Image", jobImage);
                     startActivity(jobIntent);
                     finish();
                 }
@@ -128,5 +132,19 @@ public class JobPostingActivity extends AppCompatActivity {
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAspectRatio(1, 1)
                 .start(JobPostingActivity.this);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                jobImageURI = result.getUri();
+                jobImageBtn.setImageURI(jobImageURI);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 }

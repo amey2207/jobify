@@ -98,8 +98,8 @@
 
     <ImageButton
         android:id="@+id/job_imagebtn"
-        android:layout_width="355dp"
-        android:layout_height="138dp"
+        android:layout_width="290dp"
+        android:layout_height="147dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/job_images"
         app:layout_constraintEnd_toEndOf="parent"
