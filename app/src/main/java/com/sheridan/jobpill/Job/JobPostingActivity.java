@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,8 +22,10 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +33,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.Models.Job;
+import com.sheridan.jobpill.Profile.EditProfileActivity;
+import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -61,6 +70,12 @@ public class JobPostingActivity extends AppCompatActivity {
     Map<String, Object> jobMap;
     DatabaseReference reference;
     private FirebaseFirestore db;
+
+    private StorageReference image_path = null;
+    private StorageReference storageReference;
+    private String jobId;
+
+
     CollectionReference dbJobs;
 
     @Override
@@ -76,6 +91,10 @@ public class JobPostingActivity extends AppCompatActivity {
         categorySpn = findViewById(R.id.cat_spinner);
         postBtn = findViewById(R.id.pst_btn);
         Instructions = findViewById(R.id.instructions_edt);
+        db = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+
         jobImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,72 +128,96 @@ public class JobPostingActivity extends AppCompatActivity {
                 user_id = firebaseAuth.getCurrentUser().getUid();
                 currentUser = firebaseAuth.getCurrentUser();
 
-                String jobTitle = titleEdt.getText().toString();
-                Long jobPayment = Long.parseLong(paymentEdt.getText().toString());
-                String jobLocation = locationEdt.getText().toString();
-                String jobDescription = descriptionEdt.getText().toString();
-                String jobCategory = categorySpn.getSelectedItem().toString();
-                String jobImage = jobImageURI.toString();
-                String jobInstructions = Instructions.getText().toString();
-                reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
-                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                jobMap = new HashMap<>();
-                jobMap.put("createdBy", currentUser.getEmail());
-                jobMap.put("createdDate", date);
-                jobMap.put("estimatedPay", jobPayment);
-                jobMap.put("photoURL", jobImage);
-                jobMap.put("instructions", jobInstructions);
-                jobMap.put("jobCategory", jobCategory);
-                jobMap.put("jobDescription", jobDescription);
-                jobMap.put("jobStatus", "available");
-                jobMap.put("jobTitle", jobTitle);
-                jobMap.put("location", jobLocation);
-                db = FirebaseFirestore.getInstance();
-                dbJobs = db.collection("jobs");
 
-                if (jobTitle.isEmpty() || jobPayment == null || jobLocation.isEmpty() || jobCategory.isEmpty() || jobDescription.isEmpty()) {
+
+                if (TextUtils.isEmpty(titleEdt.getText()) || TextUtils.isEmpty(paymentEdt.getText()) || TextUtils.isEmpty(locationEdt.getText()) || categorySpn.getSelectedItemPosition() < 1
+                        || TextUtils.isEmpty(descriptionEdt.getText()) || jobImageURI == null) {
                     Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    dbJobs.add(jobMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                    final String jobTitle = titleEdt.getText().toString();
+                    final Float jobPayment = Float.parseFloat(paymentEdt.getText().toString());
+                    final String jobLocation = locationEdt.getText().toString();
+                    final String jobDescription = descriptionEdt.getText().toString();
+                    final String jobCategory = categorySpn.getSelectedItem().toString();
+                    String jobImage = jobImageURI.toString();
+                    final String jobInstructions = Instructions.getText().toString();
+                    reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
+                    final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+
+                    final DocumentReference newJobRef = db.collection("jobs").document();
+                    jobId = newJobRef.getId();
+                    image_path = storageReference.child("job_images").child(jobId + ".jpg");
+
+                    image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(getApplicationContext(), "Job posted successfully", Toast.LENGTH_LONG).show();
-                            Intent jobIntent = new Intent(JobPostingActivity.this, MainActivity.class);
-                            startActivity(jobIntent);
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if(task.isSuccessful()){
+
+                                storeFirestore(task,newJobRef,currentUser.getEmail(),date,jobPayment,jobInstructions,jobCategory,jobDescription,jobTitle,jobLocation);
+
+                            }else{
+                                String error = task.getException().getMessage();
+                                Toast.makeText(JobPostingActivity.this, "Image upload error: " + error, Toast.LENGTH_LONG).show();
+
+                            }
                         }
                     });
+
                 }
             }
         });
-        addItemsOnSpinner();
     }
 
-    public void Instructions_page(View view) {
-        startActivity(new Intent(this, InstructionsActivity.class));
-    }
+    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final DocumentReference newJobRef, final String createdBy, final String createdDate, final Float jobPayment,
+                                final String instructions, final String jobCategory, final String jobDescription, final String jobTitle,
+                                final String jobLocation){
 
-    public void addItemsOnSpinner() {
+        if(task != null){
 
-        Spinner spinner2 = findViewById(R.id.cat_spinner);
-        List<String> list = new ArrayList<>();
-        list.add("Paint");
-        list.add("DIY");
-        list.add("Cleaning");
-        list.add("Gardening");
-        list.add("Babysitting");
-        list.add("Grocery Pick-up");
-        list.add("Other");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(dataAdapter);
+            image_path.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Uri downloadUri = uri;
+                    jobMap = new HashMap<>();
+                    jobMap.put("createdBy", createdBy);
+                    jobMap.put("createdDate", createdDate);
+                    jobMap.put("estimatedPay", jobPayment);
+                    jobMap.put("photoURL", downloadUri.toString());
+                    jobMap.put("instructions", instructions);
+                    jobMap.put("jobCategory", jobCategory);
+                    jobMap.put("jobDescription", jobDescription);
+                    jobMap.put("jobStatus", "available");
+                    jobMap.put("jobTitle", jobTitle);
+                    jobMap.put("location", jobLocation);
+
+                    newJobRef.set(jobMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(JobPostingActivity.this, "Job Posted Successfully", Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(JobPostingActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                String error = task.getException().getMessage();
+
+                                Toast.makeText(JobPostingActivity.this, "Firestore error: " + error, Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+                    });
+
+                }
+            });
+
+        }else{
+
+        }
+
     }
 
     private void BringImagePicker() {
@@ -197,4 +240,7 @@ public class JobPostingActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
 }

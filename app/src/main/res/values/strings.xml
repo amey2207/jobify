@@ -40,6 +40,16 @@
         <item>Repair Work</item>
         <item>Cleaning</item>
         <item>Gardening</item>
+    </string-array>
+
+    <string-array name="post_interest_categories">
+        <item>Select Category</item>
+        <item>Plumbing</item>
+        <item>Moving</item>
+        <item>Painting</item>
+        <item>Repair Work</item>
+        <item>Cleaning</item>
+        <item>Gardening</item>
         <item>Other</item>
     </string-array>
 
@@ -49,7 +59,9 @@
         <item>Moving</item>
         <item>Painting</item>
         <item>Repair Work</item>
-        <item>Mechanic</item>
+        <item>Cleaning</item>
+        <item>Gardening</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="pay_filters">

@@ -2,149 +2,189 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_job_posting"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/Location_editText"
-        android:layout_width="152dp"
-        android:layout_height="52dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/location"
-        android:inputType="text"
-        android:maxLength="15"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.857"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Job_title_editText"
-        app:layout_constraintVertical_bias="0.058" />
-
-    <Button
-        android:id="@+id/pst_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Post"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.764"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructions_edt"
-        app:layout_constraintVertical_bias="0.29" />
-
-    <Button
-        android:id="@+id/cancel_post_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructions_edt"
-        app:layout_constraintVertical_bias="0.29" />
-
-    <EditText
-        android:id="@+id/Job_title_editText"
-        android:layout_width="354dp"
-        android:layout_height="49dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/job_title"
-        android:inputType="textPersonName"
-        android:maxLength="50"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/job_imagebtn"
-        app:layout_constraintVertical_bias="0.029" />
-
-    <EditText
-        android:id="@+id/payment_editText"
-        android:layout_width="152dp"
-        android:layout_height="52dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/payment"
-        android:inputType="number"
-        android:maxLength="6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Job_title_editText"
-        app:layout_constraintVertical_bias="0.058" />
-
-    <EditText
-        android:id="@+id/description_editText"
-        android:layout_width="349dp"
-        android:layout_height="100dp"
-        android:autofillHints=""
-        android:gravity="start|end"
-        android:hint="@string/description"
-        android:inputType="textMultiLine"
-        android:lines="8"
-        android:maxLength="250"
-        android:maxLines="10"
-        android:minLines="6"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.403"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/payment_editText"
-        app:layout_constraintVertical_bias="0.081" />
-
-    <ImageButton
-        android:id="@+id/job_imagebtn"
-        android:layout_width="290dp"
-        android:layout_height="147dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/job_images"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:layout_constraintVertical_bias="0.0">
 
-    <Spinner
-        android:id="@+id/cat_spinner"
-        android:layout_width="357dp"
-        android:layout_height="43dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Category_txtView"
-        app:layout_constraintVertical_bias="0.0" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/activity_job_posting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/Category_txtView"
-        android:layout_width="112dp"
-        android:layout_height="30dp"
-        android:text="@string/category"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.093"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description_editText"
-        app:layout_constraintVertical_bias="0.06" />
+            <ImageButton
+                android:id="@+id/job_imagebtn"
+                android:layout_width="290dp"
+                android:layout_height="147dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/job_images"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/ic_launcher" />
 
-    <EditText
-        android:id="@+id/instructions_edt"
-        android:layout_width="350dp"
-        android:layout_height="106dp"
-        android:ems="10"
-        android:hint="Instructiions"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.524"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cat_spinner"
-        app:layout_constraintVertical_bias="0.118" />
+            <TextView
+                android:id="@+id/Category_txtView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/category"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description_editText" />
+
+            <EditText
+                android:id="@+id/instructions_edt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:autofillHints=""
+                android:gravity="start|end"
+                android:hint="@string/job_instructions"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:maxLength="250"
+                android:maxLines="12"
+                android:minLines="6"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cat_spinner" />
+
+            <EditText
+                android:id="@+id/payment_editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/payment"
+                android:inputType="number|numberDecimal"
+                android:maxLength="6"
+                app:layout_constraintEnd_toStartOf="@+id/Location_editText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Job_title_editText" />
+
+            <Button
+                android:id="@+id/cancel_post_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/custom_blue_btn"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/cancel"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/instructions_edt" />
+
+            <Spinner
+                android:id="@+id/cat_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:entries="@array/post_interest_categories"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Category_txtView" />
+
+            <EditText
+                android:id="@+id/description_editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:autofillHints=""
+                android:gravity="start|end"
+                android:hint="@string/description"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:maxLength="250"
+                android:maxLines="10"
+                android:minLines="6"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/payment_editText" />
+
+            <EditText
+                android:id="@+id/Location_editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/location"
+                android:inputType="text"
+                android:maxLength="15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/payment_editText"
+                app:layout_constraintTop_toBottomOf="@+id/Job_title_editText" />
+
+            <EditText
+                android:id="@+id/Job_title_editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/job_title"
+                android:inputType="textPersonName"
+                android:maxLength="50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/job_imagebtn" />
+
+            <Button
+                android:id="@+id/pst_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/custom_blue_btn"
+                android:backgroundTint="@color/colorAccent"
+                android:text="Post"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/instructions_edt" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <![CDATA[
+
+
+
+
+
+        />
+    ]]>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

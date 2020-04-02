@@ -25,7 +25,7 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
-        android:layout_height="51dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/custom_blue_btn"
         android:backgroundTint="@color/colorAccent"
         android:text="@string/log_in"
@@ -42,7 +42,7 @@
     <Button
         android:id="@+id/btn_signup"
         android:layout_width="wrap_content"
-        android:layout_height="51dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/custom_blue_btn"
         android:backgroundTint="@color/colorAccent"
         android:onClick="Signup_page"

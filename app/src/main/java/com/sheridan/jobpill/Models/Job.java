@@ -10,7 +10,7 @@ public class Job implements Parcelable {
     private String itemId;
     private String createdBy;
     private String createdDate;
-    private long estimatedPay;
+    private Float estimatedPay;
     private String instructions;
     private String jobCategory;
     private String jobDescription;
@@ -19,7 +19,7 @@ public class Job implements Parcelable {
     private String photoURL;
     private String jobStatus;
 
-    public Job(String itemId, String createdBy, String createdDate, long estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL, String jobStatus) {
+    public Job(String itemId, String createdBy, String createdDate, Float estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL, String jobStatus) {
         this.itemId = itemId;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
@@ -41,7 +41,7 @@ public class Job implements Parcelable {
         itemId = in.readString();
         createdBy = in.readString();
         createdDate = in.readString();
-        estimatedPay = in.readLong();
+        estimatedPay = in.readFloat();
         instructions = in.readString();
         jobCategory = in.readString();
         jobDescription = in.readString();
@@ -87,11 +87,11 @@ public class Job implements Parcelable {
         this.createdDate = createdDate;
     }
 
-    public long getEstimatedPay() {
+    public Float getEstimatedPay() {
         return estimatedPay;
     }
 
-    public void setEstimatedPay(long estimatedPay) {
+    public void setEstimatedPay(Float estimatedPay) {
         this.estimatedPay = estimatedPay;
     }
 
@@ -178,7 +178,7 @@ public class Job implements Parcelable {
         parcel.writeString(itemId);
         parcel.writeString(createdBy);
         parcel.writeString(createdDate);
-        parcel.writeLong(estimatedPay);
+        parcel.writeFloat(estimatedPay);
         parcel.writeString(instructions);
         parcel.writeString(jobCategory);
         parcel.writeString(jobDescription);
