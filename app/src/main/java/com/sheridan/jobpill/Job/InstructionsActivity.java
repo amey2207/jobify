@@ -57,6 +57,7 @@ public class InstructionsActivity extends AppCompatActivity {
         String jobLocation = intent.getStringExtra("Job_Location");
         String jobDescription = intent.getStringExtra("Job_Description");
         String jobCategory = intent.getStringExtra("Job_Category");
+        String jobImage = intent.getStringExtra("Job_Image");
         String jobInstructions = InstructionsEdt.getText().toString();
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
@@ -68,13 +69,13 @@ public class InstructionsActivity extends AppCompatActivity {
         jobMap.put("createdBy", currentUser.getEmail());
         jobMap.put("createdDate", date);
         jobMap.put("estimatedPay", jobPayment);
+        jobMap.put("photoURL", jobImage);
         jobMap.put("instructions", jobInstructions);
         jobMap.put("jobCategory", jobCategory);
         jobMap.put("jobDescription", jobDescription);
         jobMap.put("jobStatus", "available");
         jobMap.put("jobTitle", jobTitle);
         jobMap.put("location", jobLocation);
-        jobMap.put("photoURL", "test");
         db = FirebaseFirestore.getInstance();
         dbJobs = db.collection("jobs");
         CancelBtn.setOnClickListener(new View.OnClickListener() {

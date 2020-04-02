@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -20,17 +21,31 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class JobPostingActivity extends AppCompatActivity {
 
-    Button nextBtn;
+    Button postBtn;
     Button cancelBtn;
     ImageButton jobImageBtn;
     EditText titleEdt;
@@ -39,6 +54,14 @@ public class JobPostingActivity extends AppCompatActivity {
     EditText descriptionEdt;
     Spinner categorySpn;
     private Uri jobImageURI = null;
+    EditText Instructions;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser currentUser;
+    String user_id;
+    Map<String, Object> jobMap;
+    DatabaseReference reference;
+    private FirebaseFirestore db;
+    CollectionReference dbJobs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +74,8 @@ public class JobPostingActivity extends AppCompatActivity {
         locationEdt = findViewById(R.id.Location_editText);
         descriptionEdt = findViewById(R.id.description_editText);
         categorySpn = findViewById(R.id.cat_spinner);
-        nextBtn = findViewById(R.id.Next_btn);
+        postBtn = findViewById(R.id.pst_btn);
+        Instructions = findViewById(R.id.instructions_edt);
         jobImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,29 +101,55 @@ public class JobPostingActivity extends AppCompatActivity {
                 finish();
             }
         });
-        nextBtn.setOnClickListener(new View.OnClickListener() {
+        postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                firebaseAuth = FirebaseAuth.getInstance();
+                user_id = firebaseAuth.getCurrentUser().getUid();
+                currentUser = firebaseAuth.getCurrentUser();
+
                 String jobTitle = titleEdt.getText().toString();
-                String jobPayment = paymentEdt.getText().toString();
+                Long jobPayment = Long.parseLong(paymentEdt.getText().toString());
                 String jobLocation = locationEdt.getText().toString();
                 String jobDescription = descriptionEdt.getText().toString();
                 String jobCategory = categorySpn.getSelectedItem().toString();
                 String jobImage = jobImageURI.toString();
-                if (jobTitle.isEmpty() || jobPayment.isEmpty() || jobLocation.isEmpty() || jobCategory.isEmpty() || jobDescription.isEmpty()) {
+                String jobInstructions = Instructions.getText().toString();
+                reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
+                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                jobMap = new HashMap<>();
+                jobMap.put("createdBy", currentUser.getEmail());
+                jobMap.put("createdDate", date);
+                jobMap.put("estimatedPay", jobPayment);
+                jobMap.put("photoURL", jobImage);
+                jobMap.put("instructions", jobInstructions);
+                jobMap.put("jobCategory", jobCategory);
+                jobMap.put("jobDescription", jobDescription);
+                jobMap.put("jobStatus", "available");
+                jobMap.put("jobTitle", jobTitle);
+                jobMap.put("location", jobLocation);
+                db = FirebaseFirestore.getInstance();
+                dbJobs = db.collection("jobs");
+
+                if (jobTitle.isEmpty() || jobPayment == null || jobLocation.isEmpty() || jobCategory.isEmpty() || jobDescription.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Intent jobIntent = new Intent(JobPostingActivity.this, InstructionsActivity.class);
-                    jobIntent.putExtra("Job_Title", jobTitle);
-                    jobIntent.putExtra("Job_Payment", jobPayment);
-                    jobIntent.putExtra("Job_Location", jobLocation);
-                    jobIntent.putExtra("Job_Description", jobDescription);
-                    jobIntent.putExtra("Job_Category", jobCategory);
-                    jobIntent.putExtra("Job_Image", jobImage);
-                    startActivity(jobIntent);
-                    finish();
+                    dbJobs.add(jobMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(getApplicationContext(), "Job posted successfully", Toast.LENGTH_LONG).show();
+                            Intent jobIntent = new Intent(JobPostingActivity.this, MainActivity.class);
+                            startActivity(jobIntent);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         });
