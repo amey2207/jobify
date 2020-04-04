@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Auth.LoginActivity"
-    >
+    tools:context=".Auth.LoginActivity">
 
     <ImageView
         android:id="@+id/logo_login"
-        android:layout_width="430dp"
-        android:layout_height="227dp"
+        android:layout_width="429dp"
+        android:layout_height="235dp"
         android:contentDescription="@string/logo"
+        android:cropToPadding="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.075"
-        app:srcCompat="@mipmap/logo2"
-        tools:srcCompat="@mipmap/logo2" />
+        app:layout_constraintVertical_bias="0.065"
+        app:srcCompat="@mipmap/logo2" />
 
     <Button
         android:id="@+id/btn_login"
@@ -52,10 +51,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.711"
+        app:layout_constraintHorizontal_bias="0.705"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.697" />
+        app:layout_constraintVertical_bias="0.694" />
 
     <TextView
         android:id="@+id/txt_view_forgot_password"
@@ -73,6 +72,7 @@
         android:id="@+id/editEmail"
         android:layout_width="277dp"
         android:layout_height="50dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
@@ -80,20 +80,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.346"
-        android:autofillHints="" />
+        app:layout_constraintVertical_bias="0.346" />
 
     <EditText
         android:id="@+id/editPass"
         android:layout_width="277dp"
         android:layout_height="53dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

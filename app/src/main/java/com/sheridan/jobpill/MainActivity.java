@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_action_jobs:
-//                        sendToJobs();
+                        sendToMyJobs();
                         return true;
                     case R.id.bottom_action_schedule:
 //                        sendToSchedule();
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         finish();
     }
 
-    private void sendToJobs() {
+    private void sendToMyJobs() {
         Intent intent = new Intent(MainActivity.this, JobsActivity.class);
         startActivity(intent);
         finish();

@@ -2,29 +2,41 @@ package com.sheridan.jobpill.Job;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sheridan.jobpill.Auth.LoginActivity;
+import com.sheridan.jobpill.FilterAlertDialog;
+import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Models.Job;
+import com.sheridan.jobpill.Profile.EditProfileActivity;
+import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 
 import org.w3c.dom.Document;
@@ -32,19 +44,18 @@ import org.w3c.dom.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobsActivity extends AppCompatActivity {
+public class JobsActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
-
+    private JobsListFirestoreAdapter adapter;
+    private Toolbar toolbar;
     private LinearLayoutManager linearLayoutManager;
-
+    private BottomNavigationView bottomNavigationView;
     private boolean isScrolling;
     private boolean isLastItemReached;
-
-    private JobAdapter jobAdapter;
 
 
     private List<Job> list;
@@ -63,149 +74,100 @@ public class JobsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.jobsList);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        bottomNavigationView = findViewById(R.id.jobsBottomNav);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_action_jobs);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
+                switch (menuItem.getItemId()) {
+                    case R.id.bottom_action_jobs:
+                        //                       sendToMyJobs();
+                        return true;
+                    case R.id.bottom_action_schedule:
+//                        sendToSchedule();
+                        return true;
+                    case R.id.bottom_action_account:
+                        sendToProfile();
+                        return true;
+                    case R.id.bottom_action_home:
+                        sendToHome();
+                    default:
+                        return false;
+                }
+            }
+        });
         list = new ArrayList<>();
 
         Query query = firebaseFirestore
                 .collection("jobs")
-                .orderBy("createdDate", Query.Direction.ASCENDING)
-                .limit(5);
+                .whereEqualTo("createdBy", currentUser.getEmail());
 
-        getJobs(query);
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(3)
+                .build();
+
+        FirestorePagingOptions<Job> options = new FirestorePagingOptions.Builder<Job>()
+                .setLifecycleOwner(this)
+                .setQuery(query, config, Job.class)
+                .build();
+
+        adapter = new JobsListFirestoreAdapter(options, this);
 
 
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
+    }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
 
 
     }
 
-    public void getJobs(final Query query){
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(DocumentSnapshot document: task.getResult()){
-                        Job job = document.toObject(Job.class);
-                        job.setItemId(document.getId());
+    @Override
+    public void onDialogNeutralClick(DialogFragment dialog) {
 
-                        if(!job.getCreatedBy().equals(currentUser.getEmail())){
-                            list.add(job);
-                        }
-                    }
-
-                    jobAdapter = new JobAdapter(list);
-                    recyclerView.setAdapter(jobAdapter);
-
-                    lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
-
-                    Toast.makeText(getApplicationContext(),"First page loaded",Toast.LENGTH_SHORT).show();
-
-                    if(task.getResult().size() < 10){
-                        isLastItemReached = true;
-                    }
-
-                    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-
-                            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                                isScrolling = true;
-                            }
-                        }
-
-                        @Override
-                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-
-                            int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                            int visibleItemCount = linearLayoutManager.getChildCount();
-                            int totalItemCount = linearLayoutManager.getItemCount();
-
-                            if(isScrolling && (firstVisibleItem + visibleItemCount == totalItemCount) && !isLastItemReached){
-                                isScrolling = false;
-
-                               Query nextQuery = query.startAfter(lastVisible);
-
-
-
-                                nextQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        for(DocumentSnapshot document: task.getResult()){
-                                            Job job = document.toObject(Job.class);
-                                            job.setItemId(document.getId());
-
-                                            if(!job.getCreatedBy().equals(currentUser.getEmail())){
-                                                list.add(job);
-                                            }
-                                        }
-
-                                        jobAdapter.notifyDataSetChanged();
-                                        lastVisible = task.getResult().getDocuments().get(task.getResult().size() - 1);
-                                        Toast.makeText(getApplicationContext(),"Next page loaded",Toast.LENGTH_SHORT).show();
-
-                                        if(task.getResult().size() < 10){
-                                            isLastItemReached = true;
-                                        }
-                                    }
-                                });
-
-                            }
-                        }
-                    };
-
-                    recyclerView.addOnScrollListener(onScrollListener);
-                }
-
-                if(isLastItemReached){
-                    Toast.makeText(getApplicationContext(),"All Documents loaded",Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
     }
 
-    private class JobAdapter extends RecyclerView.Adapter<JobsViewHolder2> {
-        private List<Job> list;
+    @Override
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
+        Log.d("ITEM_CLICK", "Clicked the item: " + position + "and ID: " + snapshot.getId());
 
-        JobAdapter(List<Job> list) {
-            this.list = list;
+        Job job = snapshot.toObject(Job.class);
+        job.setItemId(snapshot.getId());
+
+
+        if (currentUser.getEmail().equals(job.getCreatedBy())) {
+            Intent intent = new Intent(this, JobDetailsPoster.class);
+            intent.putExtra("JobSnapshot", job);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, JobDetailsActivity.class);
+            intent.putExtra("JobSnapshot", job);
+            startActivity(intent);
         }
 
-        @NonNull
-        @Override
-        public JobsViewHolder2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.jobslist_item_single, parent, false);
-            return new JobsViewHolder2(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull JobsViewHolder2 jobsViewHolder, int position) {
-            String jobTitle = list.get(position).getJobTitle();
-            jobsViewHolder.jobTitle.setText(jobTitle);
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
     }
 
-    private class JobsViewHolder2 extends RecyclerView.ViewHolder {
-        private View view;
-        private TextView jobTitle;
+    private void sendToProfile() {
+        Intent intent = new Intent(JobsActivity.this, ProfileActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-
-        public JobsViewHolder2(@NonNull View itemView) {
-            super(itemView);
-
-            jobTitle = itemView.findViewById(R.id.txt_jobTitle);
-
-        }
-
-
+    private void sendToHome() {
+        Intent intent = new Intent(JobsActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
