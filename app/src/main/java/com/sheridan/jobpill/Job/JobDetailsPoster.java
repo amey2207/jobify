@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.R;
 
@@ -26,6 +27,8 @@ public class JobDetailsPoster extends AppCompatActivity {
     private TextView txtJobDescription;
     private ImageView jobImage;
     private Button btnViewApplicants;
+
+    private ImageView backButton;
 
     private Job currentJob;
 
@@ -42,6 +45,12 @@ public class JobDetailsPoster extends AppCompatActivity {
         setContentView(R.layout.activity_job_details_poster);
 
         setupWidgets();
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToHome();
+            }
+        });
 
         if(getIntent().hasExtra("JobSnapshot")){
             currentJob = getIntent().getParcelableExtra("JobSnapshot");
@@ -76,7 +85,7 @@ public class JobDetailsPoster extends AppCompatActivity {
         jobImage = findViewById(R.id.jdp_img);
 
         btnViewApplicants = findViewById(R.id.btn_viewApplicants);
-
+        backButton = findViewById(R.id.jobDetailsPoster_back_button);
 
 
         //firestore initialize
@@ -92,6 +101,12 @@ public class JobDetailsPoster extends AppCompatActivity {
         intent.putExtra("JobID", currentJob.getItemId());
         startActivity(intent);
 
+    }
+
+    private void sendToHome() {
+        Intent intent = new Intent(JobDetailsPoster.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

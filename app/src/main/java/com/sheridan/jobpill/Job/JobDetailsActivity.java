@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sheridan.jobpill.Auth.LoginActivity;
+import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
 import com.sheridan.jobpill.R;
@@ -40,6 +41,8 @@ public class JobDetailsActivity extends AppCompatActivity {
     private TextView txtJobLocation;
     private TextView txtJobEstimatedPay;
     private TextView txtJobDescription;
+
+    private ImageView backButton;
 
     private Button btn_apply;
     private Button btn_contact;
@@ -64,6 +67,13 @@ public class JobDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_job_details);
 
         setupWidgets();
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToHome();
+            }
+        });
 
         if (getIntent().hasExtra("JobSnapshot")) {
             currentJob = getIntent().getParcelableExtra("JobSnapshot");
@@ -136,6 +146,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         btn_apply = findViewById(R.id.btn_apply);
         btn_contact = findViewById(R.id.btn_contact);
 
+        backButton = findViewById(R.id.jobDetails_back_button);
 
         //firestore initialize
         firebaseAuth = FirebaseAuth.getInstance();
@@ -174,6 +185,12 @@ public class JobDetailsActivity extends AppCompatActivity {
 
     private void sendToLogin() {
         Intent intent = new Intent(JobDetailsActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendToHome() {
+        Intent intent = new Intent(JobDetailsActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

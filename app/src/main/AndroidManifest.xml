@@ -14,10 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Job.MyJobsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Job.JobApplicants"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Job.JobsActivity"
+            android:name=".Job.MyPostedJobsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Job.JobDetailsPoster"

@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sheridan.jobpill.Auth.LoginActivity;
-import com.sheridan.jobpill.Job.JobsActivity;
+import com.sheridan.jobpill.Job.MyJobsActivity;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.R;
 
@@ -242,7 +242,7 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
     private void sendToMyJobs() {
-        Intent intent = new Intent(ProfileActivity.this, JobsActivity.class);
+        Intent intent = new Intent(ProfileActivity.this, MyJobsActivity.class);
         startActivity(intent);
         finish();
     }

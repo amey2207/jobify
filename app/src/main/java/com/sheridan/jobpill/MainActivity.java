@@ -37,13 +37,11 @@ import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.JobDetailsActivity;
 import com.sheridan.jobpill.Job.JobDetailsPoster;
 import com.sheridan.jobpill.Job.JobPostingActivity;
-import com.sheridan.jobpill.Job.JobsActivity;
 import com.sheridan.jobpill.Job.JobsListFirestoreAdapter;
+import com.sheridan.jobpill.Job.MyJobsActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Profile.EditProfileActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
@@ -243,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     }
 
     private void sendToMyJobs() {
-        Intent intent = new Intent(MainActivity.this, JobsActivity.class);
+        Intent intent = new Intent(MainActivity.this, MyJobsActivity.class);
         startActivity(intent);
         finish();
     }
