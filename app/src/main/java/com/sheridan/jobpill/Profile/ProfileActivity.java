@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.MyJobsActivity;
 import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.Messaging.MessagesActivity;
 import com.sheridan.jobpill.R;
 
 import java.util.ArrayList;
@@ -85,8 +86,8 @@ public class ProfileActivity extends AppCompatActivity {
                     case R.id.bottom_action_jobs:
                         sendToMyJobs();
                         return true;
-                    case R.id.bottom_action_schedule:
-//                        sendToSchedule();
+                    case R.id.bottom_action_messages:
+                        sendToMessages();
                         return true;
                     case R.id.bottom_action_home:
                         sendToMain();
@@ -100,6 +101,8 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void setupWidgets(){
         firebaseAuth = FirebaseAuth.getInstance();
@@ -243,6 +246,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void sendToMyJobs() {
         Intent intent = new Intent(ProfileActivity.this, MyJobsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendToMessages() {
+        Intent intent = new Intent(ProfileActivity.this, MessagesActivity.class);
         startActivity(intent);
         finish();
     }

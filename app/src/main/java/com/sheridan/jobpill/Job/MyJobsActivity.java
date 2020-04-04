@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.Messaging.MessagesActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 
@@ -64,8 +65,8 @@ public class MyJobsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
-                    case R.id.bottom_action_schedule:
-//                        sendToSchedule();
+                    case R.id.bottom_action_messages:
+                       sendToMessages();
                         return true;
                     case R.id.bottom_action_account:
                         sendToProfile();
@@ -105,6 +106,12 @@ public class MyJobsActivity extends AppCompatActivity {
 
     private void sendToMyPostedJobs(){
         Intent intent = new Intent(MyJobsActivity.this, MyPostedJobsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendToMessages() {
+        Intent intent = new Intent(MyJobsActivity.this, MessagesActivity.class);
         startActivity(intent);
         finish();
     }

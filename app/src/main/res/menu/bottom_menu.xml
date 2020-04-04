@@ -10,9 +10,9 @@
         android:icon="@drawable/baseline_work_black_24"
         android:title="Jobs" />
     <item
-        android:id="@+id/bottom_action_schedule"
-        android:icon="@drawable/baseline_event_black_24"
-        android:title="Schedule" />
+        android:id="@+id/bottom_action_messages"
+        android:icon="@drawable/baseline_email_black_24"
+        android:title="Messages" />
     <item
         android:id="@+id/bottom_action_account"
         android:icon="@drawable/baseline_account_box_black_24"

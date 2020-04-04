@@ -39,6 +39,7 @@ import com.sheridan.jobpill.Job.JobDetailsPoster;
 import com.sheridan.jobpill.Job.JobPostingActivity;
 import com.sheridan.jobpill.Job.JobsListFirestoreAdapter;
 import com.sheridan.jobpill.Job.MyJobsActivity;
+import com.sheridan.jobpill.Messaging.MessagesActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Profile.EditProfileActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
@@ -93,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                     case R.id.bottom_action_jobs:
                         sendToMyJobs();
                         return true;
-                    case R.id.bottom_action_schedule:
-//                        sendToSchedule();
+                    case R.id.bottom_action_messages:
+                        sendToMessages();
                         return true;
                     case R.id.bottom_action_account:
                         sendToProfile();
@@ -245,6 +246,13 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         startActivity(intent);
         finish();
     }
+
+    private void sendToMessages() {
+        Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
