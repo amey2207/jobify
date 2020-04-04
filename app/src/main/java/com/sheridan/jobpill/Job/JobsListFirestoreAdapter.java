@@ -35,6 +35,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         holder.jobTitle.setText(model.getJobTitle());
         holder.jobDescription.setText(model.getJobDescription());
         holder.jobEstimatedPay.setText("$" + model.getEstimatedPay());
+        holder.jobLocation.setText(model.getLocation());
 
 
 
@@ -84,6 +85,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         private TextView jobDescription;
         private ImageView jobImage;
         private TextView jobEstimatedPay;
+        private TextView jobLocation;
 
         public JobsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,6 +95,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
             jobDescription = itemView.findViewById(R.id.txt_jobDescription);
             jobImage = itemView.findViewById(R.id.img_jobPhoto);
             jobEstimatedPay = itemView.findViewById(R.id.txt_jobEstimatedPay);
+            jobLocation = itemView.findViewById(R.id.txt_jobLocation);
 
             itemView.setOnClickListener(this);
         }

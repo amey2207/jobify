@@ -305,8 +305,10 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Log.d("POSITIVE_CLICK", "category: " + category_spinner.getSelectedItem().toString());
         Log.d("POSITIVE_CLICK", "pay: " + pay_spinner.getSelectedItemPosition());
 
-        Query query = firebaseFirestore.collection("jobs");
 
+        Query query = firebaseFirestore
+                .collection("jobs")
+                .orderBy("createdDate", Query.Direction.DESCENDING);
 
         if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0) {
             locFilter = location.getText().toString();
