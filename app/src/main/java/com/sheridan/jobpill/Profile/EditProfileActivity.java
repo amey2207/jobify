@@ -63,7 +63,6 @@ public class EditProfileActivity extends AppCompatActivity {
     ArrayList<Integer> selectedInterests = new ArrayList<>();
 
     private String user_id;
-
     private boolean isChanged = false;
 
     private EditText txtProfileName;
@@ -74,7 +73,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private Uri profileImageURI = null;
-
     private Uri downloadUri;
 
     private StorageReference image_path = null;
@@ -82,7 +80,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
-
     private FirebaseFirestore firebaseFirestore;
 
 

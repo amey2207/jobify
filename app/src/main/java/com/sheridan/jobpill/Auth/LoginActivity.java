@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class  LoginActivity extends AppCompatActivity {
 
     EditText userEmail;
     EditText userPass;

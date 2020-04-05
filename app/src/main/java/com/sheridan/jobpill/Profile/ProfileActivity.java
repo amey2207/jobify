@@ -36,30 +36,23 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-
     FirebaseAuth firebaseAuth;
-
     FirebaseFirestore firebaseFirestore;
-
-    String current_user_id;
 
     TextView txtProfileName;
     TextView txtProfileIntro;
     TextView txtProfilePhone;
     TextView txtProfileCity;
-
     TextView txtInterests;
-
     CircleImageView imgProfile;
 
+    Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
 
-    private Uri profileImageURI = null;
-
-
+    String current_user_id;
     String[] listInterests;
 
+    private Uri profileImageURI = null;
 
 
     @Override
@@ -78,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
 
        bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+       bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -97,7 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
                         return false;
                 }
             }
-        });
+       });
 
 
     }
@@ -165,7 +158,6 @@ public class ProfileActivity extends AppCompatActivity {
 
 
                             profileImageURI = Uri.parse(image);
-
                             txtProfileName.setText(name);
                             txtProfileCity.setText(city);
                             txtProfileIntro.setText(intro);
@@ -179,14 +171,10 @@ public class ProfileActivity extends AppCompatActivity {
                                 }
                             }
 
-
                             RequestOptions placeholderRequest = new RequestOptions();
                             placeholderRequest.placeholder(R.drawable.profile_default);
 
                             Glide.with(ProfileActivity.this).setDefaultRequestOptions(placeholderRequest).load(image).into(imgProfile);
-
-
-
 
                         }
                     }else{
