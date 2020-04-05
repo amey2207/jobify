@@ -156,6 +156,7 @@ public class SignUpActivity extends AppCompatActivity {
         clickHere = findViewById(R.id.clickHere_txtview);
         signUpBtn = findViewById(R.id.signUp_btn);
         signUpProgress = findViewById(R.id.signup_progress);
+        signUpProgress.setVisibility(View.INVISIBLE);
 
         firebaseAuth = FirebaseAuth.getInstance();
 

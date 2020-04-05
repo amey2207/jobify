@@ -123,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         for(int i = 0; i < selectedInterests.size(); i++){
                             items = items + listInterests[selectedInterests.get(i)];
                             if(i != selectedInterests.size()-1){
-                                items = items + ",";
+                                items = items + ", ";
                             }
 
                             Log.d("interests: ", "value:" + selectedInterests.get(i).toString());
@@ -206,7 +206,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             for(int i = 0; i < selectedInterests.size(); i++){
                                 items = items + listInterests[selectedInterests.get(i)];
                                 if(i != selectedInterests.size()-1){
-                                    items = items + ",";
+                                    items = items + ", ";
                                 }
 
                                 Log.d("interests: ", "value:" + selectedInterests.get(i).toString());

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +33,8 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
     private FirebaseUser currentUser;
     private String current_user_id;
     private String jobID;
+
+    private ImageView backButton;
 
 
     @Override
@@ -80,12 +84,20 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
         jobApplicantsListView.setHasFixedSize(true);
         jobApplicantsListView.setLayoutManager(new LinearLayoutManager(this));
         jobApplicantsListView.setAdapter(adapter);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void setupWidgets() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         jobApplicantsListView = findViewById(R.id.jobApplicants);
+        backButton = findViewById(R.id.jobapplicants_backbutton);
     }
 
     @Override
