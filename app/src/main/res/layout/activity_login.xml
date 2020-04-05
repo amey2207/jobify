@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/logo_login"
-        android:layout_width="429dp"
+        android:layout_width="0dp"
         android:layout_height="235dp"
         android:contentDescription="@string/logo"
         android:cropToPadding="true"
