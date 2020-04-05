@@ -59,7 +59,10 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     private Boolean filtersApplied = false;
     String locFilter = "";
     String catFilter = "";
+    String payFilter = "";
+
     int catFilterPosition = 0;
+    int payFilterPosition = 0;
 
     FirebaseUser currentUser;
 
@@ -129,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         adapter = new JobsListFirestoreAdapter(options, this);
 
 
-
         jobsListView.setHasFixedSize(true);
         jobsListView.setLayoutManager(new LinearLayoutManager(this));
         jobsListView.setAdapter(adapter);
@@ -138,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
 
     }
-
 
 
     @Override
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
                             editor.commit();
 
-                            Log.d("SHARED_PREFERENCES" , "PROFILE SAVED AS: " + name + ", " + intro +
+                            Log.d("SHARED_PREFERENCES", "PROFILE SAVED AS: " + name + ", " + intro +
                                     ", " + phone + ", " + city + ", " + image);
 
                         }
@@ -224,8 +225,6 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         }
 
     }
-
-
 
 
     private void sendToLogin() {
@@ -266,16 +265,15 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         job.setItemId(snapshot.getId());
 
 
-        if(currentUser.getEmail().equals(job.getCreatedBy())){
+        if (currentUser.getEmail().equals(job.getCreatedBy())) {
             Intent intent = new Intent(this, JobDetailsPoster.class);
             intent.putExtra("JobSnapshot", job);
             startActivity(intent);
-        }else{
+        } else {
             Intent intent = new Intent(this, JobDetailsActivity.class);
             intent.putExtra("JobSnapshot", job);
             startActivity(intent);
         }
-
 
 
     }
@@ -292,6 +290,12 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         if (!TextUtils.isEmpty(catFilter)) {
             bundle.putInt("category", catFilterPosition);
         }
+
+        if(!TextUtils.isEmpty(payFilter)){
+            bundle.putInt("estimatedPay", payFilterPosition);
+        }
+
+
         filterAlertDialog.setArguments(bundle);
         filterAlertDialog.show(getSupportFragmentManager(), "filter_dialog");
     }
@@ -303,6 +307,11 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
+
+        locFilter = "";
+        payFilter = "";
+        catFilter = "";
+
         EditText location = dialog.getDialog().findViewById(R.id.txt_location_filter);
         Spinner category_spinner = dialog.getDialog().findViewById(R.id.spinner_category_filter);
         Spinner pay_spinner = dialog.getDialog().findViewById(R.id.spinner_pay_filter);
@@ -316,31 +325,159 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                 .collection("jobs")
                 .orderBy("createdDate", Query.Direction.DESCENDING);
 
-        if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0) {
+
+        if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0 && pay_spinner.getSelectedItemPosition() > 0) {
             locFilter = location.getText().toString();
             catFilter = category_spinner.getSelectedItem().toString();
             catFilterPosition = category_spinner.getSelectedItemPosition();
 
-            query = firebaseFirestore.collection("jobs")
-                    .whereEqualTo("location", locFilter)
-                    .whereEqualTo("jobCategory", catFilter)
-                    .orderBy("createdDate",Query.Direction.DESCENDING);
+            payFilter = pay_spinner.getSelectedItem().toString();
 
-        } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0) {
+            payFilterPosition = pay_spinner.getSelectedItemPosition();
+
+            if (payFilterPosition == 1) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("location", locFilter)
+                        .whereEqualTo("jobCategory", catFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 0)
+                        .whereLessThanOrEqualTo("estimatedPay", 100)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 2) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("location", locFilter)
+                        .whereEqualTo("jobCategory", catFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 100)
+                        .whereLessThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 3) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("location", locFilter)
+                        .whereEqualTo("jobCategory", catFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            }
+
+
+        } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0 && pay_spinner.getSelectedItemPosition() == 0) {
+            catFilter = category_spinner.getSelectedItem().toString();
+            catFilterPosition = category_spinner.getSelectedItemPosition();
+
+            locFilter = location.getText().toString();
+
+            query = firebaseFirestore.collection("jobs")
+                    .whereEqualTo("location",locFilter)
+                    .whereEqualTo("jobCategory", catFilter)
+                    .orderBy("createdDate", Query.Direction.DESCENDING);
+        } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() > 0) {
+
+
+            locFilter = location.getText().toString();
+
+            payFilter = pay_spinner.getSelectedItem().toString();
+            payFilterPosition = pay_spinner.getSelectedItemPosition();
+
+            if (payFilterPosition == 1) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("location", locFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 0)
+                        .whereLessThanOrEqualTo("estimatedPay", 100)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 2) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("location", locFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 100)
+                        .whereLessThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 3) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("location", locFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            }
+
+            Log.d("IAMHERE",locFilter + "-" + payFilterPosition);
+
+
+        } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() == 0) {
 
             locFilter = location.getText().toString();
             query = firebaseFirestore.collection("jobs")
                     .whereEqualTo("location", locFilter)
-                    .orderBy("createdDate",Query.Direction.DESCENDING);
+                    .orderBy("createdDate", Query.Direction.DESCENDING);
 
-        } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0) {
+        } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0 && pay_spinner.getSelectedItemPosition() > 0) {
+
+
             catFilter = category_spinner.getSelectedItem().toString();
             catFilterPosition = category_spinner.getSelectedItemPosition();
 
+            payFilter = pay_spinner.getSelectedItem().toString();
+
+            payFilterPosition = pay_spinner.getSelectedItemPosition();
+
+            if (payFilterPosition == 1) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("jobCategory", catFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 0)
+                        .whereLessThanOrEqualTo("estimatedPay", 100)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 2) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("jobCategory", catFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 100)
+                        .whereLessThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 3) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereEqualTo("jobCategory", catFilter)
+                        .whereGreaterThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            }
+
+
+        }else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0 && pay_spinner.getSelectedItemPosition() == 0) {
+            catFilter = category_spinner.getSelectedItem().toString();
+            catFilterPosition = category_spinner.getSelectedItemPosition();
 
             query = firebaseFirestore.collection("jobs")
                     .whereEqualTo("jobCategory", catFilter)
-                    .orderBy("createdDate",Query.Direction.DESCENDING);
+                    .orderBy("createdDate", Query.Direction.DESCENDING);
+
+
+        }else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() > 0) {
+
+            payFilter = pay_spinner.getSelectedItem().toString();
+            payFilterPosition = pay_spinner.getSelectedItemPosition();
+
+            if (payFilterPosition == 1) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereGreaterThanOrEqualTo("estimatedPay", 0)
+                        .whereLessThanOrEqualTo("estimatedPay", 100)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 2) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereGreaterThanOrEqualTo("estimatedPay", 100)
+                        .whereLessThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            } else if (payFilterPosition == 3) {
+                query = firebaseFirestore.collection("jobs")
+                        .whereGreaterThanOrEqualTo("estimatedPay", 500)
+                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("createdDate", Query.Direction.DESCENDING);
+            }
+        }else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() == 0) {
+
         }
 
 
@@ -356,6 +493,8 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
         adapter.updateOptions(options);
 
+        Log.d("QUERY", locFilter.toString() + " - " + catFilter.toString());
+
         this.filtersApplied = true;
 
     }
@@ -366,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     public void onDialogNeutralClick(DialogFragment dialog) {
         Query query = firebaseFirestore
                 .collection("jobs")
-                .orderBy("createdDate",Query.Direction.DESCENDING);
+                .orderBy("createdDate", Query.Direction.DESCENDING);
 
         //RecyclerOptions
 

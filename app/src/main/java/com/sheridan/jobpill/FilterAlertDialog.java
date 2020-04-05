@@ -27,6 +27,7 @@ public class FilterAlertDialog extends DialogFragment {
 
         EditText location = v.findViewById(R.id.txt_location_filter);
         Spinner catSpinner = v.findViewById(R.id.spinner_category_filter);
+        Spinner paySpinner = v.findViewById(R.id.spinner_pay_filter);
 
 
         //prepopulate data on the filter options if they exist
@@ -34,8 +35,11 @@ public class FilterAlertDialog extends DialogFragment {
        if(!bundle.isEmpty()){
            String loc = bundle.getString("location","");
            int cat = bundle.getInt("category",0);
+           int pay = bundle.getInt("estimatedPay",0);
            location.setText(loc);
            catSpinner.setSelection(cat);
+           paySpinner.setSelection(pay);
+
 
        }
 
