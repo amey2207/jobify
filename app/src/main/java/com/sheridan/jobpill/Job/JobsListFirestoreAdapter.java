@@ -1,11 +1,14 @@
 package com.sheridan.jobpill.Job;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.R;
 
@@ -23,10 +27,12 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsListFirestoreAdapter.JobsViewHolder> {
 
     private OnListItemClick onListItemClick;
+    private Context  context;
 
-    public JobsListFirestoreAdapter(@NonNull FirestorePagingOptions<Job> options, OnListItemClick onListItemClick) {
+    public JobsListFirestoreAdapter(@NonNull FirestorePagingOptions<Job> options, OnListItemClick onListItemClick, Context context) {
         super(options);
         this.onListItemClick = onListItemClick;
+        this.context = context;
     }
 
     @Override
@@ -68,6 +74,8 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
                 Log.d("PAGING_LOG","All Data Loaded");
                 if(getItemCount() == 0){
                     Log.d("PAGING_LOG","No Items: " + 0);
+
+                    Toast.makeText(this.context,"No Jobs Available",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ERROR:

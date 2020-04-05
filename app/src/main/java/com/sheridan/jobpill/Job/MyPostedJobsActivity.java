@@ -79,7 +79,7 @@ public class MyPostedJobsActivity extends AppCompatActivity implements JobsListF
                 .setQuery(query, config, Job.class)
                 .build();
 
-        adapter = new JobsListFirestoreAdapter(options, this);
+        adapter = new JobsListFirestoreAdapter(options, this,this);
 
 
         recyclerView.setHasFixedSize(true);

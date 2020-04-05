@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                 .setQuery(query, config, Job.class)
                 .build();
 
-        adapter = new JobsListFirestoreAdapter(options, this);
+        adapter = new JobsListFirestoreAdapter(options, this,this);
 
 
         jobsListView.setHasFixedSize(true);
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
 
     }
+
 
 
     @Override
@@ -311,6 +312,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         locFilter = "";
         payFilter = "";
         catFilter = "";
+
+        catFilterPosition = 0;
+        payFilterPosition = 0;
 
         EditText location = dialog.getDialog().findViewById(R.id.txt_location_filter);
         Spinner category_spinner = dialog.getDialog().findViewById(R.id.spinner_category_filter);
@@ -493,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
         adapter.updateOptions(options);
 
-        Log.d("QUERY", locFilter.toString() + " - " + catFilter.toString());
+        Log.d("QUERY", locFilter + " - " + catFilter);
 
         this.filtersApplied = true;
 
@@ -523,8 +527,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
         locFilter = "";
         catFilter = "";
+        payFilter = "";
         catFilterPosition = 0;
-
+        payFilterPosition = 0;
 
     }
 
