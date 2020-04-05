@@ -1,14 +1,21 @@
 package com.sheridan.jobpill.Auth;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +32,7 @@ public class  LoginActivity extends AppCompatActivity {
     EditText userEmail;
     EditText userPass;
     Button userLogin;
+    TextView forgotPassword;
 
     FirebaseAuth fb;
 
@@ -36,9 +44,14 @@ public class  LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //declare spannable string variables
+        String text = "Forgot Password?";
+        SpannableString spannableString = new SpannableString(text);
+
         userEmail = findViewById(R.id.editEmail);
         userPass = findViewById(R.id.editPass);
         userLogin = findViewById(R.id.btn_login);
+        forgotPassword = findViewById(R.id.txt_view_forgot_password);
         fb = FirebaseAuth.getInstance();
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -62,6 +75,28 @@ public class  LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //redirect to reset password page when clicking the text link "Forgot Password?"
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setColor(Color.BLUE); //change link color to blue
+            }
+        };
+
+        //set part of the string to be clickable
+        spannableString.setSpan(clickableSpan, 0, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //set UI text to the spannable string and make the link in the textView element clickable
+        forgotPassword.setText(spannableString);
+        forgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
 
     }
 

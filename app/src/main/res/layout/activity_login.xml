@@ -60,7 +60,7 @@
         android:id="@+id/txt_view_forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/can_t_sign_in_click_here"
+        android:text="@string/forgot_password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
