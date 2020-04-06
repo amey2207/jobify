@@ -28,6 +28,8 @@ import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Profile.EditProfileActivity;
 import com.sheridan.jobpill.R;
 
+import java.util.regex.Pattern;
+
 public class SignUpActivity extends AppCompatActivity {
 
     //declare UI variables
@@ -61,6 +63,8 @@ public class SignUpActivity extends AppCompatActivity {
                 String pass = password.getText().toString();
                 String confPass = confirmPassword.getText().toString();
                 String emailFormat = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+
                 //check if fields are empty
                if(!TextUtils.isEmpty(emailID) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(confPass)){
 
