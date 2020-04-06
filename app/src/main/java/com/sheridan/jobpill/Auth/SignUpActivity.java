@@ -43,6 +43,9 @@ public class SignUpActivity extends AppCompatActivity {
     //declare firebase authentication
     private FirebaseAuth firebaseAuth;
 
+    //declare regex pattern for email format
+    final Pattern EMAIL_FORMAT = Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +65,13 @@ public class SignUpActivity extends AppCompatActivity {
                 String emailID = email.getText().toString().trim();
                 String pass = password.getText().toString();
                 String confPass = confirmPassword.getText().toString();
-                String emailFormat = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
 
                 //check if fields are empty
                if(!TextUtils.isEmpty(emailID) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(confPass)){
 
                    //check if email is valid and passwords match
-                   if(pass.equals(confPass) && emailID.matches(emailFormat) && emailID.length() > 0){
+                   if(pass.equals(confPass) && validateEmail(emailID) && emailID.length() > 0){
                        signUpProgress.setVisibility(View.VISIBLE);
 
                        firebaseAuth.createUserWithEmailAndPassword(emailID,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -92,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
                            }
                        });
                    }
-                   else if(!emailID.matches(emailFormat)){
+                   else if(!validateEmail(emailID)){
                        Toast.makeText(SignUpActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
                    }
                    else {
@@ -164,5 +166,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+    }
+
+    //checks if the email is valid (matches against regex pattern)
+    private boolean validateEmail(String email){
+        return EMAIL_FORMAT.matcher(email).matches();
     }
 }
