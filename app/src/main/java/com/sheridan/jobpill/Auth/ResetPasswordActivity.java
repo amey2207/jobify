@@ -56,13 +56,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 //display success message to user and redirect to login screen
-                                Toast.makeText(ResetPasswordActivity.this, "Email has been sent. Please check your email to reset your password.", Toast.LENGTH_LONG);
+                                Toast.makeText(ResetPasswordActivity.this, "Email has been sent. Please check your email to reset your password.", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             }
                             else{
                                 //display error message to user
-                                Toast.makeText(ResetPasswordActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG);
+                                Toast.makeText(ResetPasswordActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
