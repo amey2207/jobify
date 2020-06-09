@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jobpill</string>
+    <string name="app_name">JobPill</string>
     <string name="sign_up_full_name">Full Name</string>
     <string name="sign_up_email">Email</string>
     <string name="sign_up_btn">Sign Up</string>

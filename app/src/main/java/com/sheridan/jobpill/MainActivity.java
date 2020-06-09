@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                 .setQuery(query, config, Job.class)
                 .build();
 
-        adapter = new JobsListFirestoreAdapter(options, this,this);
+        adapter = new JobsListFirestoreAdapter(options, this, this);
 
 
         jobsListView.setHasFixedSize(true);
@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
 
     }
-
 
 
     @Override
@@ -292,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
             bundle.putInt("category", catFilterPosition);
         }
 
-        if(!TextUtils.isEmpty(payFilter)){
+        if (!TextUtils.isEmpty(payFilter)) {
             bundle.putInt("estimatedPay", payFilterPosition);
         }
 
@@ -345,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                         .whereEqualTo("jobCategory", catFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 0)
                         .whereLessThanOrEqualTo("estimatedPay", 100)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 2) {
                 query = firebaseFirestore.collection("jobs")
@@ -353,14 +352,14 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                         .whereEqualTo("jobCategory", catFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 100)
                         .whereLessThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 3) {
                 query = firebaseFirestore.collection("jobs")
                         .whereEqualTo("location", locFilter)
                         .whereEqualTo("jobCategory", catFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             }
 
@@ -372,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
             locFilter = location.getText().toString();
 
             query = firebaseFirestore.collection("jobs")
-                    .whereEqualTo("location",locFilter)
+                    .whereEqualTo("location", locFilter)
                     .whereEqualTo("jobCategory", catFilter)
                     .orderBy("createdDate", Query.Direction.DESCENDING);
         } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() > 0) {
@@ -388,24 +387,24 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                         .whereEqualTo("location", locFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 0)
                         .whereLessThanOrEqualTo("estimatedPay", 100)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 2) {
                 query = firebaseFirestore.collection("jobs")
                         .whereEqualTo("location", locFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 100)
                         .whereLessThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 3) {
                 query = firebaseFirestore.collection("jobs")
                         .whereEqualTo("location", locFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             }
 
-            Log.d("IAMHERE",locFilter + "-" + payFilterPosition);
+            Log.d("IAMHERE", locFilter + "-" + payFilterPosition);
 
 
         } else if (!TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() == 0) {
@@ -430,25 +429,25 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                         .whereEqualTo("jobCategory", catFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 0)
                         .whereLessThanOrEqualTo("estimatedPay", 100)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 2) {
                 query = firebaseFirestore.collection("jobs")
                         .whereEqualTo("jobCategory", catFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 100)
                         .whereLessThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 3) {
                 query = firebaseFirestore.collection("jobs")
                         .whereEqualTo("jobCategory", catFilter)
                         .whereGreaterThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             }
 
 
-        }else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0 && pay_spinner.getSelectedItemPosition() == 0) {
+        } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() > 0 && pay_spinner.getSelectedItemPosition() == 0) {
             catFilter = category_spinner.getSelectedItem().toString();
             catFilterPosition = category_spinner.getSelectedItemPosition();
 
@@ -457,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                     .orderBy("createdDate", Query.Direction.DESCENDING);
 
 
-        }else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() > 0) {
+        } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() > 0) {
 
             payFilter = pay_spinner.getSelectedItem().toString();
             payFilterPosition = pay_spinner.getSelectedItemPosition();
@@ -466,21 +465,21 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                 query = firebaseFirestore.collection("jobs")
                         .whereGreaterThanOrEqualTo("estimatedPay", 0)
                         .whereLessThanOrEqualTo("estimatedPay", 100)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 2) {
                 query = firebaseFirestore.collection("jobs")
                         .whereGreaterThanOrEqualTo("estimatedPay", 100)
                         .whereLessThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             } else if (payFilterPosition == 3) {
                 query = firebaseFirestore.collection("jobs")
                         .whereGreaterThanOrEqualTo("estimatedPay", 500)
-                        .orderBy("estimatedPay",Query.Direction.DESCENDING)
+                        .orderBy("estimatedPay", Query.Direction.DESCENDING)
                         .orderBy("createdDate", Query.Direction.DESCENDING);
             }
-        }else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() == 0) {
+        } else if (TextUtils.isEmpty(location.getText()) && category_spinner.getSelectedItemPosition() == 0 && pay_spinner.getSelectedItemPosition() == 0) {
 
         }
 
