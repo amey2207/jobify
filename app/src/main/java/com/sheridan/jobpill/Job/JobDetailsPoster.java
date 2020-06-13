@@ -41,7 +41,6 @@ public class JobDetailsPoster extends AppCompatActivity {
 
     String current_user_id;
 
-
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     CollectionReference jobsRef;
@@ -64,14 +63,13 @@ public class JobDetailsPoster extends AppCompatActivity {
         if (getIntent().hasExtra("JobSnapshot")) {
             currentJob = getIntent().getParcelableExtra("JobSnapshot");
             Log.d("JOB_DETAILS", "Job Details: " + currentJob.toString());
-
         }
+
         CurrentJob = currentJob.getItemId();
         txtJobTitle.setText(currentJob.getJobTitle());
         txtJobEstimatedPay.setText("$" + String.valueOf(currentJob.getEstimatedPay()));
         txtJobLocation.setText(currentJob.getLocation());
         txtJobDescription.setText(currentJob.getJobDescription());
-
 
         RequestOptions placeholderRequest = new RequestOptions();
         placeholderRequest.placeholder(R.drawable.profile_default);
@@ -95,7 +93,6 @@ public class JobDetailsPoster extends AppCompatActivity {
 
         btnViewApplicants = findViewById(R.id.btn_viewApplicants);
         backButton = findViewById(R.id.jobDetailsPoster_back_button);
-
 
         //firesStore initialize
         firebaseAuth = FirebaseAuth.getInstance();
@@ -133,7 +130,6 @@ public class JobDetailsPoster extends AppCompatActivity {
                 new AlertDialog.Builder(JobDetailsPoster.this)
                         .setTitle("Delete entry")
                         .setMessage("Are you sure you want to delete this entry?")
-
                         // Specifying a listener allows you to take an action before dismissing the dialog.
                         // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -147,12 +143,15 @@ public class JobDetailsPoster extends AppCompatActivity {
                                 finish();
                             }
                         })
-
                         // A null listener allows the button to dismiss the dialog and take no further action.
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
 
+            //case R.id.edit:
+              //  Intent intent = new Intent(JobDetailsPoster.this, JobPostingEditActivity.class);
+                //startActivity(intent);
+                //finish();
             default:
                 // Otherwise, do nothing.
                 break;

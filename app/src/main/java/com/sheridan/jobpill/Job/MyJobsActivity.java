@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.sheridan.jobpill.MainActivity;
@@ -22,15 +25,19 @@ public class MyJobsActivity extends AppCompatActivity {
     private CardView cardJobsInProgress;
     private CardView cardJobsCompleted;
     private BottomNavigationView bottomNavigationView;
-
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_jobs);
-
         setupWidgets();
-
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToHome();
+            }
+        });
         cardJobsPosted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,14 +66,13 @@ public class MyJobsActivity extends AppCompatActivity {
             }
         });
 
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.bottom_action_messages:
-                       sendToMessages();
+                        sendToMessages();
                         return true;
                     case R.id.bottom_action_account:
                         sendToProfile();
@@ -78,9 +84,7 @@ public class MyJobsActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
-
 
     public void setupWidgets() {
         cardJobsPosted = findViewById(R.id.card_posted_jobs);
@@ -89,7 +93,7 @@ public class MyJobsActivity extends AppCompatActivity {
         cardJobsCompleted = findViewById(R.id.card_jobs_completed);
         bottomNavigationView = findViewById(R.id.myjobs_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.bottom_action_jobs);
-
+        backButton = findViewById(R.id.My_Jobs_back_button);
     }
 
     private void sendToProfile() {
@@ -104,7 +108,7 @@ public class MyJobsActivity extends AppCompatActivity {
         finish();
     }
 
-    private void sendToMyPostedJobs(){
+    private void sendToMyPostedJobs() {
         Intent intent = new Intent(MyJobsActivity.this, MyPostedJobsActivity.class);
         startActivity(intent);
         finish();
@@ -114,5 +118,17 @@ public class MyJobsActivity extends AppCompatActivity {
         Intent intent = new Intent(MyJobsActivity.this, MessagesActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE){
+            bottomNavigationView.setVisibility(View.GONE);
+        }
+        else {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
     }
 }

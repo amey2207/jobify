@@ -15,53 +15,67 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Auth.ResetPasswordActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Messaging.MessagesActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Job.MyJobsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
+        <activity
+            android:name=".Job.JobPostingEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Job.JobApplicants"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Job.MyPostedJobsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Job.JobDetailsPoster"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Job.JobDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Auth.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Profile.EditProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity android:name=".Job.InstructionsActivity" />
         <activity
             android:name=".Auth.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".Job.JobPostingActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor"
+            />
         <activity
             android:name=".Profile.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
     </application>
-
 </manifest>
