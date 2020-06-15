@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,25 +41,22 @@ public class ResetPasswordActivity extends AppCompatActivity {
         sendEmailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //declare system variables
                 String email = userEmail.getText().toString().trim();
 
-                if(!validateEmail(email) || TextUtils.isEmpty(email)){
+                if (!validateEmail(email) || TextUtils.isEmpty(email)) {
                     //display error message
                     Toast.makeText(ResetPasswordActivity.this, "The email address entered is invalid.", Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     fb.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 //display success message to user and redirect to login screen
                                 Toast.makeText(ResetPasswordActivity.this, "Email has been sent. Please check your email to reset your password.", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
                                 startActivity(intent);
-                            }
-                            else{
+                            } else {
                                 //display error message to user
                                 Toast.makeText(ResetPasswordActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
@@ -72,8 +68,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     //checks if the email is valid (matches against regex pattern)
-    private boolean validateEmail(String email){
+    private boolean validateEmail(String email) {
         return EMAIL_FORMAT.matcher(email).matches();
     }
-
 }

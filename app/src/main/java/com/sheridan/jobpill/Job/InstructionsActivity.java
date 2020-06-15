@@ -36,7 +36,6 @@ public class InstructionsActivity extends AppCompatActivity {
     Button PostBtn;
     EditText InstructionsEdt;
     DatabaseReference reference;
-    Job job;
     String user_id;
     private FirebaseFirestore db;
     CollectionReference dbJobs;
@@ -62,7 +61,6 @@ public class InstructionsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
         currentUser = firebaseAuth.getCurrentUser();
-
         reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         jobMap = new HashMap<>();

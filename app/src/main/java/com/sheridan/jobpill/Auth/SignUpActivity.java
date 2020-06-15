@@ -56,7 +56,6 @@ public class SignUpActivity extends AppCompatActivity {
         SpannableString spannableString = new SpannableString(text);
 
         setupWidgets();
-
         //sign up the user
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,52 +65,41 @@ public class SignUpActivity extends AppCompatActivity {
                 String pass = password.getText().toString();
                 String confPass = confirmPassword.getText().toString();
 
-
                 //check if fields are empty
-               if(!TextUtils.isEmpty(emailID) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(confPass)){
-
-                   //check if email is valid and passwords match
-                   if(pass.equals(confPass) && validateEmail(emailID) && emailID.length() > 0){
-                       signUpProgress.setVisibility(View.VISIBLE);
-
-                       firebaseAuth.createUserWithEmailAndPassword(emailID,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                           @Override
-                           public void onComplete(@NonNull Task<AuthResult> task) {
-                               if(task.isSuccessful()){
-
-                                   Intent setupIntent = new Intent(SignUpActivity.this, EditProfileActivity.class);
-                                   startActivity(setupIntent);
-                                   finish();
-
-                               }else{
-
-                                   String errorMessage = task.getException().getMessage();
-                                   Toast.makeText(SignUpActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
-
-                               }
-
-                               signUpProgress.setVisibility(View.INVISIBLE);
-                           }
-                       });
-                   }
-                   else if(!validateEmail(emailID)){
-                       Toast.makeText(SignUpActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
-                   }
-                   else {
-                       Toast.makeText(SignUpActivity.this, "Passwords don't match.", Toast.LENGTH_LONG).show();
-                   }
-               }
-               else{
-                   if(TextUtils.isEmpty(emailID)){
-                       Toast.makeText(SignUpActivity.this, "Please provide a valid email address", Toast.LENGTH_LONG).show();
-                   }else if(TextUtils.isEmpty(pass)){
-                       Toast.makeText(SignUpActivity.this, "Please provide a valid password", Toast.LENGTH_LONG).show();
-                   }else if(TextUtils.isEmpty(confPass)){
-                       Toast.makeText(SignUpActivity.this, "Please confirm your password", Toast.LENGTH_LONG).show();
-                   }else if(!pass.equals(confPass)){
-                       Toast.makeText(SignUpActivity.this, "Confirm Password and Password don't match.", Toast.LENGTH_LONG).show();
-                   }
-               }
+                if (!TextUtils.isEmpty(emailID) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(confPass)) {
+                    //check if email is valid and passwords match
+                    if (pass.equals(confPass) && validateEmail(emailID) && emailID.length() > 0) {
+                        signUpProgress.setVisibility(View.VISIBLE);
+                        firebaseAuth.createUserWithEmailAndPassword(emailID, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Intent setupIntent = new Intent(SignUpActivity.this, EditProfileActivity.class);
+                                    startActivity(setupIntent);
+                                    finish();
+                                } else {
+                                    String errorMessage = task.getException().getMessage();
+                                    Toast.makeText(SignUpActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                                }
+                                signUpProgress.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    } else if (!validateEmail(emailID)) {
+                        Toast.makeText(SignUpActivity.this, "Please enter a valid email address", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Passwords don't match.", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    if (TextUtils.isEmpty(emailID)) {
+                        Toast.makeText(SignUpActivity.this, "Please provide a valid email address", Toast.LENGTH_LONG).show();
+                    } else if (TextUtils.isEmpty(pass)) {
+                        Toast.makeText(SignUpActivity.this, "Please provide a valid password", Toast.LENGTH_LONG).show();
+                    } else if (TextUtils.isEmpty(confPass)) {
+                        Toast.makeText(SignUpActivity.this, "Please confirm your password", Toast.LENGTH_LONG).show();
+                    } else if (!pass.equals(confPass)) {
+                        Toast.makeText(SignUpActivity.this, "Confirm Password and Password don't match.", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -142,9 +130,8 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             sendToMain();
         }
     }
@@ -155,7 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
         finish();
     }
 
-    public void setupWidgets(){
+    public void setupWidgets() {
         email = findViewById(R.id.email_txt);
         password = findViewById(R.id.pass_txt);
         confirmPassword = findViewById(R.id.confPass_txt);
@@ -163,13 +150,11 @@ public class SignUpActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUp_btn);
         signUpProgress = findViewById(R.id.signup_progress);
         signUpProgress.setVisibility(View.INVISIBLE);
-
         firebaseAuth = FirebaseAuth.getInstance();
-
     }
 
     //checks if the email is valid (matches against regex pattern)
-    private boolean validateEmail(String email){
+    private boolean validateEmail(String email) {
         return EMAIL_FORMAT.matcher(email).matches();
     }
 }

@@ -9,18 +9,17 @@
 
     <ImageView
         android:id="@+id/logo_login"
-        android:layout_width="0dp"
-        android:layout_height="235dp"
+        android:layout_width="319dp"
+        android:layout_height="189dp"
         android:contentDescription="@string/logo"
         android:cropToPadding="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065"
-        app:srcCompat="@mipmap/logo2" />
+        app:layout_constraintVertical_bias="0.074"
+        app:srcCompat="@mipmap/logo4" />
 
     <Button
         android:id="@+id/signUp_btn"
@@ -30,7 +29,7 @@
         android:width="180dp"
         android:height="40dp"
         android:background="@drawable/custom_blue_btn"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/colorDefault"
         android:text="@string/sign_up_btn"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

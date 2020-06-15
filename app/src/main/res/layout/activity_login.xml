@@ -8,25 +8,25 @@
 
     <ImageView
         android:id="@+id/logo_login"
-        android:layout_width="0dp"
-        android:layout_height="235dp"
+        android:layout_width="334dp"
+        android:layout_height="180dp"
         android:contentDescription="@string/logo"
         android:cropToPadding="true"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065"
-        app:srcCompat="@mipmap/logo2" />
+        app:layout_constraintVertical_bias="0.13"
+        app:srcCompat="@mipmap/logo4" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_blue_btn"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/colorDefault"
         android:text="@string/log_in"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_blue_btn"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/colorDefault"
         android:onClick="Signup_page"
         android:text="@string/sign_up"
         android:textColor="#FFFFFF"
@@ -80,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.346" />
+        app:layout_constraintVertical_bias="0.396" />
 
     <EditText
         android:id="@+id/editPass"
@@ -93,6 +93,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.518" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -80,7 +80,6 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
         adapter = new JobApplicationListFirestoreAdapter(options, this);
 
 
-
         jobApplicantsListView.setHasFixedSize(true);
         jobApplicantsListView.setLayoutManager(new LinearLayoutManager(this));
         jobApplicantsListView.setAdapter(adapter);

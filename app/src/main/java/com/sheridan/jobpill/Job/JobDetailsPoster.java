@@ -148,8 +148,8 @@ public class JobDetailsPoster extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
 
-            //case R.id.edit:
-              //  Intent intent = new Intent(JobDetailsPoster.this, JobPostingEditActivity.class);
+                //case R.id.edit:
+                //  Intent intent = new Intent(JobDetailsPoster.this, JobPostingEditActivity.class);
                 //startActivity(intent);
                 //finish();
             default:

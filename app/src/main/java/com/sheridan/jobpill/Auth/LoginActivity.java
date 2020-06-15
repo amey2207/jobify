@@ -27,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.R;
 
-public class  LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText userEmail;
     EditText userPass;
@@ -35,9 +35,6 @@ public class  LoginActivity extends AppCompatActivity {
     TextView forgotPassword;
 
     FirebaseAuth fb;
-
-    private FirebaseFirestore firebaseFirestore;
-    private String current_user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +49,14 @@ public class  LoginActivity extends AppCompatActivity {
         userPass = findViewById(R.id.editPass);
         userLogin = findViewById(R.id.btn_login);
         forgotPassword = findViewById(R.id.txt_view_forgot_password);
-        fb = FirebaseAuth.getInstance();
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        //Firebase Instance
+        fb = FirebaseAuth.getInstance();
 
         userLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //If the user did not enter an Email or Password -> Prompt the user
                 if (userEmail.getText().toString().equals("") || userPass.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Enter and E-mail and Password", Toast.LENGTH_LONG).show();
                 } else {
@@ -97,27 +95,25 @@ public class  LoginActivity extends AppCompatActivity {
         //set UI text to the spannable string and make the link in the textView element clickable
         forgotPassword.setText(spannableString);
         forgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
-
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseUser currentUser = fb.getCurrentUser();
-
         if (currentUser != null) {
             sendToMain();
         }
     }
 
+    //Intent to send the user to the main activity once they are authorized
     private void sendToMain() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
+    //Intent to send the user to the sign up page once they click on sign up
     public void Signup_page(View view) {
         startActivity(new Intent(this, SignUpActivity.class));
     }
