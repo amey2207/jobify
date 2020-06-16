@@ -17,6 +17,27 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 ---
 
 ## User Interface
+
 | Log-in | Home | Job Posting |
 | :---: |:---:| :---:|
 | <img src="https://user-images.githubusercontent.com/14349600/84811392-cae5a380-afda-11ea-8af0-fde025418141.png" width="300" height="500"> | <img src="https://user-images.githubusercontent.com/14349600/84811435-d8029280-afda-11ea-93d4-3d99dc14fe84.png" width="300" height="500"> | <img src="https://user-images.githubusercontent.com/14349600/84811460-e51f8180-afda-11ea-833e-432737a7d468.png" width="300" height="500"> |
+
+---
+
+## Links
+
+- 📃 <a href = "https://sheridanc-my.sharepoint.com/:w:/g/personal/vahida_shernet_sheridancollege_ca/EUS_X-u1r6dGjKwaFi2V9ckBPsVCWuOJctssPtaFPmdHMQ">Project Inception Document</a>
+- 💬 <a href = "https://jobpill.slack.com">Slack</a>
+- 📅 <a href = "https://app.asana.com/0/home/1156736002270744">Asana</a>
+- 📐 <a href = "https://yfzmlsqnv160.us-06.visual-paradigm.com/tasifier.jsp#proj=5">Visual Paradigm Repository</a>
+
+---
+
+## Team 
+
+- Supervisior: <a href = "https://github.com/ProfJK">Jigisha Patel</a>
+- Team Member #1: <a href = "https://github.com/akopti">Anton Kopti</a>
+- Team Member #2: <a href = "https://github.com/sabeehshah">Sabeeh Shah</a>
+- Team Member #3: <a href = "https://github.com/AlexanderVhd">Alexander Vahid</a>
+
+<img src="https://user-images.githubusercontent.com/14349600/84835378-7e618e80-b001-11ea-9770-1dbdf4ee043a.jpg" width="1050" height="150">
