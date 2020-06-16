@@ -1,4 +1,1 @@
-# JobPill
-<img src="https://user-images.githubusercontent.com/26603601/79058678-0fea0400-7c3f-11ea-8785-1198e83629f9.jpg" width="200" height="300">
-<img src="https://user-images.githubusercontent.com/26603601/79058675-08c2f600-7c3f-11ea-8930-85091777c8dd.jpg" width="200" height="300">
-
+![banner3 (1)](https://user-images.githubusercontent.com/14349600/84766285-89cf9e00-af9e-11ea-89f6-fe0ea8265fcf.jpg)
