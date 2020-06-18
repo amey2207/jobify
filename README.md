@@ -35,7 +35,7 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 
 ## Team 
 
-- Supervisior: <a href = "https://github.com/ProfJK">Professor Jigisha Patel</a>
+- Supervisor: <a href = "https://github.com/ProfJK">Professor Jigisha Patel</a>
 - Team Member #1: <a href = "https://github.com/akopti">Anton Kopti</a>
 - Team Member #2: <a href = "https://github.com/sabeehshah">Sabeeh Shah</a>
 - Team Member #3: <a href = "https://github.com/AlexanderVhd">Alexander Vahid</a>
