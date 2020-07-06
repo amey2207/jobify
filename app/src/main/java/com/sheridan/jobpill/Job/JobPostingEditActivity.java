@@ -96,7 +96,6 @@ public class JobPostingEditActivity extends AppCompatActivity {
                     } else {
                         BringImagePicker();
                     }
-
                 } else {
                     BringImagePicker();
                 }

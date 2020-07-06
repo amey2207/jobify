@@ -183,7 +183,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
         progressBar.setVisibility(View.VISIBLE);
 
         firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -223,7 +222,6 @@ public class EditProfileActivity extends AppCompatActivity {
                             //set default selected interests
                             txtInterests.setText(items);
 
-
                         }
 
                         profileImageURI = Uri.parse(image);
@@ -232,8 +230,6 @@ public class EditProfileActivity extends AppCompatActivity {
                         txtProfileIntro.setText(intro);
                         txtProfilePhone.setText(phone);
                         txtProfileCity.setText(city);
-
-
 
                         RequestOptions placeholderRequest = new RequestOptions();
                         placeholderRequest.placeholder(R.drawable.profile_default);
@@ -250,10 +246,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 progressBar.setVisibility(View.INVISIBLE);
-
             }
         });
-
 
         imgSaveIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,18 +320,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         progressBar.setVisibility(View.INVISIBLE);
 
-
                     }else{
                         storeFirestore(null, name, intro, phone, city, selectedInterests);
                     }
                 }
-
             }
         });
-
-
-
-
     }
 
     private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city, final ArrayList interests) {
@@ -359,13 +347,11 @@ public class EditProfileActivity extends AppCompatActivity {
                     userMap.put("email",currentUser.getEmail());
                     userMap.put("interests", selectedInterests);
 
-
                     firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 
                             if (task.isSuccessful()) {
-
 
                                 Toast.makeText(EditProfileActivity.this, "User Profile Updated", Toast.LENGTH_LONG).show();
 
@@ -379,11 +365,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
                                 Toast.makeText(EditProfileActivity.this, "Firestore error: " + error, Toast.LENGTH_LONG).show();
 
-
                             }
 
                             progressBar.setVisibility(View.INVISIBLE);
-
 
                         }
                     });
@@ -417,25 +401,15 @@ public class EditProfileActivity extends AppCompatActivity {
                         finish();
 
                     } else {
-
                         String error = task.getException().getMessage();
 
                         Toast.makeText(EditProfileActivity.this, "Firestore error: " + error, Toast.LENGTH_LONG).show();
-
-
                     }
-
                     progressBar.setVisibility(View.INVISIBLE);
-
-
                 }
             });
-
         }
-
-
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

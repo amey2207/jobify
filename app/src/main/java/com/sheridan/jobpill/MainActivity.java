@@ -223,16 +223,13 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                 }
             });
         }
-
     }
-
 
     private void sendToLogin() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
-
 
     private void sendToProfile() {
         Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
@@ -264,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         Job job = snapshot.toObject(Job.class);
         job.setItemId(snapshot.getId());
 
-
         if (currentUser.getEmail().equals(job.getCreatedBy())) {
             Intent intent = new Intent(this, JobDetailsPoster.class);
             intent.putExtra("JobSnapshot", job);
@@ -274,10 +270,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
             intent.putExtra("JobSnapshot", job);
             startActivity(intent);
         }
-
-
     }
-
 
     public void filterAlertDialog() {
         FilterAlertDialog filterAlertDialog = new FilterAlertDialog();
@@ -295,16 +288,13 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
             bundle.putInt("estimatedPay", payFilterPosition);
         }
 
-
         filterAlertDialog.setArguments(bundle);
         filterAlertDialog.show(getSupportFragmentManager(), "filter_dialog");
     }
 
-
     //On Filter alert dialog "filter" click
     //apply the options on the query, update the paging adapter with the new query
     //save the selected options in bundle and pass to activity
-
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
 
