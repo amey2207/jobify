@@ -9,12 +9,13 @@ public class JobApplication {
     private String applicantCity;
     private String applicantPhoto;
     private String applicationDate;
+    private String jobId;
     private String status;
 
     public JobApplication() {
     }
 
-    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto, String applicationDate, String status) {
+    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto, String applicationDate,String jobId, String status) {
         this.applicantId = applicantId;
         this.applicantName = applicantName;
         this.applicantIntro = applicantIntro;
@@ -22,6 +23,7 @@ public class JobApplication {
         this.applicantCity = applicantCity;
         this.applicantPhoto = applicantPhoto;
         this.applicationDate = applicationDate;
+        this.jobId = jobId;
         this.status = status;
     }
 
@@ -82,6 +84,14 @@ public class JobApplication {
         this.applicationDate = applicationDate;
     }
 
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -100,6 +110,7 @@ public class JobApplication {
                 ", applicantCity='" + applicantCity + '\'' +
                 ", applicantPhoto='" + applicantPhoto + '\'' +
                 ", applicationDate='" + applicationDate + '\'' +
+                ", jobId='" + jobId + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

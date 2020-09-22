@@ -111,8 +111,11 @@ public class JobDetailsActivity extends AppCompatActivity {
                 jobApplication.setApplicantPhone(phone);
                 jobApplication.setApplicantCity(city);
                 jobApplication.setApplicantPhoto(image);
+                jobApplication.setJobId(currentJob.getItemId());
 
-                jobsRef.document(currentJob.getItemId()).collection("jobApplications").add(jobApplication).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+
+
+                firebaseFirestore.collection("jobApplications").add(jobApplication).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
@@ -150,7 +153,9 @@ public class JobDetailsActivity extends AppCompatActivity {
         } else {
             current_user_id = currentUser.getUid();
 
-            jobsRef.document(currentJob.getItemId()).collection("jobApplications").whereEqualTo("applicantId", current_user_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            firebaseFirestore.collection("jobApplications").whereEqualTo("applicantId", current_user_id)
+                    .whereEqualTo("jobId",currentJob.getItemId())
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {

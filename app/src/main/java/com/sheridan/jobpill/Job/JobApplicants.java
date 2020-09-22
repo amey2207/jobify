@@ -1,5 +1,6 @@
 package com.sheridan.jobpill.Job;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.paging.PagedList;
@@ -12,11 +13,15 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.sheridan.jobpill.JobApplication.JobApplicationListFirestoreAdapter;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
@@ -58,11 +63,23 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
 
         currentUser = firebaseAuth.getCurrentUser();
 
+        firebaseFirestore.collection("jobApplications").whereEqualTo("jobId",jobID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document: task.getResult()){
+                        Log.d("TEST", document.getId() + " => " + document.getData());
+                    }
+                }else{
+                    Log.d("TEST", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
         //Query
         Query query = firebaseFirestore
-                .collection("jobs")
-                .document(jobID)
                 .collection("jobApplications")
+                .whereEqualTo("jobId",jobID)
                 .orderBy("applicationDate", Query.Direction.DESCENDING);
 
         //RecyclerOptions
