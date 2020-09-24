@@ -1,7 +1,11 @@
 package com.sheridan.jobpill.Models;
 
-public class JobApplication {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+public class JobApplication implements Parcelable {
+
+    private String itemId;
     private String applicantId;
     private String applicantName;
     private String applicantIntro;
@@ -15,7 +19,7 @@ public class JobApplication {
     public JobApplication() {
     }
 
-    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto, String applicationDate,String jobId, String status) {
+    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto, String applicationDate,String jobId, String status, String itemId) {
         this.applicantId = applicantId;
         this.applicantName = applicantName;
         this.applicantIntro = applicantIntro;
@@ -25,6 +29,7 @@ public class JobApplication {
         this.applicationDate = applicationDate;
         this.jobId = jobId;
         this.status = status;
+        this.itemId = itemId;
     }
 
     public String getApplicantName() {
@@ -100,10 +105,19 @@ public class JobApplication {
         this.status = status;
     }
 
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
     @Override
     public String toString() {
         return "JobApplication{" +
-                "applicantId='" + applicantId + '\'' +
+                "itemId='" + itemId + '\'' +
+                ", applicantId='" + applicantId + '\'' +
                 ", applicantName='" + applicantName + '\'' +
                 ", applicantIntro='" + applicantIntro + '\'' +
                 ", applicantPhone='" + applicantPhone + '\'' +
@@ -113,5 +127,50 @@ public class JobApplication {
                 ", jobId='" + jobId + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    protected JobApplication(Parcel in){
+        itemId = in.readString();
+        applicantId = in.readString();
+        applicantName = in.readString();
+        applicantCity = in.readString();
+        applicantIntro = in.readString();
+        applicantPhone = in.readString();
+        applicantPhoto = in.readString();
+        applicationDate = in.readString();
+        jobId = in.readString();
+        status = in.readString();
+    }
+
+    public static final Creator<JobApplication> CREATOR = new Creator<JobApplication>() {
+        @Override
+        public JobApplication createFromParcel(Parcel in) {
+            return new JobApplication(in);
+        }
+
+        @Override
+        public JobApplication[] newArray(int size) {
+            return new JobApplication[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(itemId);
+        parcel.writeString(applicantId);
+        parcel.writeString(applicantName);
+        parcel.writeString(applicantCity);
+        parcel.writeString(applicantIntro);
+        parcel.writeString(applicantPhone);
+        parcel.writeString(applicantPhoto);
+        parcel.writeString(applicationDate);
+        parcel.writeString(jobId);
+        parcel.writeString(status);
+
     }
 }

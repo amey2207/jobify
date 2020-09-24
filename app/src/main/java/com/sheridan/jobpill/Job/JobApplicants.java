@@ -7,6 +7,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sheridan.jobpill.JobApplication.JobApplicantProfile;
 import com.sheridan.jobpill.JobApplication.JobApplicationListFirestoreAdapter;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
@@ -118,6 +120,16 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
+        Log.d("APPLICANT_CLICKED", "Clicked the item: " + position + "and ID: " + snapshot.getId());
+
+        JobApplication jobApplication = snapshot.toObject(JobApplication.class);
+        jobApplication.setItemId(snapshot.getId());
+
+        Intent intent = new Intent(this, JobApplicantProfile.class);
+        intent.putExtra("jobApplicant", jobApplication);
+        startActivity(intent);
+
+
 
     }
 }
