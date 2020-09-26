@@ -8,9 +8,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -42,13 +46,19 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileActivity extends AppCompatActivity {
+
+
 
     private ImageView imgCancelIcon;
     private ImageView imgSaveIcon;
@@ -70,6 +80,10 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText txtProfileIntro;
     private EditText txtProfilePhone;
     private EditText txtProfileCity;
+
+    private TextView txtDateOfBirth;
+    private Button btnDateOfBirth;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     private ProgressBar progressBar;
 
@@ -165,6 +179,58 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+
+
+        //DateOfBirth Button OnClick
+        btnDateOfBirth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        EditProfileActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,month,day);
+
+                long minDate = 0;
+
+//                try {
+//                    String dateString = "01/01/2002";
+//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                    Date date = sdf.parse(dateString);
+//                    minDate = date.getTime();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.YEAR, -18);
+
+
+
+                dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month + 1;
+                Log.d("DATEPICKER","onDateSet: mm/dd/yyyy: " + dayOfMonth + "/" + month + "/" + year);
+
+                String date =  dayOfMonth + "/" + month + "/" + year;
+                txtDateOfBirth.setText(date);
+            }
+        };
+
+
+
         btnChangeProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,6 +264,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         String phone = task.getResult().getString("phone");
                         String city = task.getResult().getString("city");
                         String image = task.getResult().getString("photoURL");
+                        String dateOfBirth = task.getResult().getString("dateOfBirth");
                         ArrayList<Integer> interests = (ArrayList<Integer>)task.getResult().get("interests");
 
                         if(!interests.isEmpty()){
@@ -230,6 +297,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         txtProfileIntro.setText(intro);
                         txtProfilePhone.setText(phone);
                         txtProfileCity.setText(city);
+                        txtDateOfBirth.setText(dateOfBirth);
 
                         RequestOptions placeholderRequest = new RequestOptions();
                         placeholderRequest.placeholder(R.drawable.profile_default);
@@ -257,6 +325,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 final String intro = txtProfileIntro.getText().toString();
                 final String phone = txtProfilePhone.getText().toString();
                 final String city = txtProfileCity.getText().toString();
+                final String dateOfBirth = txtDateOfBirth.getText().toString();
 
                 progressBar.setVisibility(View.VISIBLE);
 
@@ -264,7 +333,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 if (isChanged) {
 
-                    if (!TextUtils.isEmpty(name) && profileImageURI != null) {
+                    if (!TextUtils.isEmpty(name) && profileImageURI != null && !dateOfBirth.isEmpty()) {
 
                         image_path = storageReference.child("profile_images").child(user_id + ".jpg");
 
@@ -276,7 +345,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
 
 
-                                    storeFirestore(task, name, intro, phone, city, selectedInterests);
+                                    storeFirestore(task, name, intro, phone, city, selectedInterests,dateOfBirth);
 
                                 } else {
                                     String error = task.getException().getMessage();
@@ -302,6 +371,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         }
 
+                        else if(dateOfBirth.isEmpty()){
+                            Toast.makeText(EditProfileActivity.this, "Please select your date of birth", Toast.LENGTH_LONG).show();
+
+                        }
 
                         progressBar.setVisibility(View.INVISIBLE);
 
@@ -320,15 +393,21 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         progressBar.setVisibility(View.INVISIBLE);
 
-                    }else{
-                        storeFirestore(null, name, intro, phone, city, selectedInterests);
+                    }else if(dateOfBirth.isEmpty()){
+                        Toast.makeText(EditProfileActivity.this, "Please select your date of birth", Toast.LENGTH_LONG).show();
+
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+
+                    else{
+                        storeFirestore(null, name, intro, phone, city, selectedInterests,dateOfBirth);
                     }
                 }
             }
         });
     }
 
-    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city, final ArrayList interests) {
+    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final String name, final String intro, final String phone, final String city, final ArrayList interests, final String dateOfBirth) {
 
 
         if (task != null) {
@@ -345,6 +424,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     userMap.put("city", city);
                     userMap.put("photoURL", downloadUri.toString());
                     userMap.put("email",currentUser.getEmail());
+                    userMap.put("dateOfBirth", dateOfBirth);
                     userMap.put("interests", selectedInterests);
 
                     firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -383,6 +463,7 @@ public class EditProfileActivity extends AppCompatActivity {
             userMap.put("city", city);
             userMap.put("photoURL", downloadUri.toString());
             userMap.put("email",currentUser.getEmail());
+            userMap.put("dateOfBirth",dateOfBirth);
             userMap.put("interests", selectedInterests);
 
 
@@ -455,6 +536,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.edit_profile_progress);
         progressBar.setVisibility(View.VISIBLE);
+
+        txtDateOfBirth = findViewById(R.id.txt_dateOfBirth);
+        btnDateOfBirth = findViewById(R.id.btn_dateOfBirth);
 
         firebaseAuth = FirebaseAuth.getInstance();
         user_id = firebaseAuth.getCurrentUser().getUid();
