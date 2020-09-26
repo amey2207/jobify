@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -43,8 +47,9 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtProfileIntro;
     TextView txtProfilePhone;
     TextView txtProfileCity;
-    TextView txtInterests;
     CircleImageView imgProfile;
+
+    private ChipGroup interestChipGroup;
 
     Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
@@ -105,7 +110,8 @@ public class ProfileActivity extends AppCompatActivity {
         txtProfileIntro = findViewById(R.id.txt_profile_intro);
 //        txtProfilePhone = findViewById(R.id.txt_profile_phone);
         txtProfileCity = findViewById(R.id.txt_profile_location);
-        txtInterests = findViewById(R.id.txtInterests);
+
+        interestChipGroup = findViewById(R.id.profile_interestChipGroup);
 
         imgProfile = findViewById(R.id.img_profile);
 
@@ -141,18 +147,24 @@ public class ProfileActivity extends AppCompatActivity {
                             ArrayList<Integer> interests = (ArrayList<Integer>)task.getResult().get("interests");
 
                             String interestList = "";
+                            ArrayList<String> savedInterests = new ArrayList<>();
+
                             if(!interests.isEmpty()){
                                 for(int i = 0; i < interests.size();i++){
                                     interestList = interestList + listInterests[Integer.parseInt(String.valueOf(interests.get(i)))];
                                     if(i != interests.size()-1){
                                         interestList = interestList + ", ";
                                     }
+                                    savedInterests.add(listInterests[Integer.parseInt(String.valueOf(interests.get(i)))]);
+                                    Log.d("SAVED_INTERESTS", "Interests: " + savedInterests.toString());
+
                                 }
+
+                                setInterestChips(savedInterests);
                             }else{
                                 interestList = "No Interests Selected!";
                             }
 
-                            txtInterests.setText(interestList);
 
 
 
@@ -185,6 +197,28 @@ public class ProfileActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    public void setInterestChips(ArrayList<String> interests)   {
+
+        for(String interest:interests){
+            Chip mChip = (Chip) this.getLayoutInflater().inflate(R.layout.item_chip_interest,null,false );
+            mChip.setText(interest);
+            int paddingDp = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,10,getResources().getDisplayMetrics()
+            );
+
+            mChip.setPadding(paddingDp,0,paddingDp,0);
+            mChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                }
+            });
+            interestChipGroup.addView(mChip);
+        }
+
+
     }
 
     @Override
