@@ -179,7 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     }else{
                         String errorMessage = task.getException().getMessage();
-                        Toast.makeText(ProfileActivity.this, "Firesstore Retrieve Error " + errorMessage, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProfileActivity.this, "Firestore Retrieve Error " + errorMessage, Toast.LENGTH_LONG).show();
                     }
                 }
             });

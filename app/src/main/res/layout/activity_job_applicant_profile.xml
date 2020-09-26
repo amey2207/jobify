@@ -41,14 +41,14 @@
         app:layout_constraintTop_toTopOf="@+id/top_toolbar_jobapplicant_profile" />
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/applicantProfileBottomNav"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_toolbar_jobapplicant_profile"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/top_toolbar_jobapplicant_profile">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -111,9 +111,10 @@
                 android:id="@+id/view_applicant_rating"
                 android:layout_width="113dp"
                 android:layout_height="113dp"
+                android:layout_marginStart="64dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="64dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/skill_border"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_applicant_intro" />
 
             <TextView
@@ -125,9 +126,9 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/view_applicant_jobs"
+                app:layout_constraintEnd_toEndOf="@+id/view_applicant_rating"
                 app:layout_constraintHorizontal_bias="0.518"
-                app:layout_constraintStart_toStartOf="@+id/view_applicant_jobs"
+                app:layout_constraintStart_toStartOf="@+id/view_applicant_rating"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_applicant_rating" />
 
             <TextView
@@ -137,18 +138,19 @@
                 android:text="Rating"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_applicant_jobs"
-                app:layout_constraintEnd_toEndOf="@+id/view_applicant_jobs"
-                app:layout_constraintStart_toStartOf="@+id/view_applicant_jobs"
-                app:layout_constraintTop_toTopOf="@+id/view_applicant_jobs" />
+                app:layout_constraintBottom_toBottomOf="@+id/view_applicant_rating"
+                app:layout_constraintEnd_toEndOf="@+id/view_applicant_rating"
+                app:layout_constraintStart_toStartOf="@+id/view_applicant_rating"
+                app:layout_constraintTop_toTopOf="@+id/view_applicant_rating" />
 
             <View
                 android:id="@+id/view_applicant_jobs"
                 android:layout_width="113dp"
                 android:layout_height="113dp"
-                android:layout_marginStart="64dp"
                 android:layout_marginTop="32dp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="64dp"
+                android:background="@drawable/skill_border"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_applicant_intro" />
 
             <TextView
@@ -160,8 +162,8 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/view_applicant_rating"
-                app:layout_constraintStart_toStartOf="@+id/view_applicant_rating"
+                app:layout_constraintEnd_toEndOf="@+id/view_applicant_jobs"
+                app:layout_constraintStart_toStartOf="@+id/view_applicant_jobs"
                 app:layout_constraintTop_toBottomOf="@+id/lbl_applicant_jobs" />
 
             <TextView
@@ -171,10 +173,10 @@
                 android:text="Jobs"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/view_applicant_rating"
-                app:layout_constraintEnd_toEndOf="@+id/view_applicant_rating"
-                app:layout_constraintStart_toStartOf="@+id/view_applicant_rating"
-                app:layout_constraintTop_toTopOf="@+id/view_applicant_rating" />
+                app:layout_constraintBottom_toBottomOf="@+id/view_applicant_jobs"
+                app:layout_constraintEnd_toEndOf="@+id/view_applicant_jobs"
+                app:layout_constraintStart_toStartOf="@+id/view_applicant_jobs"
+                app:layout_constraintTop_toTopOf="@+id/view_applicant_jobs" />
 
             <View
                 android:id="@+id/view5"
@@ -183,12 +185,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/rectangle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_applicant_rating" />
+                app:layout_constraintTop_toBottomOf="@+id/view_applicant_jobs" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -217,22 +219,11 @@
                 app:chipSpacingVertical="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/view5"
                 app:layout_constraintStart_toStartOf="@+id/view5"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+            </com.google.android.material.chip.ChipGroup>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/applicantProfileBottomNav"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/design_default_color_background"
-        app:itemIconTint="@drawable/menu_item_color"
-        app:itemTextColor="@drawable/menu_item_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
