@@ -104,6 +104,7 @@ public class JobDetailsActivity extends AppCompatActivity {
                 String phone = settings.getString("phone", "");
                 String city = settings.getString("city", "");
                 String image = settings.getString("image", "");
+                String dateOfBirth = settings.getString("dateOfBirth", "");
 
                 //set user details in job_application
                 jobApplication.setApplicantName(name);
@@ -112,16 +113,21 @@ public class JobDetailsActivity extends AppCompatActivity {
                 jobApplication.setApplicantCity(city);
                 jobApplication.setApplicantPhoto(image);
                 jobApplication.setJobId(currentJob.getItemId());
+                jobApplication.setApplicantDateOfBirth(dateOfBirth);
 
+                DocumentReference ref = jobsRef.document(currentJob.getItemId()).collection("jobApplications").document();
 
+                jobApplication.setItemId(ref.getId());
 
-                firebaseFirestore.collection("jobApplications").add(jobApplication).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                ref.set(jobApplication).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(JobDetailsActivity.this, "Application Successful", Toast.LENGTH_LONG).show();
                             btn_apply.setEnabled(false);
                             btn_apply.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonDisabled));
+                        }else{
+                            Toast.makeText(JobDetailsActivity.this, "Application Failed: Database Error", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -153,7 +159,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         } else {
             current_user_id = currentUser.getUid();
 
-            firebaseFirestore.collection("jobApplications").whereEqualTo("applicantId", current_user_id)
+            jobsRef.document(currentJob.getItemId()).collection("jobApplications").whereEqualTo("applicantId", current_user_id)
                     .whereEqualTo("jobId",currentJob.getItemId())
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override

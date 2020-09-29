@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                             String phone = task.getResult().getString("phone");
                             String city = task.getResult().getString("city");
                             String image = task.getResult().getString("photoURL");
+                            String dateOfBirth = task.getResult().getString("dateOfBirth");
 
                             SharedPreferences settings = getSharedPreferences("myprofile",
                                     Context.MODE_PRIVATE);
@@ -209,11 +210,12 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                             editor.putString("phone", phone);
                             editor.putString("city", city);
                             editor.putString("image", image);
+                            editor.putString("dateOfBirth",dateOfBirth);
 
                             editor.commit();
 
                             Log.d("SHARED_PREFERENCES", "PROFILE SAVED AS: " + name + ", " + intro +
-                                    ", " + phone + ", " + city + ", " + image);
+                                    ", " + phone + ", " + city + ", " + image + ", " + dateOfBirth);
 
                         }
                     } else {

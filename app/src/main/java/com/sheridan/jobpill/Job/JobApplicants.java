@@ -65,7 +65,7 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
 
         currentUser = firebaseAuth.getCurrentUser();
 
-        firebaseFirestore.collection("jobApplications").whereEqualTo("jobId",jobID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collection("jobs").document(jobID).collection("jobApplications").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
@@ -80,8 +80,9 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
 
         //Query
         Query query = firebaseFirestore
+                .collection("jobs")
+                .document(jobID)
                 .collection("jobApplications")
-                .whereEqualTo("jobId",jobID)
                 .orderBy("applicationDate", Query.Direction.DESCENDING);
 
         //RecyclerOptions

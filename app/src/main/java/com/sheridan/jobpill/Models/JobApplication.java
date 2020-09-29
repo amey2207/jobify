@@ -12,6 +12,7 @@ public class JobApplication implements Parcelable {
     private String applicantPhone;
     private String applicantCity;
     private String applicantPhoto;
+    private String applicantDateOfBirth;
     private String applicationDate;
     private String jobId;
     private String status;
@@ -19,7 +20,7 @@ public class JobApplication implements Parcelable {
     public JobApplication() {
     }
 
-    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto, String applicationDate,String jobId, String status, String itemId) {
+    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto,String applicantDateOfBirth, String applicationDate,String jobId, String status, String itemId) {
         this.applicantId = applicantId;
         this.applicantName = applicantName;
         this.applicantIntro = applicantIntro;
@@ -27,6 +28,7 @@ public class JobApplication implements Parcelable {
         this.applicantCity = applicantCity;
         this.applicantPhoto = applicantPhoto;
         this.applicationDate = applicationDate;
+        this.applicantDateOfBirth = applicantDateOfBirth;
         this.jobId = jobId;
         this.status = status;
         this.itemId = itemId;
@@ -89,6 +91,14 @@ public class JobApplication implements Parcelable {
         this.applicationDate = applicationDate;
     }
 
+    public String getApplicantDateOfBirth() {
+        return applicantDateOfBirth;
+    }
+
+    public void setApplicantDateOfBirth(String applicantDateOfBirth) {
+        this.applicantDateOfBirth = applicantDateOfBirth;
+    }
+
     public String getJobId() {
         return jobId;
     }
@@ -123,6 +133,7 @@ public class JobApplication implements Parcelable {
                 ", applicantPhone='" + applicantPhone + '\'' +
                 ", applicantCity='" + applicantCity + '\'' +
                 ", applicantPhoto='" + applicantPhoto + '\'' +
+                ", applicantDateOfBirth='" + applicantDateOfBirth + '\'' +
                 ", applicationDate='" + applicationDate + '\'' +
                 ", jobId='" + jobId + '\'' +
                 ", status='" + status + '\'' +
@@ -138,6 +149,7 @@ public class JobApplication implements Parcelable {
         applicantPhone = in.readString();
         applicantPhoto = in.readString();
         applicationDate = in.readString();
+        applicantDateOfBirth = in.readString();
         jobId = in.readString();
         status = in.readString();
     }
@@ -169,6 +181,7 @@ public class JobApplication implements Parcelable {
         parcel.writeString(applicantPhone);
         parcel.writeString(applicantPhoto);
         parcel.writeString(applicationDate);
+        parcel.writeString(applicantDateOfBirth);
         parcel.writeString(jobId);
         parcel.writeString(status);
 

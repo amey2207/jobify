@@ -11,6 +11,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.JobDetailsActivity;
 import com.sheridan.jobpill.Job.MyJobsActivity;
@@ -36,7 +38,12 @@ import com.sheridan.jobpill.Profile.EditProfileActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,6 +58,8 @@ public class JobApplicantProfile extends AppCompatActivity {
    private TextView txtApplicantIntro;
    private  TextView txtApplicantRating;
    private TextView txtApplicantJobsCompleted;
+
+   private Button btnHireApplicant;
 
     String[] listInterests;
 
@@ -136,7 +145,7 @@ public class JobApplicantProfile extends AppCompatActivity {
                             RequestOptions placeholderRequest = new RequestOptions();
                             placeholderRequest.placeholder(R.drawable.profile_default);
 
-                            Glide.with(JobApplicantProfile.this).setDefaultRequestOptions(placeholderRequest).load(currentJobApplication.getApplicantPhoto()).into(applicantProfileImg);
+                            Glide.with(JobApplicantProfile.this).setDefaultRequestOptions(placeholderRequest).load(image).into(applicantProfileImg);
 
 
 
@@ -150,6 +159,36 @@ public class JobApplicantProfile extends AppCompatActivity {
 
         }
 
+        //INCOMPLETE
+
+//        btnHireApplicant.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+//
+//
+//                Map<String, Object> data = new HashMap<>();
+//                data.put("hiredApplicant", currentJobApplication.getApplicantId());
+//                data.put("jobStatus","In-Progress");
+//                data.put("hiringDate",date);
+//
+//
+//
+//                firebaseFirestore.collection("jobs").document(currentJobApplication.getJobId()).set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if(task.isSuccessful()){
+//                            Toast.makeText(JobApplicantProfile.this, "Applicant Hired Successfully ", Toast.LENGTH_LONG).show();
+//                            finish();
+//                        }else{
+//                            String errorMessage = task.getException().getMessage();
+//                            Toast.makeText(JobApplicantProfile.this, "Firestore Update Error " + errorMessage, Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+//            }
+//        });
 
 
 
@@ -192,7 +231,7 @@ public class JobApplicantProfile extends AppCompatActivity {
         interestChipGroup = findViewById(R.id.interest_chipGroup);
 
         backBtn = findViewById(R.id.applicant_profile_back_btn);
-
+        btnHireApplicant = findViewById(R.id.btn_hireApplicant);
 
     }
 
