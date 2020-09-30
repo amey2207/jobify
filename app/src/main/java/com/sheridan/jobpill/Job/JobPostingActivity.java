@@ -192,6 +192,8 @@ public class JobPostingActivity extends AppCompatActivity {
                     jobMap.put("jobStatus", "available");
                     jobMap.put("jobTitle", jobTitle);
                     jobMap.put("location", jobLocation);
+                    jobMap.put("hiringDate","");
+                    jobMap.put("hiredApplicant","");
 
                     newJobRef.set(jobMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

@@ -159,36 +159,65 @@ public class JobApplicantProfile extends AppCompatActivity {
 
         }
 
-        //INCOMPLETE
+        firebaseFirestore.collection("jobs").document(currentJobApplication.getJobId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    String hiredApplicant = task.getResult().getString("hiredApplicant");
+                    if(!hiredApplicant.isEmpty()){
+                        btnHireApplicant.setEnabled(false);
+                    }
+                }
+            }
+        });
 
-//        btnHireApplicant.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-//
-//
-//                Map<String, Object> data = new HashMap<>();
-//                data.put("hiredApplicant", currentJobApplication.getApplicantId());
-//                data.put("jobStatus","In-Progress");
-//                data.put("hiringDate",date);
-//
-//
-//
-//                firebaseFirestore.collection("jobs").document(currentJobApplication.getJobId()).set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if(task.isSuccessful()){
-//                            Toast.makeText(JobApplicantProfile.this, "Applicant Hired Successfully ", Toast.LENGTH_LONG).show();
-//                            finish();
-//                        }else{
-//                            String errorMessage = task.getException().getMessage();
-//                            Toast.makeText(JobApplicantProfile.this, "Firestore Update Error " + errorMessage, Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
-//            }
-//        });
+
+
+        btnHireApplicant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+
+                Map<String, Object> data = new HashMap<>();
+                data.put("hiredApplicant", currentJobApplication.getApplicantId());
+                data.put("jobStatus","In-Progress");
+                data.put("hiringDate",date);
+
+
+
+                firebaseFirestore.collection("jobs").document(currentJobApplication.getJobId()).set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+
+                            final Map<String,Object> jobApplication = new HashMap<>();
+                            jobApplication.put("status","assigned");
+
+                            firebaseFirestore.collection("jobs").document(currentJobApplication.getJobId()).collection("jobApplications")
+                                    .document(currentJobApplication.getItemId())
+                                    .set(jobApplication,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                }
+                            });
+
+                            Toast.makeText(JobApplicantProfile.this, "Applicant Hired Successfully ", Toast.LENGTH_LONG).show();
+                            finish();
+                        }else{
+                            String errorMessage = task.getException().getMessage();
+                            Toast.makeText(JobApplicantProfile.this, "Firestore Update Error " + errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+
+            }
+        });
 
 
 

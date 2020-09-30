@@ -113,6 +113,10 @@ public class JobDetailsActivity extends AppCompatActivity {
                 jobApplication.setApplicantCity(city);
                 jobApplication.setApplicantPhoto(image);
                 jobApplication.setJobId(currentJob.getItemId());
+                jobApplication.setJobTitle(currentJob.getJobTitle());
+                jobApplication.setJobDescription(currentJob.getJobDescription());
+                jobApplication.setJobLocation(currentJob.getLocation());
+                jobApplication.setJobPhotoURL(currentJob.getPhotoURL());
                 jobApplication.setApplicantDateOfBirth(dateOfBirth);
 
                 DocumentReference ref = jobsRef.document(currentJob.getItemId()).collection("jobApplications").document();

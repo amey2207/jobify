@@ -65,18 +65,6 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
 
         currentUser = firebaseAuth.getCurrentUser();
 
-        firebaseFirestore.collection("jobs").document(jobID).collection("jobApplications").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
-                        Log.d("TEST", document.getId() + " => " + document.getData());
-                    }
-                }else{
-                    Log.d("TEST", "Error getting documents: ", task.getException());
-                }
-            }
-        });
 
         //Query
         Query query = firebaseFirestore

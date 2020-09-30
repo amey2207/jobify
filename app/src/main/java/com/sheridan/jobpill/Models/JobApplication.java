@@ -15,12 +15,24 @@ public class JobApplication implements Parcelable {
     private String applicantDateOfBirth;
     private String applicationDate;
     private String jobId;
+    private String jobTitle;
+    private String jobDescription;
+    private String jobLocation;
+    private String jobPhotoURL;
+
     private String status;
 
     public JobApplication() {
     }
 
-    public JobApplication(String applicantId, String applicantName, String applicantIntro, String applicantPhone, String applicantCity, String applicantPhoto,String applicantDateOfBirth, String applicationDate,String jobId, String status, String itemId) {
+    public JobApplication(String applicantId, String applicantName,
+                          String applicantIntro, String applicantPhone,
+                          String applicantCity, String applicantPhoto,
+                          String applicantDateOfBirth, String applicationDate,
+                          String jobId, String jobTitle,
+                          String jobDescription, String jobLocation,
+                          String jobPhotoURL,
+                          String status, String itemId) {
         this.applicantId = applicantId;
         this.applicantName = applicantName;
         this.applicantIntro = applicantIntro;
@@ -30,6 +42,10 @@ public class JobApplication implements Parcelable {
         this.applicationDate = applicationDate;
         this.applicantDateOfBirth = applicantDateOfBirth;
         this.jobId = jobId;
+        this.jobTitle = jobTitle;
+        this.jobDescription = jobDescription;
+        this.jobLocation = jobLocation;
+        this.jobPhotoURL = jobPhotoURL;
         this.status = status;
         this.itemId = itemId;
     }
@@ -123,6 +139,38 @@ public class JobApplication implements Parcelable {
         this.itemId = itemId;
     }
 
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getJobDescription() {
+        return jobDescription;
+    }
+
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
+    }
+
+    public String getJobLocation() {
+        return jobLocation;
+    }
+
+    public void setJobLocation(String jobLocation) {
+        this.jobLocation = jobLocation;
+    }
+
+    public String getJobPhotoURL() {
+        return jobPhotoURL;
+    }
+
+    public void setJobPhotoURL(String jobPhotoURL) {
+        this.jobPhotoURL = jobPhotoURL;
+    }
+
     @Override
     public String toString() {
         return "JobApplication{" +
@@ -136,6 +184,10 @@ public class JobApplication implements Parcelable {
                 ", applicantDateOfBirth='" + applicantDateOfBirth + '\'' +
                 ", applicationDate='" + applicationDate + '\'' +
                 ", jobId='" + jobId + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", jobDescription='" + jobDescription + '\'' +
+                ", jobLocation='" + jobLocation + '\'' +
+                ", jobPhotoURL='" + jobPhotoURL + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }
@@ -151,6 +203,10 @@ public class JobApplication implements Parcelable {
         applicationDate = in.readString();
         applicantDateOfBirth = in.readString();
         jobId = in.readString();
+        jobTitle = in.readString();
+        jobDescription = in.readString();
+        jobLocation = in.readString();
+        jobPhotoURL = in.readString();
         status = in.readString();
     }
 
@@ -183,6 +239,10 @@ public class JobApplication implements Parcelable {
         parcel.writeString(applicationDate);
         parcel.writeString(applicantDateOfBirth);
         parcel.writeString(jobId);
+        parcel.writeString(jobTitle);
+        parcel.writeString(jobDescription);
+        parcel.writeString(jobLocation);
+        parcel.writeString(jobPhotoURL);
         parcel.writeString(status);
 
     }
