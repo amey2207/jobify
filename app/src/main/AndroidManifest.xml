@@ -33,7 +33,7 @@
             android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Job.JobApplicants"
+            android:name=".Job.JobApplications"
             android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

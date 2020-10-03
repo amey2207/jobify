@@ -36,6 +36,7 @@ public class JobApplicationListFirestoreAdapter extends FirestorePagingAdapter<J
     protected void onBindViewHolder(@NonNull JobApplicationListFirestoreAdapter.JobApplicantsViewHolder holder, int position, @NonNull JobApplication model) {
 
         holder.applicantName.setText(model.getApplicantName() + " from " + model.getApplicantCity());
+        holder.applicationDate.setText(model.getApplicationDate());
 
         Glide.with(holder.itemView.getContext())
                 .load(model.getApplicantPhoto())
@@ -80,12 +81,14 @@ public class JobApplicationListFirestoreAdapter extends FirestorePagingAdapter<J
 
         private TextView applicantName;
         private ImageView applicantImg;
+        private TextView applicationDate;
 
         public JobApplicantsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             applicantName = itemView.findViewById(R.id.name_applicant);
             applicantImg = itemView.findViewById(R.id.img_applicant);
+            applicationDate = itemView.findViewById(R.id.application_date);
 
             itemView.setOnClickListener(this);
         }

@@ -103,7 +103,7 @@ public class JobDetailsPoster extends AppCompatActivity {
     private void viewApplicants() {
         Log.d("VIEW_APPLICANTS", "Clicked View Applicants");
 
-        Intent intent = new Intent(this, JobApplicants.class);
+        Intent intent = new Intent(this, JobApplications.class);
         intent.putExtra("JobID", currentJob.getItemId());
         startActivity(intent);
 

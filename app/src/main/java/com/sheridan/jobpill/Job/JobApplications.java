@@ -29,7 +29,7 @@ import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
 import com.sheridan.jobpill.R;
 
-public class JobApplicants extends AppCompatActivity implements JobApplicationListFirestoreAdapter.OnListItemClick {
+public class JobApplications extends AppCompatActivity implements JobApplicationListFirestoreAdapter.OnListItemClick {
 
     private RecyclerView jobApplicantsListView;
     private JobApplicationListFirestoreAdapter adapter;
