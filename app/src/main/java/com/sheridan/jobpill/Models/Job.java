@@ -9,6 +9,7 @@ public class Job implements Parcelable {
 
     private String itemId;
     private String createdBy;
+    private String createdByName;
     private String createdDate;
     private Float estimatedPay;
     private String instructions;
@@ -21,11 +22,12 @@ public class Job implements Parcelable {
     private String hiringDate;
     private String hiredApplicant;
 
-    public Job(String itemId, String createdBy, String createdDate, Float estimatedPay, String instructions,
+    public Job(String itemId, String createdBy, String createdByName, String createdDate, Float estimatedPay, String instructions,
                String jobCategory, String jobDescription, String jobTitle,
                String location, String photoURL, String jobStatus, String hiringDate, String hiredApplicant) {
         this.itemId = itemId;
         this.createdBy = createdBy;
+        this.createdByName = createdByName;
         this.createdDate = createdDate;
         this.estimatedPay = estimatedPay;
         this.instructions = instructions;
@@ -46,6 +48,7 @@ public class Job implements Parcelable {
     protected Job(Parcel in) {
         itemId = in.readString();
         createdBy = in.readString();
+        createdByName = in.readString();
         createdDate = in.readString();
         estimatedPay = in.readFloat();
         instructions = in.readString();
@@ -85,6 +88,14 @@ public class Job implements Parcelable {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getCreatedByName() {
+        return createdByName;
+    }
+
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
     }
 
     public String getCreatedDate() {
@@ -180,6 +191,7 @@ public class Job implements Parcelable {
         return "Job{" +
                 "itemId='" + itemId + '\'' +
                 ", createdBy='" + createdBy + '\'' +
+                ", createdByName='" + createdByName + '\'' +
                 ", createdDate='" + createdDate + '\'' +
                 ", estimatedPay=" + estimatedPay +
                 ", instructions='" + instructions + '\'' +
@@ -203,6 +215,7 @@ public class Job implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(itemId);
         parcel.writeString(createdBy);
+        parcel.writeString(createdByName);
         parcel.writeString(createdDate);
         parcel.writeFloat(estimatedPay);
         parcel.writeString(instructions);
