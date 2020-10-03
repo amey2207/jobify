@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
         //Query
         Query query = firebaseFirestore
                 .collection("jobs")
+                .whereEqualTo("jobStatus","available")
+                .whereNotEqualTo("createdBy",currentUser.getEmail())
+                .orderBy("createdBy")
                 .orderBy("createdDate", Query.Direction.DESCENDING);
 
         //RecyclerOptions

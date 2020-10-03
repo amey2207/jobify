@@ -18,8 +18,12 @@ public class Job implements Parcelable {
     private String location;
     private String photoURL;
     private String jobStatus;
+    private String hiringDate;
+    private String hiredApplicant;
 
-    public Job(String itemId, String createdBy, String createdDate, Float estimatedPay, String instructions, String jobCategory, String jobDescription, String jobTitle, String location, String photoURL, String jobStatus) {
+    public Job(String itemId, String createdBy, String createdDate, Float estimatedPay, String instructions,
+               String jobCategory, String jobDescription, String jobTitle,
+               String location, String photoURL, String jobStatus, String hiringDate, String hiredApplicant) {
         this.itemId = itemId;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
@@ -31,6 +35,8 @@ public class Job implements Parcelable {
         this.location = location;
         this.photoURL = photoURL;
         this.jobStatus = jobStatus;
+        this.hiringDate = hiringDate;
+        this.hiredApplicant = hiredApplicant;
 
     }
 
@@ -49,6 +55,8 @@ public class Job implements Parcelable {
         location = in.readString();
         photoURL = in.readString();
         jobStatus = in.readString();
+        hiringDate = in.readString();
+        hiredApplicant = in.readString();
     }
 
     public static final Creator<Job> CREATOR = new Creator<Job>() {
@@ -151,6 +159,22 @@ public class Job implements Parcelable {
         this.jobStatus = jobStatus;
     }
 
+    public String getHiringDate() {
+        return hiringDate;
+    }
+
+    public void setHiringDate(String hiringDate) {
+        this.hiringDate = hiringDate;
+    }
+
+    public String getHiredApplicant() {
+        return hiredApplicant;
+    }
+
+    public void setHiredApplicant(String hiredApplicant) {
+        this.hiredApplicant = hiredApplicant;
+    }
+
     @Override
     public String toString() {
         return "Job{" +
@@ -163,8 +187,10 @@ public class Job implements Parcelable {
                 ", jobDescription='" + jobDescription + '\'' +
                 ", jobTitle='" + jobTitle + '\'' +
                 ", location='" + location + '\'' +
-                ", photoUrl='" + photoURL + '\'' +
+                ", photoURL='" + photoURL + '\'' +
                 ", jobStatus='" + jobStatus + '\'' +
+                ", hiringDate='" + hiringDate + '\'' +
+                ", hiredApplicant='" + hiredApplicant + '\'' +
                 '}';
     }
 
@@ -186,6 +212,8 @@ public class Job implements Parcelable {
         parcel.writeString(location);
         parcel.writeString(photoURL);
         parcel.writeString(jobStatus);
+        parcel.writeString(hiringDate);
+        parcel.writeString(hiredApplicant);
 
     }
 }

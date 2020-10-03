@@ -118,7 +118,7 @@ public class JobApplicants extends AppCompatActivity implements JobApplicationLi
         intent.putExtra("jobApplicant", jobApplication);
         startActivity(intent);
 
-
-
     }
+
+
 }

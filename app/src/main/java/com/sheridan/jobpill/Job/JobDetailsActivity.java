@@ -157,13 +157,22 @@ public class JobDetailsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        if(!currentJob.getHiredApplicant().isEmpty()){
+            Log.d("FOUND_APPLICATION", "User has already applied for the job");
+            btn_apply.setEnabled(false);
+            btn_apply.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonDisabled));
+        }
+
+
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser == null) {
             sendToLogin();
         } else {
             current_user_id = currentUser.getUid();
 
-            jobsRef.document(currentJob.getItemId()).collection("jobApplications").whereEqualTo("applicantId", current_user_id)
+            jobsRef.document(currentJob.getItemId()).collection("jobApplications")
+                    .whereEqualTo("applicantId", current_user_id)
                     .whereEqualTo("jobId",currentJob.getItemId())
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -177,6 +186,8 @@ public class JobDetailsActivity extends AppCompatActivity {
                     }
                 }
             });
+
+
         }
     }
 
