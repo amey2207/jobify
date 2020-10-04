@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -74,6 +75,7 @@ public class JobPostingActivity extends AppCompatActivity {
     private StorageReference image_path = null;
     private StorageReference storageReference;
     private String jobId;
+    private String createdByName = "";
 
 
     CollectionReference dbJobs;
@@ -146,6 +148,17 @@ public class JobPostingActivity extends AppCompatActivity {
                     reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
                     final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
+                    db.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                              if(task.isSuccessful()){
+                                  createdByName = task.getResult().getString("name");
+                              }else{
+                                  createdByName = currentUser.getEmail();
+                              }
+                        }
+                    });
+
 
                     final DocumentReference newJobRef = db.collection("jobs").document();
                     jobId = newJobRef.getId();
@@ -183,6 +196,7 @@ public class JobPostingActivity extends AppCompatActivity {
                     Uri downloadUri = uri;
                     jobMap = new HashMap<>();
                     jobMap.put("createdBy", createdBy);
+                    jobMap.put("createdByName",createdByName);
                     jobMap.put("createdDate", createdDate);
                     jobMap.put("estimatedPay", jobPayment);
                     jobMap.put("photoURL", downloadUri.toString());
