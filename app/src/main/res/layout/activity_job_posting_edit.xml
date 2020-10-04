@@ -52,6 +52,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:autofillHints=""
+                android:background="#E8E8E8"
                 android:gravity="start|end"
                 android:hint="@string/job_instructions"
                 android:inputType="textMultiLine"
@@ -102,10 +103,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:entries="@array/post_interest_categories"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Category_txtView" />
 
@@ -117,6 +119,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:autofillHints=""
+                android:background="#E8E8E8"
                 android:gravity="start|end"
                 android:hint="@string/description"
                 android:inputType="textMultiLine"
@@ -169,7 +172,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/custom_blue_btn"
                 android:backgroundTint="@color/colorAccent"
-                android:text="@string/post"
+                android:text="Update"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -178,4 +181,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/instructions_edt" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

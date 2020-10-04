@@ -18,51 +18,35 @@ import com.sheridan.jobpill.Messaging.MessagesActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 
-public class MyJobsActivity extends AppCompatActivity {
-
-    private CardView cardJobsPosted;
-    private CardView cardJobsApplied;
-    private CardView cardJobsInProgress;
-    private CardView cardJobsCompleted;
+public class JobsInProgressOptionActivity extends AppCompatActivity {
+    private CardView cardInProgressApplied;
+    private CardView cardInProgressPosted;
     private BottomNavigationView bottomNavigationView;
     private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_jobs);
+        setContentView(R.layout.activity_jobs_in_progress_option);
         setupWidgets();
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToHome();
-            }
-        });
-        cardJobsPosted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendToMyPostedJobs();
+                sendtoMyJobs();
             }
         });
 
-        cardJobsApplied.setOnClickListener(new View.OnClickListener() {
+        cardInProgressPosted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToMyAppliedJobs();
+                sendToPostedJobsInProgress();
             }
         });
 
-        cardJobsInProgress.setOnClickListener(new View.OnClickListener() {
+        cardInProgressApplied.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToJobsInProgress();
-            }
-        });
-
-        cardJobsCompleted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+                sendToAppliedJobsInProgress();
             }
         });
 
@@ -87,47 +71,45 @@ public class MyJobsActivity extends AppCompatActivity {
     }
 
     public void setupWidgets() {
-        cardJobsPosted = findViewById(R.id.card_posted_jobs);
-        cardJobsApplied = findViewById(R.id.card_jobs_applied);
-        cardJobsInProgress = findViewById(R.id.card_jobs_inprogress);
-        cardJobsCompleted = findViewById(R.id.card_jobs_completed);
+
+        cardInProgressPosted = findViewById(R.id.card_in_progress_jobs_posted);
+        cardInProgressApplied = findViewById(R.id.card_in_progress_jobs_applied);
         bottomNavigationView = findViewById(R.id.myjobs_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.bottom_action_jobs);
-        backButton = findViewById(R.id.My_Jobs_back_button);
+        backButton = findViewById(R.id.jobs_in_progress_option_back_button);
     }
 
     private void sendToProfile() {
-        Intent intent = new Intent(MyJobsActivity.this, ProfileActivity.class);
+        Intent intent = new Intent(JobsInProgressOptionActivity.this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }
 
     private void sendToHome() {
-        Intent intent = new Intent(MyJobsActivity.this, MainActivity.class);
+        Intent intent = new Intent(JobsInProgressOptionActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void sendToMyPostedJobs() {
-        Intent intent = new Intent(MyJobsActivity.this, MyPostedJobsActivity.class);
+
+    private void sendToPostedJobsInProgress() {
+        Intent intent = new Intent(JobsInProgressOptionActivity.this, JobsInProgressActivity.class);
         startActivity(intent);
         finish();
     }
-
-    private void sendToMyAppliedJobs() {
-        Intent intent = new Intent(MyJobsActivity.this, MyAppliedJobsActivity.class);
+    private void sendtoMyJobs() {
+        Intent intent = new Intent(JobsInProgressOptionActivity.this, MyJobsActivity.class);
         startActivity(intent);
         finish();
     }
-
     private void sendToMessages() {
-        Intent intent = new Intent(MyJobsActivity.this, MessagesActivity.class);
+        Intent intent = new Intent(JobsInProgressOptionActivity.this, MessagesActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void sendToJobsInProgress() {
-        Intent intent = new Intent(MyJobsActivity.this, JobsInProgressOptionActivity.class);
+    private void sendToAppliedJobsInProgress() {
+        Intent intent = new Intent(JobsInProgressOptionActivity.this, JobsInProgressApplied.class);
         startActivity(intent);
         finish();
     }

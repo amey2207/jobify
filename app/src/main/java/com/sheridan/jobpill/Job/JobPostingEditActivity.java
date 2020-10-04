@@ -3,11 +3,14 @@ package com.sheridan.jobpill.Job;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +42,9 @@ import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -74,15 +81,46 @@ public class JobPostingEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_posting_edit);
+
         cancelBtn = findViewById(R.id.cancel_post_btn);
+
         jobImageBtn = findViewById(R.id.job_imagebtn);
+        Uri uri = Uri.parse(getIntent().getStringExtra("ImageURL"));
+        jobImageBtn.setImageURI(Uri.parse(getIntent().getStringExtra("ImageURL")));
+        jobImageURI = Uri.parse(getIntent().getStringExtra("ImageURL"));
+        Glide.with(JobPostingEditActivity.this).load(uri).into(jobImageBtn);
         titleEdt = findViewById(R.id.Job_title_editText);
+        String jobTitle = getIntent().getStringExtra("JobTitle");
+        titleEdt.setText(jobTitle);
+
         paymentEdt = findViewById(R.id.payment_editText);
+        String pay = getIntent().getStringExtra("EstimatePay");
+        paymentEdt.setText(pay);
+
         locationEdt = findViewById(R.id.Location_editText);
+        String location = getIntent().getStringExtra("Location");
+        locationEdt.setText(location);
+
         descriptionEdt = findViewById(R.id.description_editText);
+        String description = getIntent().getStringExtra("Description");
+        descriptionEdt.setText(description);
+
         categorySpn = findViewById(R.id.cat_spinner);
+        String category = getIntent().getStringExtra("Category");
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.filter_categories, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpn.setAdapter(adapter);
+        if (category != null) {
+            int spinnerPosition = adapter.getPosition(category);
+            categorySpn.setSelection(spinnerPosition);
+        }
+
         postBtn = findViewById(R.id.pst_btn);
+
         Instructions = findViewById(R.id.instructions_edt);
+        String instructions = getIntent().getStringExtra("Instructions");
+        Instructions.setText(instructions);
+
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         jobImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +169,7 @@ public class JobPostingEditActivity extends AppCompatActivity {
                     final String jobInstructions = Instructions.getText().toString();
                     reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
                     final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                    final DocumentReference newJobRef = db.collection("jobs").document();
+                    final DocumentReference newJobRef = db.collection("jobs").document(getIntent().getStringExtra("id"));
                     jobId = newJobRef.getId();
                     image_path = storageReference.child("job_images").child(jobId + ".jpg");
                     image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -176,7 +214,7 @@ public class JobPostingEditActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(JobPostingEditActivity.this, "Job Posted Successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(JobPostingEditActivity.this, "Job Updated Successfully", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(JobPostingEditActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();

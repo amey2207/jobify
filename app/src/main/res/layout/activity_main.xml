@@ -47,6 +47,7 @@
         android:id="@+id/jobs_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#E8E8E8"
         android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/mainBottomNav"
         app:layout_constraintEnd_toEndOf="parent"

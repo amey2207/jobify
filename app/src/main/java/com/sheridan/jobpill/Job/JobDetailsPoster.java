@@ -126,6 +126,23 @@ public class JobDetailsPoster extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Get the menu item and determine what action to take.
         switch (item.getItemId()) {
+
+            //case R.id.edit_job:
+                //Intent intent = new Intent(JobDetailsPoster.this, JobPostingEditActivity.class).putExtra("JobTitle", currentJob.getJobTitle());
+                //intent.putExtra("EstimatePay", currentJob.getEstimatedPay().toString());
+                //intent.putExtra("Location", currentJob.getLocation());
+                //intent.putExtra("Description", currentJob.getJobDescription());
+                //intent.putExtra("Category", currentJob.getJobCategory());
+                //intent.putExtra("Date", currentJob.getCreatedDate());
+                //intent.putExtra("CreatedBy", currentJob.getCreatedBy());
+                //intent.putExtra("Instructions", currentJob.getInstructions());
+                //intent.putExtra("Status", currentJob.getJobStatus());
+                //intent.putExtra("ImageURL", currentJob.getPhotoURL());
+                //intent.putExtra("id" , currentJob.getItemId());
+                //startActivity(intent);
+                //finish();
+                //break;
+
             case R.id.remove:
                 new AlertDialog.Builder(JobDetailsPoster.this)
                         .setTitle("Delete entry")
@@ -147,11 +164,8 @@ public class JobDetailsPoster extends AppCompatActivity {
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                break;
 
-                //case R.id.edit:
-                //  Intent intent = new Intent(JobDetailsPoster.this, JobPostingEditActivity.class);
-                //startActivity(intent);
-                //finish();
             default:
                 // Otherwise, do nothing.
                 break;
