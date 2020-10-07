@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtProfilePhone;
     TextView txtProfileCity;
     CircleImageView imgProfile;
+    View ratingsView;
 
     private ChipGroup interestChipGroup;
 
@@ -66,17 +68,25 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-       toolbar = (Toolbar)findViewById(R.id.top_toolbar_myprofile);
-       toolbar.setTitle("");
-       setSupportActionBar(toolbar);
+        ratingsView = (View) findViewById(R.id.view_rating);
+        toolbar = (Toolbar)findViewById(R.id.top_toolbar_myprofile);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
-       setupWidgets();
+        setupWidgets();
 
-       listInterests = getResources().getStringArray(R.array.interest_categories);
+        ratingsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToProfileRating();
+            }
+        });
 
-       bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
+        listInterests = getResources().getStringArray(R.array.interest_categories);
 
-       bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -268,6 +278,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void sendToMyJobs() {
         Intent intent = new Intent(ProfileActivity.this, MyJobsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendToProfileRating(){
+        Intent intent = new Intent(ProfileActivity.this, ProfileRatingActivity.class);
         startActivity(intent);
         finish();
     }
