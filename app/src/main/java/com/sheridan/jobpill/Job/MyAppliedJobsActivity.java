@@ -28,19 +28,21 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sheridan.jobpill.FilterAlertDialog;
+import com.sheridan.jobpill.JobApplication.AppliedJobApplicationListFirestoreAdapter;
+import com.sheridan.jobpill.JobApplication.JobApplicationListFirestoreAdapter;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
 import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 
-public class MyAppliedJobsActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
+public class MyAppliedJobsActivity extends AppCompatActivity implements AppliedJobApplicationListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser currentUser;
-    private JobsListFirestoreAdapter adapter;
+    private AppliedJobApplicationListFirestoreAdapter adapter;
     private Toolbar toolbar;
     private LinearLayoutManager linearLayoutManager;
     private ImageView imageView;
@@ -72,7 +74,7 @@ public class MyAppliedJobsActivity extends AppCompatActivity implements JobsList
         recyclerView.setLayoutManager(linearLayoutManager);
 
         Query query = firebaseFirestore
-                .collectionGroup("jobs")
+                .collectionGroup("jobApplications")
                 .whereEqualTo("applicantId", currentUser.getUid());
 
         PagedList.Config config = new PagedList.Config.Builder()
@@ -80,14 +82,12 @@ public class MyAppliedJobsActivity extends AppCompatActivity implements JobsList
                 .setPageSize(3)
                 .build();
 
-        FirestorePagingOptions<Job> options = new FirestorePagingOptions.Builder<Job>()
+        FirestorePagingOptions<JobApplication> options = new FirestorePagingOptions.Builder<JobApplication>()
                 .setLifecycleOwner(this)
-                .setQuery(query, config, Job.class)
+                .setQuery(query, config, JobApplication.class)
                 .build();
 
-        adapter = new
-
-                JobsListFirestoreAdapter(options, this, this);
+        adapter = new AppliedJobApplicationListFirestoreAdapter(options, this);
 
 
         recyclerView.setHasFixedSize(true);
@@ -112,18 +112,44 @@ public class MyAppliedJobsActivity extends AppCompatActivity implements JobsList
 
     }
 
+
+    /*
+     * Get the JobApplication Snapshot from the ListAdapter
+     * Create a local JobApplication object
+     * Use the jobID from the local JobApplication Document to query for
+     * the specific job that the application is for
+     * Use the snapshot from the query result to pass it to the jobDetails Activity
+     * */
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
 
         Log.d("ITEM_CLICK", "Clicked the item: " + position + "and ID: " + snapshot.getId());
 
-        Job job = snapshot.toObject(Job.class);
-        job.setItemId(snapshot.getId());
+        final JobApplication jobApplication = snapshot.toObject(JobApplication.class);
 
 
-        Intent intent = new Intent(this, JobDetailsPoster.class);
-        intent.putExtra("JobSnapshot", job);
-        startActivity(intent);
+
+        firebaseFirestore.collection("jobs").document(jobApplication.getJobId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+
+                   Job job = task.getResult().toObject(Job.class);
+                   job.setItemId(task.getResult().getId());
+
+                    Intent intent = new Intent(MyAppliedJobsActivity.this, JobDetailsActivity.class);
+                    intent.putExtra("JobSnapshot", job);
+                    startActivity(intent);
+
+                    Log.d("JOB", "JOB: " + job.toString());
+
+                }else{
+                    Log.d("NO_JOB", "Firestore Query Failed - No Job Found with ID: " + jobApplication.getJobId());
+                }
+            }
+        });
+
+
     }
 
     private void sendToProfile() {
