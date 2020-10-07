@@ -26,7 +26,7 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 
 ## Links
 
-- 📃 <a href = "https://sheridanc-my.sharepoint.com/:w:/g/personal/vahida_shernet_sheridancollege_ca/EUS_X-u1r6dGjKwaFi2V9ckBPsVCWuOJctssPtaFPmdHMQ">Project Inception Document</a>
+- 📃 <a href = "https://sheridanc-my.sharepoint.com/:w:/g/personal/vahida_shernet_sheridancollege_ca/EUS_X-u1r6dGjKwaFi2V9ckBPsVCWuOJctssPtaFPmdHMQ">Capstone Project Report</a>
 - 💬 <a href = "https://jobpill.slack.com">Slack</a>
 - 📅 <a href = "https://app.asana.com/0/home/1156736002270744">Asana</a>
 - 📐 <a href = "https://yfzmlsqnv160.us-06.visual-paradigm.com/tasifier.jsp#proj=5">Visual Paradigm Repository</a>
