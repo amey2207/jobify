@@ -1,5 +1,7 @@
 package com.sheridan.jobpill.Auth;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -12,6 +14,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +30,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.R;
 
+import java.util.HashMap;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText userEmail;
@@ -35,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView forgotPassword;
 
     FirebaseAuth fb;
+    FirebaseFirestore firebaseFirestore;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +71,37 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+
+                            currentUser = fb.getCurrentUser();
+
+                                SharedPreferences sharedPreferences = getSharedPreferences("tokenSettings", Context.MODE_PRIVATE);
+                                final String token = sharedPreferences.getString("deviceToken","null");
+
+                                HashMap<String,String> map = new HashMap<>();
+                                map.put("UID",currentUser.getUid());
+
+                                firebaseFirestore.collection("Users").document(currentUser.getUid()).collection("deviceTokens").document(token).set(map)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    Log.d("FCM:", "The Refreshed token: " + token + "is saved to user collection.");
+                                                }else{
+                                                    Log.d("FCM:", "Firebase Error: token not saved");
+                                                }
+                                            }
+                                        });
+
+
+
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             } else {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
+
+
                 }
             }
         });
@@ -100,7 +132,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = fb.getCurrentUser();
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        currentUser = fb.getCurrentUser();
         if (currentUser != null) {
             sendToMain();
         }

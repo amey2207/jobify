@@ -169,7 +169,7 @@ public class JobPostingActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                             if(task.isSuccessful()){
 
-                                storeFirestore(task,newJobRef,currentUser.getEmail(),date,jobPayment,jobInstructions,jobCategory,jobDescription,jobTitle,jobLocation);
+                                storeFirestore(task,newJobRef,currentUser.getEmail(),currentUser.getUid(),date,jobPayment,jobInstructions,jobCategory,jobDescription,jobTitle,jobLocation);
 
                             }else{
                                 String error = task.getException().getMessage();
@@ -184,7 +184,7 @@ public class JobPostingActivity extends AppCompatActivity {
         });
     }
 
-    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final DocumentReference newJobRef, final String createdBy, final String createdDate, final Float jobPayment,
+    private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final DocumentReference newJobRef, final String createdBy, final String createdByUID , final String createdDate, final Float jobPayment,
                                 final String instructions, final String jobCategory, final String jobDescription, final String jobTitle,
                                 final String jobLocation){
 
@@ -197,6 +197,7 @@ public class JobPostingActivity extends AppCompatActivity {
                     jobMap = new HashMap<>();
                     jobMap.put("createdBy", createdBy);
                     jobMap.put("createdByName",createdByName);
+                    jobMap.put("createdByUID",createdByUID);
                     jobMap.put("createdDate", createdDate);
                     jobMap.put("estimatedPay", jobPayment);
                     jobMap.put("photoURL", downloadUri.toString());
