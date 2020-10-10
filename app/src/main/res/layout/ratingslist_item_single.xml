@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="3dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/jobsingle_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_profile_rating_item"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="1dp"
+                android:src="@drawable/profile_default"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
+
+            <RatingBar
+                android:id="@+id/rating_bar_rating_item"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:layout_constraintTop_toBottomOf="@+id/img_profile_rating_item"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/rating_score_rating_item"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="5dp"
+                android:textSize="12dp"
+                app:layout_constraintStart_toEndOf="@id/rating_bar_rating_item"
+                app:layout_constraintTop_toBottomOf="@id/img_profile_rating_item"
+                tools:text="0.0"/>
+
+            <TextView
+                android:id="@+id/job_title_lbl_rating_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textSize="12dp"
+
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rating_bar_rating_item"
+                tools:text="Job Title" />
+
+            <ImageView
+                android:id="@+id/dot_icon_rating_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="3dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                app:layout_constraintStart_toEndOf="@+id/job_title_lbl_rating_item"
+                app:layout_constraintTop_toBottomOf="@+id/rating_bar_rating_item"
+                app:srcCompat="@drawable/dot_icon"/>
+
+            <TextView
+                android:id="@+id/date_lbl_rating_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="2dp"
+                android:textSize="12dp"
+                app:layout_constraintStart_toEndOf="@+id/dot_icon_rating_item"
+                app:layout_constraintTop_toBottomOf="@id/rating_bar_rating_item"
+                tools:text="Review Date" />
+
+            <TextView
+                android:id="@+id/review_rating_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="3dp"
+                android:textSize="13dp"
+                android:textColor="@color/common_google_signin_btn_text_light_pressed"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/job_title_lbl_rating_item"
+                tools:text="Review Description" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

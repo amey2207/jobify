@@ -1,11 +1,14 @@
 package com.sheridan.jobpill.Models;
 
+import java.util.List;
+
 public class User {
 
     private String name;
     private String introduction;
     private String phone;
     private String city;
+    private List<Rating> ratings;
     private String photoURL;
 
     public String getName() {
@@ -49,4 +52,11 @@ public class User {
     }
 
 
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
 }

@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="My Ratings"
+        android:text="My Rating"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
@@ -41,6 +41,7 @@
         app:layout_constraintStart_toStartOf="@+id/top_toolbar_myrating"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back_button" />
+
 
     <RatingBar
         android:id="@+id/profile_rating_bar"
@@ -61,6 +62,7 @@
         android:textAlignment="center"
         android:textStyle="bold"
         android:textSize="30sp"
+        android:textColor="@color/colorDefault"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,14 +86,27 @@
         android:layout_marginTop="40dp"
         android:font="@font/arial"
         android:fontFamily="sans-serif"
-        android:text="Reviews (0)"
+        android:text="Reviews"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/num_ratings_lbl" />
+
+    <TextView
+        android:id="@+id/review_title_number_ratings"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/review_title"
+        app:layout_constraintTop_toBottomOf="@+id/num_ratings_lbl"
+        tools:text="(0)"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reviews_list"
@@ -99,7 +114,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:layout_marginHorizontal="10dp"
-        android:background="#E8E8E8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/review_title"
@@ -119,6 +133,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         app:menu="@menu/bottom_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

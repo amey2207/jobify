@@ -28,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.MyJobsActivity;
 import com.sheridan.jobpill.MainActivity;
@@ -48,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtProfileIntro;
     TextView txtProfilePhone;
     TextView txtProfileCity;
+    TextView txtNumRating;
     CircleImageView imgProfile;
     View ratingsView;
 
@@ -58,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     String current_user_id;
     String[] listInterests;
+    double ratingAverage;
+    int numratings;
 
     private Uri profileImageURI = null;
 
@@ -68,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        ratingsView = (View) findViewById(R.id.view_rating);
+        listInterests = getResources().getStringArray(R.array.interest_categories);
         toolbar = (Toolbar)findViewById(R.id.top_toolbar_myprofile);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -78,14 +83,11 @@ public class ProfileActivity extends AppCompatActivity {
         ratingsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToProfileRating();
+                sendToProfileRating(ratingAverage, numratings);
             }
         });
 
-        listInterests = getResources().getStringArray(R.array.interest_categories);
-
         bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -116,15 +118,15 @@ public class ProfileActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        ratingsView = findViewById(R.id.view_rating);
         txtProfileName = findViewById(R.id.txt_profile_name);
         txtProfileIntro = findViewById(R.id.txt_profile_intro);
-//        txtProfilePhone = findViewById(R.id.txt_profile_phone);
+        txtNumRating = findViewById(R.id.txt_num_rating);
+        //txtProfilePhone = findViewById(R.id.txt_profile_phone);
         txtProfileCity = findViewById(R.id.txt_profile_location);
 
         interestChipGroup = findViewById(R.id.profile_interestChipGroup);
-
         imgProfile = findViewById(R.id.img_profile);
-
         bottomNavigationView = findViewById(R.id.profileBottomNav);
     }
 
@@ -175,10 +177,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 interestList = "No Interests Selected!";
                             }
 
-
-
-
-
+                            //populate profile layout
                             profileImageURI = Uri.parse(image);
                             txtProfileName.setText(name);
                             txtProfileCity.setText(city);
@@ -206,6 +205,26 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
 
+            //get number of rating  for current user to calculate current rating
+            firebaseFirestore.collection("Users").document(current_user_id).collection("ratings").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        double ratingTotal = 0;
+                        numratings = task.getResult().size();
+
+                        //get rating value for every entry for average calculation
+                        for(QueryDocumentSnapshot doc : task.getResult()){
+                            double rating = doc.getDouble("ratingScore");
+                            ratingTotal += rating;
+                        }
+
+                        //calculate average rating of user and set the rating score view
+                        ratingAverage = ratingTotal / numratings;
+                        txtNumRating.setText(Double.toString(ratingAverage));
+                    }
+                }
+            });
         }
     }
 
@@ -282,8 +301,12 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    private void sendToProfileRating(){
+    private void sendToProfileRating(double ratingAverage, int numratings){
         Intent intent = new Intent(ProfileActivity.this, ProfileRatingActivity.class);
+
+        intent.putExtra("RATING_SCORE", String.valueOf(ratingAverage));
+        intent.putExtra("NUMBER_OF_RATINGS", String.valueOf(numratings));
+
         startActivity(intent);
         finish();
     }
