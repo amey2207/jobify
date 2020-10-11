@@ -51,9 +51,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d("SHARED_PREFERENCES", "TOKEN SAVED AS: " + token);
 
-
-
-
     }
 
 

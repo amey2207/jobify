@@ -93,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                                         });
 
 
-
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             } else {
                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();

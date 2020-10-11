@@ -44,6 +44,8 @@ import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Profile.EditProfileActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
     private FirebaseAuth firebaseAuth;
@@ -227,6 +229,26 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
                     }
                 }
             });
+
+
+            SharedPreferences sharedPreferences = getSharedPreferences("tokenSettings", Context.MODE_PRIVATE);
+            final String token = sharedPreferences.getString("deviceToken","null");
+
+            HashMap<String,String> map = new HashMap<>();
+            map.put("UID",currentUser.getUid());
+
+            firebaseFirestore.collection("Users").document(currentUser.getUid()).collection("deviceTokens").document(token).set(map)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Log.d("FCM:", "The Refreshed token: " + token + "is saved to user collection.");
+                            }else{
+                                Log.d("FCM:", "Firebase Error: token not saved");
+                            }
+                        }
+                    });
+
         }
     }
 
