@@ -1,6 +1,5 @@
 package com.sheridan.jobpill.Job;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.JobApplication.JobApplicantProfile;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
@@ -50,6 +52,14 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
                 .placeholder(R.drawable.profile_default)
                 .transition(withCrossFade())
                 .into(holder.jobImage);
+
+        Glide.with(holder.itemView.getContext())
+                .load(model.getCreatedByPhotoURL())
+                .placeholder(R.drawable.profile_default)
+                .into(holder.postedByImage);
+
+
+
     }
 
     @NonNull
@@ -94,6 +104,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         private TextView jobEstimatedPay;
         private TextView jobLocation;
         private TextView postedBy;
+        private CircleImageView postedByImage;
 
         public JobsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,6 +116,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
             jobEstimatedPay = itemView.findViewById(R.id.txt_jobEstimatedPay);
             jobLocation = itemView.findViewById(R.id.txt_jobLocation);
             postedBy = itemView.findViewById(R.id.txtPostedBy);
+            postedByImage = itemView.findViewById(R.id.img_postedBy);
 
             itemView.setOnClickListener(this);
         }
