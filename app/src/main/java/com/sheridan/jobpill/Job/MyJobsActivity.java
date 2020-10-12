@@ -62,7 +62,7 @@ public class MyJobsActivity extends AppCompatActivity {
         cardJobsCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                sendtoJobsCompleted();
             }
         });
 
@@ -128,6 +128,12 @@ public class MyJobsActivity extends AppCompatActivity {
 
     private void sendToJobsInProgress() {
         Intent intent = new Intent(MyJobsActivity.this, JobsInProgressOptionActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void sendtoJobsCompleted() {
+        Intent intent = new Intent(MyJobsActivity.this, JobCompletedActivity.class);
         startActivity(intent);
         finish();
     }
