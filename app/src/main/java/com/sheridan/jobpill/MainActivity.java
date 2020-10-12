@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.JobDetailsActivity;
 import com.sheridan.jobpill.Job.JobDetailsPoster;
@@ -233,21 +234,41 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
             SharedPreferences sharedPreferences = getSharedPreferences("tokenSettings", Context.MODE_PRIVATE);
             final String token = sharedPreferences.getString("deviceToken","null");
+            Log.d("SHARED_PREF_TOKEN: " , token);
 
-            HashMap<String,String> map = new HashMap<>();
-            map.put("UID",currentUser.getUid());
 
-            firebaseFirestore.collection("Users").document(currentUser.getUid()).collection("deviceTokens").document(token).set(map)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+
+
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Log.d("FCM:", "The Refreshed token: " + token + "is saved to user collection.");
-                            }else{
-                                Log.d("FCM:", "Firebase Error: token not saved");
+                        public void onComplete(@NonNull Task<String> task) {
+                            if(!task.isSuccessful()){
+                                Log.d("FCM:","Fetching FCM registration token failed", task.getException());
+                                return;
                             }
+
+                            final String token = task.getResult();
+                            Log.d("FCM INSTANCE:", token);
+
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("UID",current_user_id);
+
+
+                            firebaseFirestore.collection("Users").document(currentUser.getUid()).collection("deviceTokens").document(token).set(map)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                Log.d("FCM:", "The Refreshed token: " + token + "is saved to user collection.");
+                                            }else{
+                                                Log.d("FCM:", "Firebase Error: token not saved");
+                                            }
+                                        }
+                                    });
                         }
                     });
+
 
         }
     }

@@ -76,6 +76,7 @@ public class JobPostingActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private String jobId;
     private String createdByName = "";
+    private String createdByPhotoURL = "";
 
 
     CollectionReference dbJobs;
@@ -153,6 +154,7 @@ public class JobPostingActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                               if(task.isSuccessful()){
                                   createdByName = task.getResult().getString("name");
+                                  createdByPhotoURL = task.getResult().getString("photoURL");
                               }else{
                                   createdByName = currentUser.getEmail();
                               }
@@ -197,6 +199,7 @@ public class JobPostingActivity extends AppCompatActivity {
                     jobMap = new HashMap<>();
                     jobMap.put("createdBy", createdBy);
                     jobMap.put("createdByName",createdByName);
+                    jobMap.put("createdByPhotoURL", createdByPhotoURL);
                     jobMap.put("createdByUID",createdByUID);
                     jobMap.put("createdDate", createdDate);
                     jobMap.put("estimatedPay", jobPayment);
