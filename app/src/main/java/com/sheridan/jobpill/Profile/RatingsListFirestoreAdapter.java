@@ -1,6 +1,9 @@
 package com.sheridan.jobpill.Profile;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +42,10 @@ class RatingsListFirestoreAdapter extends FirestorePagingAdapter<Rating, Ratings
         holder.ratingScore.setText(Float.toString(model.getRatingScore()));
         holder.jobTitle.setText(model.getJobTitle());
         holder.reviewDate.setText(model.getPostedDate());
+
         holder.reviewTxt.setText(model.getReview());
+        holder.setReviewSize(true, holder.reviewTxt);
+        holder.ExpandCollapse(holder.reviewTxt);
 
         Glide.with(holder.itemView.getContext())
                 .load(model.getReviewerPhotoUrl())
@@ -88,6 +94,8 @@ class RatingsListFirestoreAdapter extends FirestorePagingAdapter<Rating, Ratings
         private TextView reviewTxt;
         private CircleImageView profileImg;
 
+        private boolean isExpanded = false;
+
         public RatingsViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -98,5 +106,35 @@ class RatingsListFirestoreAdapter extends FirestorePagingAdapter<Rating, Ratings
             reviewTxt = itemView.findViewById(R.id.review_rating_item);
             profileImg = itemView.findViewById(R.id.img_profile_rating_item);
         }
+
+        private void setReviewSize(boolean active, TextView textView){
+            if(active){
+                textView.setMaxLines(2);
+                textView.setEllipsize(TextUtils.TruncateAt.END);
+            }
+            else{
+                textView.setMaxLines(Integer.MAX_VALUE);
+                textView.setEllipsize(null);
+            }
+        }
+
+        private void ExpandCollapse(final TextView textView){
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(isExpanded){
+                        TransitionManager.beginDelayedTransition((ViewGroup) view.getRootView(), new AutoTransition());
+                        setReviewSize(false, textView);
+                    }
+                    else{
+                        TransitionManager.beginDelayedTransition((ViewGroup) view.getRootView(), new AutoTransition());
+                        setReviewSize(true, textView);
+                    }
+
+                    isExpanded = !isExpanded;
+                }
+            });
+        }
+
     }
 }

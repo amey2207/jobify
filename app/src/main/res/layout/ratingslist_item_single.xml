@@ -5,11 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:padding="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -90,17 +91,14 @@
 
             <TextView
                 android:id="@+id/review_rating_item"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="1dp"
                 android:layout_marginTop="3dp"
                 android:textSize="13dp"
                 android:textColor="@color/common_google_signin_btn_text_light_pressed"
-                app:layout_constraintHorizontal_bias="0.04"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/job_title_lbl_rating_item"
                 tools:text="Review Description" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

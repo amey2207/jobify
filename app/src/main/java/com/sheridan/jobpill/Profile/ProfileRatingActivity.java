@@ -2,6 +2,7 @@ package com.sheridan.jobpill.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,11 +38,13 @@ public class ProfileRatingActivity extends AppCompatActivity {
     private RatingBar rating_bar;
     private TextView rating_score;
     private TextView num_rating_lbl;
-    private TextView number_of_ratings;
-    private RecyclerView reviewsListView;
-    private BottomNavigationView bottomNavigationView;
-    private RatingsListFirestoreAdapter adapter;
 
+    private RecyclerView reviewsListView;
+    private CollapsingToolbarLayout collapsingToolbar;
+    private BottomNavigationView bottomNavigationView;
+
+
+    private RatingsListFirestoreAdapter adapter;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     FirebaseUser currentUser;
@@ -77,7 +81,11 @@ public class ProfileRatingActivity extends AppCompatActivity {
         rating_bar.setRating(Float.parseFloat(ratingScore));
         rating_score.setText(ratingScore);
         num_rating_lbl.setText("Based on " + numRatings + " ratings");
-        number_of_ratings.setText("(" + numRatings + ")");
+
+        //set typography of toolbar title when expanded and collapsed
+        collapsingToolbar.setTitle("Ratings" + " (" + numRatings + ")");
+        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
         //setup click listener for bottom navigation
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -149,8 +157,9 @@ public class ProfileRatingActivity extends AppCompatActivity {
         rating_bar = findViewById(R.id.profile_rating_bar);
         rating_score = findViewById(R.id.rating_score);
         num_rating_lbl = findViewById(R.id.num_ratings_lbl);
-        number_of_ratings = findViewById(R.id.review_title_number_ratings);
         reviewsListView = findViewById(R.id.reviews_list);
+
+        collapsingToolbar = findViewById(R.id.collapsing_toolbar);
         bottomNavigationView = findViewById(R.id.profileRatingBottomNav);
 
         firebaseAuth = FirebaseAuth.getInstance();
