@@ -38,6 +38,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -69,6 +70,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     String user_id;
     Map<String, Object> jobMap;
+    Map<String, Object> jobStatus = new HashMap<>();
     DatabaseReference reference;
     private FirebaseFirestore db;
     private StorageReference image_path = null;
@@ -175,14 +177,17 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     jobMap.put("Notes", notes);
                     jobMap.put("photoURL", downloadUri.toString());
                     jobMap.put("Payment", paymentChoice);
-                    jobMap.put("jobId", 123);
-
+                    jobMap.put("jobId", getIntent().getStringExtra("JobId"));
+                    jobStatus.put("jobStatus", "complete");
+                    db.collection("jobs").document(getIntent().getStringExtra("JobId")).update(jobStatus);
                     newJobRef.set(jobMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(JobCompletionFormActivity.this, "Job Updated Successfully", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(JobCompletionFormActivity.this, JobsInProgressActivity.class);
+
+                                      //  .set(jobStatus, SetOptions.merge());
+                                Intent intent = new Intent(JobCompletionFormActivity.this, MyJobsActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {

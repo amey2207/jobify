@@ -124,7 +124,7 @@ public class JobsInProgressApplied extends AppCompatActivity implements JobsList
         job.setItemId(snapshot.getId());
 
 
-        Intent intent = new Intent(this, JobDetailsActivity.class);
+        Intent intent = new Intent(this, JobDetailsInProgress.class);
         intent.putExtra("JobSnapshot", job);
         startActivity(intent);
     }
