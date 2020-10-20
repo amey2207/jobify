@@ -64,10 +64,10 @@ public class MyPostedJobsActivity extends AppCompatActivity implements JobsListF
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-
         Query query = firebaseFirestore
                 .collection("jobs")
-                .whereEqualTo("createdBy", currentUser.getEmail());
+                .whereEqualTo("createdBy", currentUser.getEmail())
+                .whereEqualTo("jobStatus", "available");
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
@@ -79,7 +79,7 @@ public class MyPostedJobsActivity extends AppCompatActivity implements JobsListF
                 .setQuery(query, config, Job.class)
                 .build();
 
-        adapter = new JobsListFirestoreAdapter(options, this,this);
+        adapter = new JobsListFirestoreAdapter(options, this, this);
 
 
         recyclerView.setHasFixedSize(true);
