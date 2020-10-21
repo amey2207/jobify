@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Job.JobsInProgressOptionActivity">
+    tools:context=".Job.JobsCompletedOptionActivity">
 
     <ScrollView
         android:id="@+id/scroll_view_3"
@@ -43,13 +43,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/top_toolbar_job_details"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/back_button" />
+                app:srcCompat="@drawable/back_button"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/myjobs_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="In-Progress Jobs"
+                android:text="Completed Jobs"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -79,7 +80,7 @@
                         android:id="@+id/txt_jobs_posted"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="In-Progress Posted Jobs"
+                        android:text="My Completed Jobs"
                         android:textAllCaps="true"
                         android:textColor="@color/colorAccent"
                         android:textSize="24sp"
@@ -112,7 +113,7 @@
                         android:id="@+id/txt_jobs_applied"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="In-Progress Applied Jobs"
+                        android:text="Applied Jobs Completed"
                         android:textAllCaps="true"
                         android:textColor="@color/colorAccent"
                         android:textSize="24sp"

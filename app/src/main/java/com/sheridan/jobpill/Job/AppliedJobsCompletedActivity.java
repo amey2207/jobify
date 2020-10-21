@@ -23,7 +23,7 @@ import com.sheridan.jobpill.FilterAlertDialog;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.R;
 
-public class JobCompletedActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
+public class AppliedJobsCompletedActivity extends AppCompatActivity implements JobsListFirestoreAdapter.OnListItemClick, FilterAlertDialog.FilterDialogListener {
 
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
@@ -36,7 +36,7 @@ public class JobCompletedActivity extends AppCompatActivity implements JobsListF
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_job_completed);
+        setContentView(R.layout.activity_applied_jobs_completed);
         toolbar = findViewById(R.id.top_toolbar_job_completed);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -60,8 +60,8 @@ public class JobCompletedActivity extends AppCompatActivity implements JobsListF
         recyclerView.setLayoutManager(linearLayoutManager);
         Query query = firebaseFirestore
                 .collection("jobs")
-                //.whereEqualTo("hiredApplicant", currentUser.getUid())
-                .whereEqualTo("createdBy", currentUser.getEmail())
+                .whereEqualTo("hiredApplicant", currentUser.getUid())
+                //.whereEqualTo("createdBy", currentUser.getEmail())
                 .whereEqualTo("jobStatus", "complete");
 
         PagedList.Config config = new PagedList.Config.Builder()
@@ -97,19 +97,16 @@ public class JobCompletedActivity extends AppCompatActivity implements JobsListF
 
     @Override
     public void onItemClick(DocumentSnapshot snapshot, int position) {
-
         Log.d("ITEM_CLICK", "Clicked the item: " + position + "and ID: " + snapshot.getId());
-
         Job job = snapshot.toObject(Job.class);
         job.setItemId(snapshot.getId());
-
         Intent intent = new Intent(this, JobDetailsPoster.class);
         intent.putExtra("JobSnapshot", job);
         startActivity(intent);
     }
 
     private void sendToMyJobs() {
-        Intent intent = new Intent(JobCompletedActivity.this, JobsCompletedOptionActivity.class);
+        Intent intent = new Intent(AppliedJobsCompletedActivity.this, JobsCompletedOptionActivity.class);
         startActivity(intent);
         finish();
     }
