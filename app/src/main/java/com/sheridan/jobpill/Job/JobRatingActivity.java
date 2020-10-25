@@ -1,12 +1,10 @@
 package com.sheridan.jobpill.Job;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,13 +14,12 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.sheridan.jobpill.MainActivity;
-import com.sheridan.jobpill.Messaging.MessagesActivity;
-import com.sheridan.jobpill.Profile.ProfileActivity;
-import com.sheridan.jobpill.Profile.ProfileRatingActivity;
 import com.sheridan.jobpill.R;
 
-public class JobPosterRatingActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
+
+public class JobRatingActivity extends AppCompatActivity {
 
     private ImageView backBtn;
     private Button finishBtn;
@@ -32,15 +29,16 @@ public class JobPosterRatingActivity extends AppCompatActivity {
     private EditText reviewEdtTxt;
     private TextView title;
 
-    private FirebaseFirestore fb;
+    Map<String, Object> jobStatus = new HashMap<>();
+
+    private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_job_poster_rating);
+        setContentView(R.layout.activity_job_rating);
         setupWidgets();
-
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,12 +47,32 @@ public class JobPosterRatingActivity extends AppCompatActivity {
             }
         });
 
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean b) {
+                if(rating <= 1){
+                    ratingTxt.setText("Could be Better");
+                }
+                else if(rating <= 2){
+                    ratingTxt.setText("So So");
+                }
+                else if(rating <= 3){
+                    ratingTxt.setText("Good Job!");
+                }
+                else if(rating <= 4){
+                    ratingTxt.setText("Fantastic!");
+                }
+                else{
+                    ratingTxt.setText("Above and Beyond!");
+                }
+            }
+        });
+
         finishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(getIntent().getStringExtra("Role") != null)
-                sendToMain();
+                sendToMyJobs();
             }
         });
 
@@ -71,8 +89,8 @@ public class JobPosterRatingActivity extends AppCompatActivity {
         title = findViewById(R.id.user_rating_title);
     }
 
-    private void sendToMain() {
-        Intent intent = new Intent(JobPosterRatingActivity.this, MainActivity.class);
+    private void sendToMyJobs(){
+        Intent intent = new Intent(JobRatingActivity.this, MyJobsActivity.class);
         startActivity(intent);
         finish();
     }

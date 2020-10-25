@@ -121,7 +121,7 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".Job.JobPosterRatingActivity"
+            android:name=".Job.JobRatingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <service android:name=".FCM.MyFirebaseMessagingService">
