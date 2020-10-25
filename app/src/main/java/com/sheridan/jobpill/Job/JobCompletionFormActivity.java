@@ -91,12 +91,32 @@ public class JobCompletionFormActivity extends AppCompatActivity {
         radio = findViewById(R.id.radioGroup2);
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
+
+        // retrieve job image and job notes
+        if(savedInstanceState != null){
+
+            // retrieve saved job image and job notes from the saved state
+            jobImageURI = savedInstanceState.getParcelable("jobImageURI");
+            String jobNotes = savedInstanceState.getString("jobNotes");
+
+            //check if there is a saved jobImage
+            if(jobImageURI != null){
+                jobImageBtn.setImageURI(jobImageURI);
+            }
+
+            //check if there are saved job notes
+            if(jobNotes != null){
+                notesEdt.setText(jobNotes);
+            }
+        }
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendToHome();
             }
         });
+
         jobImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +134,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 }
             }
         });
+
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +143,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         completionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,6 +152,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 user_id = firebaseAuth.getCurrentUser().getUid();
                 currentUser = firebaseAuth.getCurrentUser();
 
+
                 if (radio.getCheckedRadioButtonId() == 0) {
                     Toast.makeText(getApplicationContext(), "Please fill the payment field", Toast.LENGTH_LONG).show();
                 } else {
@@ -137,8 +160,9 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     final int paymentChoice = radio.getCheckedRadioButtonId();
                     final RadioButton radiochoice = findViewById(paymentChoice);
 
-                    reference = FirebaseDatabase.getInstance().getReference().child("JobCompletion").child(user_id);
-                    final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+                    //reference = FirebaseDatabase.getInstance().getReference().child("JobCompletion").child(user_id);
+                    /*final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                     final DocumentReference newJobRef = db.collection("JobCompletion").document();
                     jobId = newJobRef.getId();
                     image_path = storageReference.child("job_images").child(jobId + ".jpg");
@@ -155,9 +179,11 @@ public class JobCompletionFormActivity extends AppCompatActivity {
 
                             }
                         }
-                    });
+                    });*/
 
+                    sendToPosterRating();
                 }
+
             }
         });
     }
@@ -179,7 +205,9 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     jobMap.put("Payment", paymentChoice);
                     jobMap.put("jobId", getIntent().getStringExtra("JobId"));
                     jobStatus.put("jobStatus", "complete");
+
                     db.collection("jobs").document(getIntent().getStringExtra("JobId")).update(jobStatus);
+
                     newJobRef.set(jobMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -224,9 +252,26 @@ public class JobCompletionFormActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //save job image and job notes for retrieval when navigating back to activity
+        outState.putParcelable("jobImageURI", jobImageURI);
+        outState.putString("jobNotes", notesEdt.getText().toString());
+    }
+
     private void sendToHome() {
         Intent intent = new Intent(JobCompletionFormActivity.this, MyJobsActivity.class);
         startActivity(intent);
         finish();
     }
+
+    private void sendToPosterRating(){
+        Intent intent = new Intent(JobCompletionFormActivity.this, JobPosterRatingActivity.class);
+        intent.putExtra("Role", getIntent().getStringExtra("Role"));
+        intent.putExtra("JobId", getIntent().getStringExtra("JobId"));
+        startActivity(intent);
+    }
+
 }

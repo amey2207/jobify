@@ -127,6 +127,7 @@ public class JobsInProgressActivity extends AppCompatActivity implements JobsLis
 
         Intent intent = new Intent(this, JobDetailsInProgress.class);
         intent.putExtra("JobSnapshot", job);
+        intent.putExtra("Role", "JobPoster");
         startActivity(intent);
     }
 

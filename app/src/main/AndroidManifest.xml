@@ -120,8 +120,11 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".Job.JobPosterRatingActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
-        <service android:name="com.sheridan.jobpill.FCM.MyFirebaseMessagingService">
+        <service android:name=".FCM.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
