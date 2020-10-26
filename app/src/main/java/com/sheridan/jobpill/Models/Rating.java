@@ -5,6 +5,7 @@ public class Rating {
     private String itemId;
     private Float ratingScore;
     private String ratedBy;
+    private String ratedByUID;
     private String postedDate;
     private String review;
     private String jobTitle;
@@ -14,10 +15,11 @@ public class Rating {
 
     }
 
-    public Rating(String itemId, Float ratingScore, String ratedBy, String postedDate, String review, String jobTitle, String reviewerPhotoUrl){
+    public Rating(String itemId, Float ratingScore, String ratedBy, String ratedByUID, String postedDate, String review, String jobTitle, String reviewerPhotoUrl){
         this.itemId = itemId;
         this.ratingScore = ratingScore;
         this.ratedBy = ratedBy;
+        this.ratedByUID = ratedByUID;
         this.postedDate = postedDate;
         this.review = review;
         this.jobTitle = jobTitle;
@@ -79,5 +81,13 @@ public class Rating {
 
     public void setDate(String postedDate) {
         this.postedDate = postedDate;
+    }
+
+    public String getRatedByUID() {
+        return ratedByUID;
+    }
+
+    public void setRatedByUID(String ratedByUID) {
+        this.ratedByUID = ratedByUID;
     }
 }
