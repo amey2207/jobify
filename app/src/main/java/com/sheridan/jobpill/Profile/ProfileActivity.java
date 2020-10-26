@@ -62,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     String current_user_id;
     String[] listInterests;
-    double ratingAverage;
+    double ratingScore;
     int numratings;
 
     private Uri profileImageURI = null;
@@ -84,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
         ratingsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToProfileRating(ratingAverage, numratings);
+                sendToProfileRating(ratingScore, numratings);
             }
         });
 
@@ -212,6 +212,8 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if(task.isSuccessful()){
                         double ratingTotal = 0;
+                        double ratingAverage;
+
                         numratings = task.getResult().size();
 
                         //get rating value for every entry for average calculation
@@ -222,7 +224,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                         //calculate average rating of user and set the rating score view
                         ratingAverage = ratingTotal / numratings;
-                        txtNumRating.setText(Double.toString(ratingAverage));
+                        ratingScore = (ratingAverage <= 5 && ratingAverage >= 0) ? ratingAverage : 0;
+
+                        txtNumRating.setText(Double.toString(ratingScore));
                     }
                 }
             });
@@ -336,10 +340,10 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    private void sendToProfileRating(double ratingAverage, int numratings){
+    private void sendToProfileRating(double ratingScore, int numratings){
         Intent intent = new Intent(ProfileActivity.this, ProfileRatingActivity.class);
 
-        intent.putExtra("RATING_SCORE", String.valueOf(ratingAverage));
+        intent.putExtra("RATING_SCORE", String.valueOf(ratingScore));
         intent.putExtra("NUMBER_OF_RATINGS", String.valueOf(numratings));
 
         startActivity(intent);

@@ -5,7 +5,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,47 +13,34 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sheridan.jobpill.MainActivity;
-import com.sheridan.jobpill.Models.Job;
-import com.sheridan.jobpill.Profile.EditProfileActivity;
-import com.sheridan.jobpill.Profile.ProfileActivity;
 import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -70,14 +56,15 @@ public class JobCompletionFormActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     String user_id;
     Map<String, Object> jobMap;
-    Map<String, Object> jobStatus = new HashMap<>();
     DatabaseReference reference;
     private FirebaseFirestore db;
     private StorageReference image_path = null;
     private StorageReference storageReference;
-    private String jobId;
+    private String jobCompletionId;
     private String createdByName = "";
     private ImageView backButton;
+
+    private String test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +78,32 @@ public class JobCompletionFormActivity extends AppCompatActivity {
         radio = findViewById(R.id.radioGroup2);
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
+
+        // retrieve job image and job notes
+        if(savedInstanceState != null){
+
+            // retrieve saved job image and job notes from the saved state
+            jobImageURI = savedInstanceState.getParcelable("jobImageURI");
+            String jobNotes = savedInstanceState.getString("jobNotes");
+
+            //check if there is a saved jobImage
+            if(jobImageURI != null){
+                jobImageBtn.setImageURI(jobImageURI);
+            }
+
+            //check if there are saved job notes
+            if(jobNotes != null){
+                notesEdt.setText(jobNotes);
+            }
+        }
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendToHome();
             }
         });
+
         jobImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +121,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 }
             }
         });
+
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,6 +130,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         completionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,32 +139,57 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 user_id = firebaseAuth.getCurrentUser().getUid();
                 currentUser = firebaseAuth.getCurrentUser();
 
-                if (radio.getCheckedRadioButtonId() == 0) {
+                //check if user has added a job image and chosen a option for the payment
+                if (radio.getCheckedRadioButtonId() == 0 && jobImageURI == null) {
+                    Toast.makeText(getApplicationContext(), "Please fill the payment field and add an image of your work", Toast.LENGTH_LONG).show();
+                }
+                else if(jobImageURI == null){
+                    Toast.makeText(getApplicationContext(), "Please add an image of your work", Toast.LENGTH_LONG).show();
+                }
+                else if(radio.getCheckedRadioButtonId() == 0){
                     Toast.makeText(getApplicationContext(), "Please fill the payment field", Toast.LENGTH_LONG).show();
-                } else {
+                }
+                else {
                     final String jobNotes = notesEdt.getText().toString();
                     final int paymentChoice = radio.getCheckedRadioButtonId();
                     final RadioButton radiochoice = findViewById(paymentChoice);
 
-                    reference = FirebaseDatabase.getInstance().getReference().child("JobCompletion").child(user_id);
                     final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                    final DocumentReference newJobRef = db.collection("JobCompletion").document();
-                    jobId = newJobRef.getId();
-                    image_path = storageReference.child("job_images").child(jobId + ".jpg");
-                    image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if (task.isSuccessful()) {
 
-                                storeFirestore(task, newJobRef, currentUser.getUid(), date, jobNotes, radiochoice.getText().toString());
+                    //check if job completion document already exists
+                    if(jobCompletionId != null){
 
-                            } else {
-                                String error = task.getException().getMessage();
-                                Toast.makeText(JobCompletionFormActivity.this, "Image upload error: " + error, Toast.LENGTH_LONG).show();
+                        //retrieve existing job application document for update
+                        final DocumentReference newJobRef = db.collection("JobCompletion").document(jobCompletionId);
+                        storeFirestorage(newJobRef, date, jobNotes, radiochoice);
+                    }
+                    else{
 
-                            }
-                        }
-                    });
+                        //create new job application document
+                        final DocumentReference newJobRef = db.collection("JobCompletion").document();
+                        jobCompletionId = newJobRef.getId();
+
+                        storeFirestorage(newJobRef, date, jobNotes, radiochoice);
+                    }
+                }
+
+            }
+        });
+    }
+
+    private void storeFirestorage(final DocumentReference newJobRef, final String date, final String jobNotes, final RadioButton radiochoice){
+
+        image_path = storageReference.child("job_images").child(jobCompletionId + ".jpg");
+        image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    storeFirestore(task, newJobRef, currentUser.getUid(), date, jobNotes, radiochoice.getText().toString());
+
+                } else {
+                    String error = task.getException().getMessage();
+                    Toast.makeText(JobCompletionFormActivity.this, "Image upload error: " + error, Toast.LENGTH_LONG).show();
 
                 }
             }
@@ -178,8 +212,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     jobMap.put("photoURL", downloadUri.toString());
                     jobMap.put("Payment", paymentChoice);
                     jobMap.put("jobId", getIntent().getStringExtra("JobId"));
-                    jobStatus.put("jobStatus", "complete");
-                    db.collection("jobs").document(getIntent().getStringExtra("JobId")).update(jobStatus);
+
                     newJobRef.set(jobMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -187,9 +220,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                                 Toast.makeText(JobCompletionFormActivity.this, "Job Updated Successfully", Toast.LENGTH_LONG).show();
 
                                       //  .set(jobStatus, SetOptions.merge());
-                                Intent intent = new Intent(JobCompletionFormActivity.this, MyJobsActivity.class);
-                                startActivity(intent);
-                                finish();
+                                sendToPosterRating();
                             } else {
                                 String error = task.getException().getMessage();
                                 Toast.makeText(JobCompletionFormActivity.this, "Firestore error: " + error, Toast.LENGTH_LONG).show();
@@ -224,9 +255,26 @@ public class JobCompletionFormActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //save job image and job notes for retrieval when navigating back to activity
+        outState.putParcelable("jobImageURI", jobImageURI);
+        outState.putString("jobNotes", notesEdt.getText().toString());
+    }
+
     private void sendToHome() {
         Intent intent = new Intent(JobCompletionFormActivity.this, MyJobsActivity.class);
         startActivity(intent);
         finish();
     }
+
+    private void sendToPosterRating(){
+        Intent intent = new Intent(JobCompletionFormActivity.this, JobRatingActivity.class);
+        intent.putExtra("Role", getIntent().getStringExtra("Role"));
+        intent.putExtra("JobId", getIntent().getStringExtra("JobId"));
+        startActivity(intent);
+    }
+
 }
