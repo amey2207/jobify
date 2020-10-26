@@ -232,9 +232,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
             });
 
 
-            SharedPreferences sharedPreferences = getSharedPreferences("tokenSettings", Context.MODE_PRIVATE);
-            final String token = sharedPreferences.getString("deviceToken","null");
-            Log.d("SHARED_PREF_TOKEN: " , token);
+//            SharedPreferences sharedPreferences = getSharedPreferences("tokenSettings", Context.MODE_PRIVATE);
+//            final String token = sharedPreferences.getString("deviceToken","null");
+//            Log.d("SHARED_PREF_TOKEN: " , token);
 
 
 

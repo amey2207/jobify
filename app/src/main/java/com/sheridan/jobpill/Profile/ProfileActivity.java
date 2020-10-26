@@ -30,6 +30,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.MyJobsActivity;
 import com.sheridan.jobpill.MainActivity;
@@ -280,8 +281,42 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        firebaseAuth.signOut();
-        sendToLogin();
+
+        /*
+        * Delete deviceToken from the subcollection of the current logged in user
+        * so that they don't receive push notifications for any other user
+        * */
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    Log.d("FCM:","Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+
+                final String token = task.getResult();
+                Log.d("FCM INSTANCE:", token);
+
+                firebaseFirestore.collection("Users").document(current_user_id).collection("deviceTokens").document(token).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d("FCM:","DELETING TOKEN SUCCESSFUL: " + token);
+
+                            //Logout User and Send to Login Page
+                            firebaseAuth.signOut();
+                            sendToLogin();
+
+
+                        }else{
+                            Log.d("FCM:","DELETING TOKEN FAILED: " + token, task.getException());
+                        }
+                    }
+                });
+            }
+        });
+
     }
 
     private void sendToLogin() {
