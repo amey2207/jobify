@@ -27,6 +27,8 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.Job.JobDetailsActivity;
@@ -62,7 +64,8 @@ public class JobApplicantProfile extends AppCompatActivity {
    private Button btnHireApplicant;
 
     String[] listInterests;
-
+    double ratingScore;
+    int numratings;
 
     private ImageView backBtn;
 
@@ -132,11 +135,6 @@ public class JobApplicantProfile extends AppCompatActivity {
                                 interestList = "No Interests Selected!";
                             }
 
-
-
-
-
-
                             txtApplicantName.setText(name);
                             txtApplicantCity.setText(city);
                             txtApplicantIntro.setText(intro);
@@ -146,6 +144,31 @@ public class JobApplicantProfile extends AppCompatActivity {
                             placeholderRequest.placeholder(R.drawable.profile_default);
 
                             Glide.with(JobApplicantProfile.this).setDefaultRequestOptions(placeholderRequest).load(image).into(applicantProfileImg);
+
+                            //get number of rating  for current user to calculate current rating
+                            firebaseFirestore.collection("Users").document(currentJobApplication.getApplicantId()).collection("ratings").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        double ratingTotal = 0;
+                                        double ratingAverage;
+
+                                        numratings = task.getResult().size();
+
+                                        //get rating value for every entry for average calculation
+                                        for(QueryDocumentSnapshot doc : task.getResult()){
+                                            double rating = doc.getDouble("ratingScore");
+                                            ratingTotal += rating;
+                                        }
+
+                                        //calculate average rating of user and set the rating score view
+                                        ratingAverage = ratingTotal / numratings;
+                                        ratingScore = (ratingAverage <= 5 && ratingAverage >= 0) ? ratingAverage : 0;
+
+                                        txtApplicantRating.setText(Double.toString(ratingScore));
+                                    }
+                                }
+                            });
 
 
 
@@ -258,6 +281,8 @@ public class JobApplicantProfile extends AppCompatActivity {
         txtApplicantCity = findViewById(R.id.txt_applicant_city);
         txtApplicantIntro = findViewById(R.id.txt_applicant_intro);
         interestChipGroup = findViewById(R.id.interest_chipGroup);
+
+        txtApplicantRating = findViewById(R.id.txt_applicant_rating);
 
         backBtn = findViewById(R.id.applicant_profile_back_btn);
         btnHireApplicant = findViewById(R.id.btn_hireApplicant);
