@@ -41,7 +41,6 @@ public class ProfileRatingActivity extends AppCompatActivity {
 
     private RecyclerView reviewsListView;
     private CollapsingToolbarLayout collapsingToolbar;
-    private BottomNavigationView bottomNavigationView;
 
 
     private RatingsListFirestoreAdapter adapter;
@@ -59,20 +58,20 @@ public class ProfileRatingActivity extends AppCompatActivity {
         //get current logged in user
         currentUser = firebaseAuth.getCurrentUser();
 
-        //highlight profile button of bottom navigation
-        bottomNavigationView.setSelectedItemId(R.id.bottom_action_account);
-
         //setup click listener for back button
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToAccount();
+                onBackPressed();
             }
         });
 
         //get the data passed from the profile activity
         String ratingScore = getIntent().getStringExtra("RATING_SCORE");
         String numRatings = getIntent().getStringExtra("NUMBER_OF_RATINGS");
+
+        //get the data passed from the job applicant profile
+        String applicantId = getIntent().getStringExtra("APPLICANT_ID");
 
         Log.d("RATINGSCORE", ratingScore);
         Log.d("NUMBEROFRATINGS", numRatings);
@@ -87,37 +86,29 @@ public class ProfileRatingActivity extends AppCompatActivity {
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
-        //setup click listener for bottom navigation
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-                switch (menuItem.getItemId()) {
-                    case R.id.bottom_action_jobs:
-                        sendToMyJobs();
-                        return true;
-                    case R.id.bottom_action_messages:
-                        sendToMessages();
-                        return true;
-                    case R.id.bottom_action_home:
-                        sendToMain();
-                        return true;
-                    case R.id.bottom_action_account:
-                        sendToAccount();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
+        //create firestore query
+        Query query;
 
-        //create firestore query to retrieve all the ratings for the current user
-        Query query = firebaseFirestore
-                .collection("Users")
-                .document(currentUser.getUid())
-                .collection("ratings")
-                .orderBy("postedDate", Query.Direction.DESCENDING);
+        //build query based on which activity preceded this one (ProfileActivity or JobApplicantProfile)
+        if(applicantId != null){
 
+            //create query to retrieve all the ratings for the applicant
+            query = firebaseFirestore
+                    .collection("Users")
+                    .document(applicantId)
+                    .collection("ratings")
+                    .orderBy("postedDate", Query.Direction.DESCENDING);
+        }
+        else{
+
+            //create query to retrieve all the ratings for the current user
+            query = firebaseFirestore
+                    .collection("Users")
+                    .document(currentUser.getUid())
+                    .collection("ratings")
+                    .orderBy("postedDate", Query.Direction.DESCENDING);
+        }
 
         //configure page settings
         PagedList.Config config = new PagedList.Config.Builder()
@@ -160,33 +151,9 @@ public class ProfileRatingActivity extends AppCompatActivity {
         reviewsListView = findViewById(R.id.reviews_list);
 
         collapsingToolbar = findViewById(R.id.collapsing_toolbar);
-        bottomNavigationView = findViewById(R.id.profileRatingBottomNav);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
-    private void sendToMain() {
-        Intent intent = new Intent(ProfileRatingActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void sendToMyJobs() {
-        Intent intent = new Intent(ProfileRatingActivity.this, MyJobsActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void sendToMessages() {
-        Intent intent = new Intent(ProfileRatingActivity.this, MessagesActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void sendToAccount() {
-        Intent intent = new Intent(ProfileRatingActivity.this, ProfileActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }

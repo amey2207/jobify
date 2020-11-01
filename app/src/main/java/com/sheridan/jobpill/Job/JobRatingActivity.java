@@ -68,44 +68,10 @@ public class JobRatingActivity extends AppCompatActivity {
         final String role = getIntent().getStringExtra("Role");
 
         //determine role of current user
-        if(role.equals("JobSeeker")  || role.equals("JobPoster")){
+        if(role.equals("JobSeeker") || role.equals("JobPoster")){
 
             //retrieve data and populate the rating page with reviewee's data (name, profile img)
             populatePage(role);
-
-            /*db.collection("jobs").document(jobId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        if(!task.getResult().exists()){
-                            Log.d("Error", "Task does not exist");
-                        }
-                        else{
-                            String userId = task.getResult().getString("createdByUID");
-                            String jobTitle = task.getResult().getString("jobTitle");
-                            String name = task.getResult().getString("createdByName");
-                            String profileImgURL = task.getResult().getString("createdByPhotoURL");
-
-                            revieweeId = userId;
-                            revieweesJobTitle = jobTitle;
-
-                            //set title
-                            title.setText("Rate " + name);
-
-                            //set profile image
-                            RequestOptions placeholderRequest = new RequestOptions();
-                            placeholderRequest.placeholder(R.drawable.profile_default);
-                            Glide.with(JobRatingActivity.this).setDefaultRequestOptions(placeholderRequest).load(profileImgURL).into(profileImg);
-                        }
-
-                    }
-                    else{
-                        String errorMessage = task.getException().getMessage();
-                        Toast.makeText(JobRatingActivity.this, "Firestore Retrieve Error " + errorMessage, Toast.LENGTH_LONG).show();
-                    }
-                }
-            });*/
-
         }
         else{
             Log.d("Error", "Role is not defined");

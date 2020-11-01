@@ -206,7 +206,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
 
-            //get number of rating  for current user to calculate current rating
+            //get number of rating for current user to calculate current rating
             firebaseFirestore.collection("Users").document(current_user_id).collection("ratings").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -347,7 +347,6 @@ public class ProfileActivity extends AppCompatActivity {
         intent.putExtra("NUMBER_OF_RATINGS", String.valueOf(numratings));
 
         startActivity(intent);
-        finish();
     }
 
     private void sendToMessages() {

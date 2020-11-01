@@ -38,6 +38,7 @@ import com.sheridan.jobpill.Messaging.MessagesActivity;
 import com.sheridan.jobpill.Models.JobApplication;
 import com.sheridan.jobpill.Profile.EditProfileActivity;
 import com.sheridan.jobpill.Profile.ProfileActivity;
+import com.sheridan.jobpill.Profile.ProfileRatingActivity;
 import com.sheridan.jobpill.R;
 
 import java.text.SimpleDateFormat;
@@ -58,7 +59,8 @@ public class JobApplicantProfile extends AppCompatActivity {
    private TextView txtApplicantName;
    private TextView txtApplicantCity;
    private TextView txtApplicantIntro;
-   private  TextView txtApplicantRating;
+   private TextView txtApplicantRating;
+   private View ratingView;
    private TextView txtApplicantJobsCompleted;
 
    private Button btnHireApplicant;
@@ -196,7 +198,12 @@ public class JobApplicantProfile extends AppCompatActivity {
             }
         });
 
-
+        ratingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToProfileRating(ratingScore, numratings);
+            }
+        });
 
         btnHireApplicant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,6 +289,7 @@ public class JobApplicantProfile extends AppCompatActivity {
         txtApplicantIntro = findViewById(R.id.txt_applicant_intro);
         interestChipGroup = findViewById(R.id.interest_chipGroup);
 
+        ratingView = findViewById(R.id.view_applicant_rating);
         txtApplicantRating = findViewById(R.id.txt_applicant_rating);
 
         backBtn = findViewById(R.id.applicant_profile_back_btn);
@@ -302,6 +310,16 @@ public class JobApplicantProfile extends AppCompatActivity {
         });
 
 
+    }
+
+    private void sendToProfileRating(double ratingScore, int numratings){
+        Intent intent = new Intent(JobApplicantProfile.this, ProfileRatingActivity.class);
+
+        intent.putExtra("RATING_SCORE", String.valueOf(ratingScore));
+        intent.putExtra("NUMBER_OF_RATINGS", String.valueOf(numratings));
+        intent.putExtra("APPLICANT_ID", currentJobApplication.getApplicantId());
+
+        startActivity(intent);
     }
 
     private void sendToLogin() {
