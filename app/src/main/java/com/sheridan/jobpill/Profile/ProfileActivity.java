@@ -62,8 +62,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     String current_user_id;
     String[] listInterests;
-    double ratingScore;
-    int numratings;
+    String userName;
+    String ratingScore;
+    int numratings = 0;
 
     private Uri profileImageURI = null;
 
@@ -84,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         ratingsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToProfileRating(ratingScore, numratings);
+                sendToProfileRating();
             }
         });
 
@@ -178,6 +179,8 @@ public class ProfileActivity extends AppCompatActivity {
                                 interestList = "No Interests Selected!";
                             }
 
+                            userName = name;  //set the username for use across all profile pages (Profile, ProfileRating)
+
                             //populate profile layout
                             profileImageURI = Uri.parse(image);
                             txtProfileName.setText(name);
@@ -223,10 +226,12 @@ public class ProfileActivity extends AppCompatActivity {
                         }
 
                         //calculate average rating of user and set the rating score view
-                        ratingAverage = ratingTotal / numratings;
-                        ratingScore = (ratingAverage <= 5 && ratingAverage >= 0) ? ratingAverage : 0;
+                        ratingAverage = (ratingTotal / numratings);
+                        ratingAverage = (ratingAverage <= 5 && ratingAverage >= 0) ? ratingAverage : 0;
 
-                        txtNumRating.setText(Double.toString(ratingScore));
+                        //round the rating score and display it in the profile
+                        ratingScore = String.format("%.1f", ratingAverage);
+                        txtNumRating.setText(ratingScore);
                     }
                 }
             });
@@ -340,11 +345,12 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    private void sendToProfileRating(double ratingScore, int numratings){
+    private void sendToProfileRating(){
         Intent intent = new Intent(ProfileActivity.this, ProfileRatingActivity.class);
 
-        intent.putExtra("RATING_SCORE", String.valueOf(ratingScore));
+        intent.putExtra("RATING_SCORE", ratingScore);
         intent.putExtra("NUMBER_OF_RATINGS", String.valueOf(numratings));
+        intent.putExtra("NAME", userName);
 
         startActivity(intent);
     }

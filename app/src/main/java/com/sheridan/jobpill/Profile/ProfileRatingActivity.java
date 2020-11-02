@@ -69,20 +69,25 @@ public class ProfileRatingActivity extends AppCompatActivity {
         //get the data passed from the profile activity
         String ratingScore = getIntent().getStringExtra("RATING_SCORE");
         String numRatings = getIntent().getStringExtra("NUMBER_OF_RATINGS");
+        String name = getIntent().getStringExtra("NAME");
 
         //get the data passed from the job applicant profile
         String applicantId = getIntent().getStringExtra("APPLICANT_ID");
 
-        Log.d("RATINGSCORE", ratingScore);
-        Log.d("NUMBEROFRATINGS", numRatings);
+        //check if there are any ratings and populate layout accordingly
+        if(Float.parseFloat(ratingScore) == 0 && numRatings.equals("0")){
 
-        //pupulate layout
-        rating_bar.setRating(Float.parseFloat(ratingScore));
-        rating_score.setText(ratingScore);
-        num_rating_lbl.setText("Based on " + numRatings + " ratings");
+            rating_bar.setRating(Float.parseFloat(ratingScore));
+            num_rating_lbl.setText("No Ratings");
+        }
+        else{
+            rating_bar.setRating(Float.parseFloat(ratingScore));
+            rating_score.setText(ratingScore);
+            num_rating_lbl.setText("Based on " + numRatings + " ratings");
+        }
 
         //set typography of toolbar title when expanded and collapsed
-        collapsingToolbar.setTitle("Ratings" + " (" + numRatings + ")");
+        collapsingToolbar.setTitle(name + "'s Ratings" + " (" + numRatings + ")");
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 

@@ -66,7 +66,8 @@ public class JobApplicantProfile extends AppCompatActivity {
    private Button btnHireApplicant;
 
     String[] listInterests;
-    double ratingScore;
+    String userName;
+    String ratingScore;
     int numratings;
 
     private ImageView backBtn;
@@ -137,6 +138,8 @@ public class JobApplicantProfile extends AppCompatActivity {
                                 interestList = "No Interests Selected!";
                             }
 
+                            userName = name;  //set the username for use across all job applicant pages (JobApplicantProfile, ProfileRating)
+
                             txtApplicantName.setText(name);
                             txtApplicantCity.setText(city);
                             txtApplicantIntro.setText(intro);
@@ -164,10 +167,12 @@ public class JobApplicantProfile extends AppCompatActivity {
                                         }
 
                                         //calculate average rating of user and set the rating score view
-                                        ratingAverage = ratingTotal / numratings;
-                                        ratingScore = (ratingAverage <= 5 && ratingAverage >= 0) ? ratingAverage : 0;
+                                        ratingAverage = (ratingTotal / numratings);
+                                        ratingAverage = (ratingAverage <= 5 && ratingAverage >= 0) ? ratingAverage : 0;
 
-                                        txtApplicantRating.setText(Double.toString(ratingScore));
+                                        //round the rating score and display it in the profile
+                                        ratingScore = String.format("%.1f", ratingAverage);
+                                        txtApplicantRating.setText(ratingScore);
                                     }
                                 }
                             });
@@ -201,7 +206,7 @@ public class JobApplicantProfile extends AppCompatActivity {
         ratingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToProfileRating(ratingScore, numratings);
+                sendToProfileRating();
             }
         });
 
@@ -312,11 +317,12 @@ public class JobApplicantProfile extends AppCompatActivity {
 
     }
 
-    private void sendToProfileRating(double ratingScore, int numratings){
+    private void sendToProfileRating(){
         Intent intent = new Intent(JobApplicantProfile.this, ProfileRatingActivity.class);
 
-        intent.putExtra("RATING_SCORE", String.valueOf(ratingScore));
+        intent.putExtra("RATING_SCORE", ratingScore);
         intent.putExtra("NUMBER_OF_RATINGS", String.valueOf(numratings));
+        intent.putExtra("NAME", userName);
         intent.putExtra("APPLICANT_ID", currentJobApplication.getApplicantId());
 
         startActivity(intent);
