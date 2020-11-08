@@ -212,6 +212,8 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     jobMap.put("photoURL", downloadUri.toString());
                     jobMap.put("Payment", paymentChoice);
                     jobMap.put("jobId", getIntent().getStringExtra("JobId"));
+                    jobMap.put("posterID", getIntent().getStringExtra("posterID"));
+                    jobMap.put("employeeID", getIntent().getStringExtra("employeeID"));
 
                     newJobRef.set(jobMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

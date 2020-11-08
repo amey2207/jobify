@@ -90,6 +90,8 @@ public class JobDetailsInProgress extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(JobDetailsInProgress.this, JobCompletionFormActivity.class);
                 intent.putExtra("JobId", currentJob.getItemId());
+                intent.putExtra("posterID", currentJob.getCreatedByUID());
+                intent.putExtra("employeeID", currentJob.getHiredApplicant());
                 intent.putExtra("Role", getIntent().getStringExtra("Role"));
                 startActivity(intent);
                 finish();
