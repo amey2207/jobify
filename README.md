@@ -9,7 +9,7 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 ## Features
 
 - Post or accept one-time jobs in your area.
-- Pay or get paid through the application without the need for cash.
+- Communicate using the in-app messaging service.
 - Track your jobs and earnings that you got through the application.
 - Easy to use and user friendly UI.
 - Developed for mobile and will be available for Android and IOS.
