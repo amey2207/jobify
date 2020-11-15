@@ -23,12 +23,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sheridan.jobpill.Auth.LoginActivity;
 import com.sheridan.jobpill.MainActivity;
+import com.sheridan.jobpill.Messaging.ChatActivity;
+import com.sheridan.jobpill.Messaging.MessagesActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Models.JobApplication;
+import com.sheridan.jobpill.Models.Messaging;
+import com.sheridan.jobpill.Models.User;
 import com.sheridan.jobpill.R;
 
 import java.text.SimpleDateFormat;
@@ -56,13 +61,37 @@ public class JobDetailsActivity extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
 
     String current_user_id;
-
+    private FirebaseUser currentUser;
     CollectionReference jobsRef;
+    CollectionReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_details);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
+        User user = new User();
+        DocumentReference docRef = firebaseFirestore.collection("Users").document(currentUser.getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        user.setName(document.getString("name"));
+                        user.setPhotoURL(document.getString("photoURL"));
+                        Log.d("", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+
         setupWidgets();
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +114,44 @@ public class JobDetailsActivity extends AppCompatActivity {
         placeholderRequest.placeholder(R.drawable.profile_default);
 
         Glide.with(JobDetailsActivity.this).setDefaultRequestOptions(placeholderRequest).load(currentJob.getPhotoURL()).into(jobImage);
+
+        btn_contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //sender
+                Messaging messaging = new Messaging();
+                messaging.setContactName(currentJob.getCreatedByName());
+                messaging.setContactPhotoURL(currentJob.getCreatedByPhotoURL());
+                messaging.setContactId(currentJob.getCreatedByUID());
+                messaging.setChatJobId(currentJob.getItemId());
+                messaging.setChatJobName(currentJob.getJobTitle());
+                DocumentReference ref = userRef.document(current_user_id)
+                        .collection("Contacts").document();
+                messaging.setItemId(ref.getId());
+                ref.set(messaging);
+                //Receiver
+                Messaging messagingReceiver = new Messaging();
+                messagingReceiver.setContactName(user.getName());
+                messagingReceiver.setContactPhotoURL(user.getPhotoURL());
+                messagingReceiver.setContactId(current_user_id);
+                messagingReceiver.setChatJobId(currentJob.getItemId());
+                messagingReceiver.setChatJobName(currentJob.getJobTitle());
+                DocumentReference refReceiver = userRef.document(currentJob.getCreatedByUID())
+                        .collection("Contacts").document();
+                messagingReceiver.setItemId(refReceiver.getId());
+                refReceiver.set(messagingReceiver);
+
+                Intent intent = new Intent(JobDetailsActivity.this, ChatActivity.class);
+                intent.putExtra("contactID", currentJob.getCreatedByUID());
+                intent.putExtra("contactName", currentJob.getCreatedByName());
+                if (currentJob.getCreatedByPhotoURL() != null) {
+                    intent.putExtra("contactPhoto", currentJob.getCreatedByPhotoURL());
+                } else {
+                    intent.putExtra("contactPhoto", "profile_default");
+                }
+                startActivity(intent);
+            }
+        });
 
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +197,7 @@ public class JobDetailsActivity extends AppCompatActivity {
                             Toast.makeText(JobDetailsActivity.this, "Application Successful", Toast.LENGTH_LONG).show();
                             btn_apply.setEnabled(false);
                             btn_apply.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonDisabled));
-                        }else{
+                        } else {
                             Toast.makeText(JobDetailsActivity.this, "Application Failed: Database Error", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -149,23 +216,20 @@ public class JobDetailsActivity extends AppCompatActivity {
         btn_contact = findViewById(R.id.btn_contact);
         backButton = findViewById(R.id.jobDetails_back_button);
         //FireStore initialize
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         jobsRef = firebaseFirestore.collection("jobs");
+        userRef = firebaseFirestore.collection("Users");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if(!currentJob.getHiredApplicant().isEmpty()){
+        if (!currentJob.getHiredApplicant().isEmpty()) {
             Log.d("FOUND_APPLICATION", "User has already applied for the job");
             btn_apply.setEnabled(false);
             btn_apply.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonDisabled));
         }
 
-
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser == null) {
             sendToLogin();
         } else {
@@ -173,7 +237,7 @@ public class JobDetailsActivity extends AppCompatActivity {
 
             jobsRef.document(currentJob.getItemId()).collection("jobApplications")
                     .whereEqualTo("applicantId", current_user_id)
-                    .whereEqualTo("jobId",currentJob.getItemId())
+                    .whereEqualTo("jobId", currentJob.getItemId())
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/bottom_action_home"
         android:icon="@drawable/round_home_black_24"
@@ -12,7 +12,7 @@
     <item
         android:id="@+id/bottom_action_messages"
         android:icon="@drawable/baseline_email_black_24"
-        android:title="Messages" />
+        android:title="Messages"></item>
     <item
         android:id="@+id/bottom_action_account"
         android:icon="@drawable/baseline_account_box_black_24"
