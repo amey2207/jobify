@@ -34,6 +34,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="btn_hire">Hire Applicant</string>
 
+    <string name="API_KEY">AIzaSyDJyQn4NwgP2-P-_U-GXQVypjDyCcxioQY</string>
 
     <string-array name="interest_categories">
         <item>Plumbing</item>

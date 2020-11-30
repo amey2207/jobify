@@ -2,7 +2,10 @@ package com.sheridan.jobpill.Job;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -14,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +30,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.vision.v1.Vision;
+import com.google.api.services.vision.v1.VisionRequestInitializer;
+import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.AnnotateImageResponse;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+import com.google.api.services.vision.v1.model.Feature;
+import com.google.api.services.vision.v1.model.Image;
+import com.google.api.services.vision.v1.model.SafeSearchAnnotation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +56,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.sheridan.jobpill.ML.ImageModerate;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.Models.Job;
 import com.sheridan.jobpill.Profile.EditProfileActivity;
@@ -45,13 +65,19 @@ import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class JobPostingActivity extends AppCompatActivity {
 
@@ -78,6 +104,9 @@ public class JobPostingActivity extends AppCompatActivity {
     private String createdByName = "";
     private String createdByPhotoURL = "";
 
+    //image moderation variables
+    ImageModerate imageModerate;
+    private Bitmap imageBitmap;
 
     CollectionReference dbJobs;
 
@@ -139,47 +168,52 @@ public class JobPostingActivity extends AppCompatActivity {
                 }
                 else {
 
-                    final String jobTitle = titleEdt.getText().toString();
-                    final Float jobPayment = Float.parseFloat(paymentEdt.getText().toString());
-                    final String jobLocation = locationEdt.getText().toString();
-                    final String jobDescription = descriptionEdt.getText().toString();
-                    final String jobCategory = categorySpn.getSelectedItem().toString();
-                    String jobImage = jobImageURI.toString();
-                    final String jobInstructions = Instructions.getText().toString();
-                    reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
-                    final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    if(imageModerate.isImageClean()) {
+                        final String jobTitle = titleEdt.getText().toString();
+                        final Float jobPayment = Float.parseFloat(paymentEdt.getText().toString());
+                        final String jobLocation = locationEdt.getText().toString();
+                        final String jobDescription = descriptionEdt.getText().toString();
+                        final String jobCategory = categorySpn.getSelectedItem().toString();
+                        String jobImage = jobImageURI.toString();
+                        final String jobInstructions = Instructions.getText().toString();
+                        reference = FirebaseDatabase.getInstance().getReference().child("jobs").child(user_id);
+                        final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-                    db.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                              if(task.isSuccessful()){
-                                  createdByName = task.getResult().getString("name");
-                                  createdByPhotoURL = task.getResult().getString("photoURL");
-                              }else{
-                                  createdByName = currentUser.getEmail();
-                              }
-                        }
-                    });
-
-
-                    final DocumentReference newJobRef = db.collection("jobs").document();
-                    jobId = newJobRef.getId();
-                    image_path = storageReference.child("job_images").child(jobId + ".jpg");
-
-                    image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if(task.isSuccessful()){
-
-                                storeFirestore(task,newJobRef,currentUser.getEmail(),currentUser.getUid(),date,jobPayment,jobInstructions,jobCategory,jobDescription,jobTitle,jobLocation);
-
-                            }else{
-                                String error = task.getException().getMessage();
-                                Toast.makeText(JobPostingActivity.this, "Image upload error: " + error, Toast.LENGTH_LONG).show();
-
+                        db.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    createdByName = task.getResult().getString("name");
+                                    createdByPhotoURL = task.getResult().getString("photoURL");
+                                }else{
+                                    createdByName = currentUser.getEmail();
+                                }
                             }
-                        }
-                    });
+                        });
+
+
+                        final DocumentReference newJobRef = db.collection("jobs").document();
+                        jobId = newJobRef.getId();
+                        image_path = storageReference.child("job_images").child(jobId + ".jpg");
+
+                        image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if(task.isSuccessful()){
+
+                                    storeFirestore(task,newJobRef,currentUser.getEmail(),currentUser.getUid(),date,jobPayment,jobInstructions,jobCategory,jobDescription,jobTitle,jobLocation);
+
+                                }else{
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(JobPostingActivity.this, "Image upload error: " + error, Toast.LENGTH_LONG).show();
+
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        Toast.makeText(JobPostingActivity.this, "Innapropriate content detected in image, please select another image.", Toast.LENGTH_LONG).show();
+                    }
 
                 }
             }
@@ -246,21 +280,35 @@ public class JobPostingActivity extends AppCompatActivity {
                 .setAspectRatio(1, 1)
                 .start(JobPostingActivity.this);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
             if (resultCode == RESULT_OK) {
                 jobImageURI = result.getUri();
                 jobImageBtn.setImageURI(jobImageURI);
+
+                //get bitmap of image
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(jobImageURI);
+                    imageBitmap = BitmapFactory.decodeStream(inputStream);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                //moderate image content with Vision API
+                imageModerate = new ImageModerate(JobPostingActivity.this, imageBitmap);
+                imageModerate.callVisionAPI();
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
     }
-
-
 
 }
