@@ -96,7 +96,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToHome();
+                finish();
             }
         });
 

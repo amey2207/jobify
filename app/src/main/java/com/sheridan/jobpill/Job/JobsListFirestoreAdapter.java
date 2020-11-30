@@ -45,6 +45,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         holder.jobEstimatedPay.setText("$" + model.getEstimatedPay());
         holder.jobLocation.setText(model.getLocation());
         holder.postedBy.setText(model.getCreatedByName());
+        holder.createdDate.setText(model.getCreatedDate());
 
 
         Glide.with(holder.itemView.getContext())
@@ -104,6 +105,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
         private TextView jobEstimatedPay;
         private TextView jobLocation;
         private TextView postedBy;
+        private TextView createdDate;
         private CircleImageView postedByImage;
 
         public JobsViewHolder(@NonNull View itemView) {
@@ -117,6 +119,7 @@ public class JobsListFirestoreAdapter extends FirestorePagingAdapter<Job, JobsLi
             jobLocation = itemView.findViewById(R.id.txt_jobLocation);
             postedBy = itemView.findViewById(R.id.txtPostedBy);
             postedByImage = itemView.findViewById(R.id.img_postedBy);
+            createdDate = itemView.findViewById(R.id.txtCreatedDate);
 
             itemView.setOnClickListener(this);
         }

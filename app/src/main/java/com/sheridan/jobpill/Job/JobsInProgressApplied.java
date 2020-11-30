@@ -73,7 +73,8 @@ public class JobsInProgressApplied extends AppCompatActivity implements JobsList
         Query query = firebaseFirestore
                 .collection("jobs")
                 .whereEqualTo("hiredApplicant", currentUser.getUid())
-                .whereEqualTo("jobStatus", "In-Progress");
+                .whereEqualTo("jobStatus", "In-Progress")
+                .orderBy("createdDate",Query.Direction.DESCENDING);
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)

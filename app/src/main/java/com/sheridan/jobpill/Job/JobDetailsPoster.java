@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,7 +57,7 @@ public class JobDetailsPoster extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToHome();
+                finish();
             }
         });
 
@@ -75,6 +76,8 @@ public class JobDetailsPoster extends AppCompatActivity {
         placeholderRequest.placeholder(R.drawable.profile_default);
 
         Glide.with(JobDetailsPoster.this).setDefaultRequestOptions(placeholderRequest).load(currentJob.getPhotoURL()).into(jobImage);
+
+
 
         btnViewApplicants.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,5 +175,18 @@ public class JobDetailsPoster extends AppCompatActivity {
         }
         // Call the super version of this method.
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Log.d("JOB_STATUS", currentJob.getJobStatus());
+        if(!currentJob.getJobStatus().equals("available")){
+
+            btnViewApplicants.setEnabled(false);
+            btnViewApplicants.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.colorButtonDisabled));
+        }
+
     }
 }

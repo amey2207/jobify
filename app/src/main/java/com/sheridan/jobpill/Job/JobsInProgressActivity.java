@@ -74,7 +74,8 @@ public class JobsInProgressActivity extends AppCompatActivity implements JobsLis
                 .collection("jobs")
                 //.whereEqualTo("hiredApplicant", currentUser.getUid())
                 .whereEqualTo("createdBy", currentUser.getEmail())
-                .whereEqualTo("jobStatus", "In-Progress");
+                .whereEqualTo("jobStatus", "In-Progress")
+                .orderBy("createdDate",Query.Direction.DESCENDING);
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)

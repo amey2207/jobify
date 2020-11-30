@@ -75,7 +75,9 @@ public class MyAppliedJobsActivity extends AppCompatActivity implements AppliedJ
 
         Query query = firebaseFirestore
                 .collectionGroup("jobApplications")
-                .whereEqualTo("applicantId", currentUser.getUid());
+                .whereEqualTo("applicantId", currentUser.getUid())
+                .orderBy("applicationDate",Query.Direction.DESCENDING);
+
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)

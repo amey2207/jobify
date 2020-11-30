@@ -364,6 +364,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
 
         Query query = firebaseFirestore
                 .collection("jobs")
+                .whereEqualTo("jobStatus","available")
+                .whereNotEqualTo("createdBy",currentUser.getEmail())
+                .orderBy("createdBy")
                 .orderBy("createdDate", Query.Direction.DESCENDING);
 
 
@@ -546,6 +549,9 @@ public class MainActivity extends AppCompatActivity implements JobsListFirestore
     public void onDialogNeutralClick(DialogFragment dialog) {
         Query query = firebaseFirestore
                 .collection("jobs")
+                .whereEqualTo("jobStatus","available")
+                .whereNotEqualTo("createdBy",currentUser.getEmail())
+                .orderBy("createdBy")
                 .orderBy("createdDate", Query.Direction.DESCENDING);
 
         //RecyclerOptions
