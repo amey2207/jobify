@@ -3,6 +3,7 @@ package com.sheridan.jobpill.ML;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -16,6 +17,7 @@ import com.google.api.services.vision.v1.model.AnnotateImageRequest;
 import com.google.api.services.vision.v1.model.AnnotateImageResponse;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
 import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 import com.google.api.services.vision.v1.model.SafeSearchAnnotation;
@@ -25,14 +27,18 @@ import com.sheridan.jobpill.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ImageModerate {
 
-    private Bitmap imageBitmap;
     private Context context;
+    private Bitmap imageBitmap;
+    private HashMap<String, Float> extraLabels;
     private boolean imageClean = false;
 
     //constants
@@ -41,9 +47,16 @@ public class ImageModerate {
     final String ERROR = "ERROR";
     final String EMPTY = "EMPTY";
 
+    //list of extra inappropriate labels
+    final Set<String> weaponLabels = new HashSet<>(Arrays.asList("Gun", "Firearm", "Soldier", "Shooting"));
+    final Set<String> drugLabels = new HashSet<>(Arrays.asList("Pill", "Capsule", "Prescription Drug", "Pharmaceutical Drug"));
+
+    final int confidenceThreshold = 80;
+
     public ImageModerate(Context context, Bitmap imageBitmap){
         this.context = context;
         this.imageBitmap = imageBitmap;
+        this.extraLabels = new HashMap<>();
     }
 
     public boolean isImageClean() {
@@ -68,9 +81,37 @@ public class ImageModerate {
         return encodedImage;
     }
 
-    private Map<String, String> responseToString(BatchAnnotateImagesResponse response, Map<String, String> visionResults){
+    private Map<String, String> convertResponse(BatchAnnotateImagesResponse response, Map<String, String> visionResults){
 
-        List<AnnotateImageResponse> responses = response.getResponses();
+        //get the safe search results
+        List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
+        SafeSearchAnnotation annotation = response.getResponses().get(0).getSafeSearchAnnotation();
+
+        if(labels != null && annotation != null){
+            if (labels != null){
+
+                //get extra label descriptions and confidence scores and store results into hash map
+                for (EntityAnnotation label : labels) {
+                    extraLabels.put(label.getDescription(), label.getScore());
+                }
+            }
+
+            if (annotation != null){
+
+                //get safe search results and store results into hash map
+                visionResults.put("adult", annotation.getAdult());
+                visionResults.put("medical", annotation.getMedical());
+                visionResults.put("spoof", annotation.getSpoof());
+                visionResults.put("violent", annotation.getViolence());
+            }
+        }
+        else{
+            visionResults.put(EMPTY, "No Results");
+        }
+
+        return visionResults;
+
+        /*List<AnnotateImageResponse> responses = response.getResponses();
 
         for(AnnotateImageResponse res: responses){
             if(res.getError() == null){
@@ -89,7 +130,7 @@ public class ImageModerate {
             }
         }
 
-        return visionResults;
+        return visionResults;*/
     }
 
     public void callVisionAPI(){
@@ -106,8 +147,13 @@ public class ImageModerate {
                 AnnotateImageRequest annotateImageRequest = new AnnotateImageRequest();
                 annotateImageRequest.setFeatures(new ArrayList<Feature>() {{
                     Feature feature = new Feature();
-                    feature.setType("SAFE_SEARCH_DETECTION");
+                    feature.setType("LABEL_DETECTION");
+                    feature.setMaxResults(10);
                     add(feature);
+
+                    Feature safeFeature = new Feature();
+                    safeFeature.setType("SAFE_SEARCH_DETECTION");
+                    add(safeFeature);
                 }});
 
                 //encode the image and add it to request list
@@ -134,13 +180,13 @@ public class ImageModerate {
                     annotate.setDisableGZipContent(true);
                     BatchAnnotateImagesResponse response = annotate.execute();
 
-                    return responseToString(response, visionResults);
+                    return convertResponse(response, visionResults);
                 }
                 catch (GoogleJsonResponseException err){
-                    visionResults.put(ERROR, "API Request Failed: " + err.getMessage());
+                    visionResults.put(ERROR, "Request Failed: " + err.getMessage());
                 }
                 catch (IOException err){
-                    visionResults.put(ERROR, "API Request Failed (IO Exception): " + err.getMessage());
+                    visionResults.put(ERROR, "Request Failed (IO Exception): " + err.getMessage());
                 }
 
                 return visionResults;
@@ -150,20 +196,37 @@ public class ImageModerate {
             protected void onPostExecute(Map<String, String> results) {
                 super.onPostExecute(results);
 
-                String message = null;
+                String mainMessage = EMPTY;
+                String extraLabelMessage = EMPTY;
 
-                //check if results found innaprpriate content in image
+                //check if results found explicit content in image
                 for(Map.Entry<String, String> result : results.entrySet()){
                     if(result.getValue().equals(LIKELY_LIKELIHOOD) || result.getValue().equals(VERY_LIKELY_LIKELIHOOD)){
-                        message += result.getKey() + ", ";
+                        mainMessage += result.getKey() + ", ";
                     }
                 }
 
-                if(message != null){
-                    //trim message ('null' at start of message ', ' at end of message) and build message
-                    message = message.substring(4, message.length() - 2);
-                    message += " content in image, please select another image.";
+                //check if results found extra inappropriate content (weapons, drugs) in image
+                for(Map.Entry<String, Float> result : extraLabels.entrySet()){
 
+                    int labelResult = checkLabel(result.getKey());
+
+                    //check if label matches any inappropriate labels
+                    if(labelResult != 0 && result.getValue()*100 > confidenceThreshold){
+
+                        if(labelResult == 1){
+                            extraLabelMessage = extraLabelMessage.indexOf("weapons") == -1 ? extraLabelMessage + "weapons, " : extraLabelMessage;  //check if weapons label is already found
+                        }
+                        else if(labelResult == 2 && extraLabelMessage != null){
+                            extraLabelMessage = extraLabelMessage.indexOf("drugs") == -1 ? extraLabelMessage + "drugs, " : extraLabelMessage;  //check if drugs label is already found
+                        }
+                    }
+                }
+
+                if(!mainMessage.equals(EMPTY) || !extraLabelMessage.equals(EMPTY)){
+
+                    //build and display message
+                    String message = buildMessage(mainMessage, extraLabelMessage);
                     Toast.makeText(context, "Detected " + message, Toast.LENGTH_LONG).show();
                 }
                 else{
@@ -171,6 +234,61 @@ public class ImageModerate {
                 }
             }
         }.execute();
+    }
+
+    /*
+    *  checks if resulted labels are part of the weapons or drugs category
+    *  returns 0 if label is not part of any list category
+    *  returns 1 if label is part of weapons list category
+    *  returns 2 if label is part of drugs list category
+     */
+    private int checkLabel(String label){
+
+        if(weaponLabels.contains(label)){
+            return 1;
+        }
+        else if(drugLabels.contains(label)){
+            return 2;
+        }
+
+        /*for (String weaponLabel : weaponLabels){
+            if(label.equals(weaponLabel)){
+                return 1;
+            }
+        }
+
+        for(String drugLabel : drugLabels){
+            if(label.equals(drugLabel)){
+                return 2;
+            }
+        }*/
+
+        return 0;
+    }
+
+    private String buildMessage(String mainMessage, String extraLabelMessage){
+
+        if(!mainMessage.equals(EMPTY) && !extraLabelMessage.equals(EMPTY)){
+
+            //trim both messages ('null' and ', ') and build message
+            mainMessage = mainMessage.substring(EMPTY.length(), mainMessage.length() - 2);
+            extraLabelMessage = extraLabelMessage.substring(EMPTY.length(), extraLabelMessage.length() - 2);
+            mainMessage = extraLabelMessage + " as well as " + mainMessage + " in image, please select another image.";
+        }
+        else if(!extraLabelMessage.equals(EMPTY)){
+
+            //trim message ('null' and ', ') and build message
+            extraLabelMessage = extraLabelMessage.substring(EMPTY.length(), extraLabelMessage.length() - 2);
+            mainMessage = extraLabelMessage + " in image, please select another image.";
+        }
+        else if(!mainMessage.equals(EMPTY)){
+
+            //trim message ('null' and ', ') and build message
+            mainMessage = mainMessage.substring(EMPTY.length(), mainMessage.length() - 2);
+            mainMessage += " content in image, please select another image.";
+        }
+
+        return mainMessage;
     }
 
 }
