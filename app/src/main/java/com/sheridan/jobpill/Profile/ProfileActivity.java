@@ -66,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
     String ratingScore;
     int numratings = 0;
 
+    String interestList = "";
+
     private Uri profileImageURI = null;
 
 
@@ -160,12 +162,13 @@ public class ProfileActivity extends AppCompatActivity {
                             String image = task.getResult().getString("photoURL");
                             ArrayList<Integer> interests = (ArrayList<Integer>)task.getResult().get("interests");
 
-                            String interestList = "";
+
                             ArrayList<String> savedInterests = new ArrayList<>();
 
                             if(!interests.isEmpty()){
                                 for(int i = 0; i < interests.size();i++){
                                     interestList = interestList + listInterests[Integer.parseInt(String.valueOf(interests.get(i)))];
+
                                     if(i != interests.size()-1){
                                         interestList = interestList + ", ";
                                     }
@@ -173,6 +176,8 @@ public class ProfileActivity extends AppCompatActivity {
                                     Log.d("SAVED_INTERESTS", "Interests: " + savedInterests.toString());
 
                                 }
+
+                                interestChipGroup.removeAllViews();
 
                                 setInterestChips(savedInterests);
                             }else{
@@ -239,6 +244,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void setInterestChips(ArrayList<String> interests)   {
+
+        Log.d("interests_size", "interests: " + interests.size());
+
 
         for(String interest:interests){
             Chip mChip = (Chip) this.getLayoutInflater().inflate(R.layout.item_chip_interest,null,false );
