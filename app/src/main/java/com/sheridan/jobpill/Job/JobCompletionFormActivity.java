@@ -75,7 +75,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
         cancelBtn = findViewById(R.id.cancel_post_btn);
         jobImageBtn = findViewById(R.id.job_imagebtn);
         notesEdt = findViewById(R.id.instructions_edt);
-        radio = findViewById(R.id.radioGroup2);
+
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -139,21 +139,12 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                 user_id = firebaseAuth.getCurrentUser().getUid();
                 currentUser = firebaseAuth.getCurrentUser();
 
-                //check if user has added a job image and chosen a option for the payment
-                if (radio.getCheckedRadioButtonId() == 0 && jobImageURI == null) {
-                    Toast.makeText(getApplicationContext(), "Please fill the payment field and add an image of your work", Toast.LENGTH_LONG).show();
-                }
-                else if(jobImageURI == null){
+                //check if user has added a job image
+                if(jobImageURI == null){
                     Toast.makeText(getApplicationContext(), "Please add an image of your work", Toast.LENGTH_LONG).show();
-                }
-                else if(radio.getCheckedRadioButtonId() == 0){
-                    Toast.makeText(getApplicationContext(), "Please fill the payment field", Toast.LENGTH_LONG).show();
                 }
                 else {
                     final String jobNotes = notesEdt.getText().toString();
-                    final int paymentChoice = radio.getCheckedRadioButtonId();
-                    final RadioButton radiochoice = findViewById(paymentChoice);
-
                     final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
                     //check if job completion document already exists
@@ -161,7 +152,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
 
                         //retrieve existing job application document for update
                         final DocumentReference newJobRef = db.collection("JobCompletion").document(jobCompletionId);
-                        storeFirestorage(newJobRef, date, jobNotes, radiochoice);
+                        storeFirestorage(newJobRef, date, jobNotes);
                     }
                     else{
 
@@ -169,7 +160,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                         final DocumentReference newJobRef = db.collection("JobCompletion").document();
                         jobCompletionId = newJobRef.getId();
 
-                        storeFirestorage(newJobRef, date, jobNotes, radiochoice);
+                        storeFirestorage(newJobRef, date, jobNotes);
                     }
                 }
 
@@ -177,7 +168,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
         });
     }
 
-    private void storeFirestorage(final DocumentReference newJobRef, final String date, final String jobNotes, final RadioButton radiochoice){
+    private void storeFirestorage(final DocumentReference newJobRef, final String date, final String jobNotes){
 
         image_path = storageReference.child("job_images").child(jobCompletionId + ".jpg");
         image_path.putFile(jobImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -185,7 +176,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if (task.isSuccessful()) {
 
-                    storeFirestore(task, newJobRef, currentUser.getUid(), date, jobNotes, radiochoice.getText().toString());
+                    storeFirestore(task, newJobRef, currentUser.getUid(), date, jobNotes);
 
                 } else {
                     String error = task.getException().getMessage();
@@ -197,7 +188,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
     }
 
     private void storeFirestore(@NonNull Task<UploadTask.TaskSnapshot> task, final DocumentReference newJobRef, final String createdByUID, final String createdDate,
-                                final String notes, final String paymentChoice) {
+                                final String notes) {
 
         if (task != null) {
 
@@ -210,7 +201,6 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     jobMap.put("createdByUID", createdByUID);
                     jobMap.put("Notes", notes);
                     jobMap.put("photoURL", downloadUri.toString());
-                    jobMap.put("Payment", paymentChoice);
                     jobMap.put("jobId", getIntent().getStringExtra("JobId"));
                     jobMap.put("posterID", getIntent().getStringExtra("posterID"));
                     jobMap.put("employeeID", getIntent().getStringExtra("employeeID"));

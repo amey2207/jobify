@@ -119,11 +119,14 @@ public class ChatActivity extends AppCompatActivity {
             final CollectionReference newChatRefSender = db.collection("Messages")
                     .document(chatIdSender)
                     .collection("History");
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
             chatMap = new HashMap<>();
             chatMap.put("from", currentUser.getUid());
             chatMap.put("to", contactID);
             chatMap.put("text", messageText);
             chatMap.put("type", "text");
+            chatMap.put("time", ts);
             newChatRefSender.add(chatMap);
 
             final CollectionReference newChatRefReceiver = db.collection("Messages")
@@ -134,9 +137,8 @@ public class ChatActivity extends AppCompatActivity {
             chatMap.put("to", contactID);
             chatMap.put("text", messageText);
             chatMap.put("type", "text");
+            chatMap.put("time", ts);
             newChatRefReceiver.add(chatMap);
-
-
         }
     }
 
@@ -203,6 +205,5 @@ public class ChatActivity extends AppCompatActivity {
         userMessagesList.setLayoutManager(linearLayoutManager);
         userMessagesList.setAdapter(messageAdapter);
         currentUser = firebaseAuth.getCurrentUser();
-
     }
 }
