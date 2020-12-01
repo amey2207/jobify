@@ -1,5 +1,7 @@
 package com.sheridan.jobpill.Job;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -33,11 +35,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.sheridan.jobpill.ML.ImageModerate;
 import com.sheridan.jobpill.MainActivity;
 import com.sheridan.jobpill.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,6 +61,11 @@ public class JobCompletionFormActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     String user_id;
     Map<String, Object> jobMap;
+
+    //image moderation variables
+    ImageModerate imageModerate;
+    private Bitmap imageBitmap;
+
     DatabaseReference reference;
     private FirebaseFirestore db;
     private StorageReference image_path = null;
@@ -144,23 +154,28 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please add an image of your work", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    final String jobNotes = notesEdt.getText().toString();
-                    final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    if (imageModerate.isImageClean()){
+                        final String jobNotes = notesEdt.getText().toString();
+                        final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-                    //check if job completion document already exists
-                    if(jobCompletionId != null){
+                        //check if job completion document already exists
+                        if(jobCompletionId != null){
 
-                        //retrieve existing job application document for update
-                        final DocumentReference newJobRef = db.collection("JobCompletion").document(jobCompletionId);
-                        storeFirestorage(newJobRef, date, jobNotes);
+                            //retrieve existing job application document for update
+                            final DocumentReference newJobRef = db.collection("JobCompletion").document(jobCompletionId);
+                            storeFirestorage(newJobRef, date, jobNotes);
+                        }
+                        else{
+
+                            //create new job application document
+                            final DocumentReference newJobRef = db.collection("JobCompletion").document();
+                            jobCompletionId = newJobRef.getId();
+
+                            storeFirestorage(newJobRef, date, jobNotes);
+                        }
                     }
                     else{
-
-                        //create new job application document
-                        final DocumentReference newJobRef = db.collection("JobCompletion").document();
-                        jobCompletionId = newJobRef.getId();
-
-                        storeFirestorage(newJobRef, date, jobNotes);
+                        Toast.makeText(JobCompletionFormActivity.this, "Innapropriate content detected in image, please select another image.", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -241,6 +256,20 @@ public class JobCompletionFormActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 jobImageURI = result.getUri();
                 jobImageBtn.setImageURI(jobImageURI);
+
+                //get bitmap of image
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(jobImageURI);
+                    imageBitmap = BitmapFactory.decodeStream(inputStream);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                //moderate image content with Vision API
+                imageModerate = new ImageModerate(JobCompletionFormActivity.this, imageBitmap);
+                imageModerate.callVisionAPI();
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

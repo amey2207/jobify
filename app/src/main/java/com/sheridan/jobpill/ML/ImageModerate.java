@@ -48,7 +48,7 @@ public class ImageModerate {
     final String EMPTY = "EMPTY";
 
     //list of extra inappropriate labels
-    final Set<String> weaponLabels = new HashSet<>(Arrays.asList("Gun", "Firearm", "Soldier", "Shooting"));
+    final Set<String> weaponLabels = new HashSet<>(Arrays.asList("Gun", "Firearm", "Shooting"));
     final Set<String> drugLabels = new HashSet<>(Arrays.asList("Pill", "Capsule", "Prescription Drug", "Pharmaceutical Drug"));
 
     final int confidenceThreshold = 80;
@@ -110,27 +110,6 @@ public class ImageModerate {
         }
 
         return visionResults;
-
-        /*List<AnnotateImageResponse> responses = response.getResponses();
-
-        for(AnnotateImageResponse res: responses){
-            if(res.getError() == null){
-
-                //get the safe search results
-                SafeSearchAnnotation annotation = res.getSafeSearchAnnotation();
-
-                //store results into hash map
-                visionResults.put("adult", annotation.getAdult());
-                visionResults.put("medical", annotation.getMedical());
-                visionResults.put("spoof", annotation.getSpoof());
-                visionResults.put("violent", annotation.getViolence());
-            }
-            else{
-                visionResults.put(EMPTY, "No Results");
-            }
-        }
-
-        return visionResults;*/
     }
 
     public void callVisionAPI(){
@@ -250,18 +229,6 @@ public class ImageModerate {
         else if(drugLabels.contains(label)){
             return 2;
         }
-
-        /*for (String weaponLabel : weaponLabels){
-            if(label.equals(weaponLabel)){
-                return 1;
-            }
-        }
-
-        for(String drugLabel : drugLabels){
-            if(label.equals(drugLabel)){
-                return 2;
-            }
-        }*/
 
         return 0;
     }
