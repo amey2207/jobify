@@ -30,6 +30,7 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 - 💬 <a href = "https://jobpill.slack.com">Slack</a>
 - 📅 <a href = "https://app.asana.com/0/home/1156736002270744">Asana</a>
 - 📐 <a href = "https://yfzmlsqnv160.us-06.visual-paradigm.com/tasifier.jsp#proj=5">Visual Paradigm Repository</a>
+- 📐 <a href = "https://github.com/sabeehshah/JobPill-CloudFunctions">Cloud Functions Repository</a>
 
 ---
 
