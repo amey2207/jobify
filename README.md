@@ -12,7 +12,7 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 - Communicate using the in-app messaging service.
 - Track your jobs and earnings that you got through the application.
 - Easy to use and user friendly UI.
-- Developed for mobile and will be available for Android and IOS.
+- Developed for mobile and will be available for Android.
 
 ---
 
@@ -30,6 +30,7 @@ JobPill is a job search platform that will give the user the freedom to apply fo
 - 💬 <a href = "https://jobpill.slack.com">Slack</a>
 - 📅 <a href = "https://app.asana.com/0/home/1156736002270744">Asana</a>
 - 📐 <a href = "https://yfzmlsqnv160.us-06.visual-paradigm.com/tasifier.jsp#proj=5">Visual Paradigm Repository</a>
+- 📐 <a href = "https://github.com/sabeehshah/JobPill-CloudFunctions">Cloud Functions Repository</a>
 
 ---
 
