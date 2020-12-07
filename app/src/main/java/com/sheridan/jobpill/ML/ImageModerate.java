@@ -207,6 +207,8 @@ public class ImageModerate {
                     //build and display message
                     String message = buildMessage(mainMessage, extraLabelMessage);
                     Toast.makeText(context, "Detected " + message, Toast.LENGTH_LONG).show();
+
+                    imageClean = false;
                 }
                 else{
                     imageClean = true;

@@ -197,7 +197,7 @@ public class JobPostingActivity extends AppCompatActivity {
                         });
                     }
                     else{
-                        Toast.makeText(JobPostingActivity.this, "Innapropriate content detected in image, please select another image.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(JobPostingActivity.this, "Inappropriate content detected in image, please select another image.", Toast.LENGTH_LONG).show();
                     }
 
                 }

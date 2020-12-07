@@ -175,7 +175,7 @@ public class JobCompletionFormActivity extends AppCompatActivity {
                         }
                     }
                     else{
-                        Toast.makeText(JobCompletionFormActivity.this, "Innapropriate content detected in image, please select another image.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(JobCompletionFormActivity.this, "Inappropriate content detected in image, please select another image.", Toast.LENGTH_LONG).show();
                     }
                 }
 
