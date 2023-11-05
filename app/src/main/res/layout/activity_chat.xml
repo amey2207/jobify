@@ -51,7 +51,7 @@
         android:id="@+id/chat_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorTopBar"
+        android:background="#00A7E1"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
 
@@ -66,7 +66,7 @@
         android:layout_marginEnd="105dp"
         android:layout_marginBottom="12dp"
         android:text="Null"
-        android:textColor="@color/colorAccent"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/chat_toolbar"
